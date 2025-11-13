@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->foreignId('template_id')->nullable()->constrained('templates')->nullOnDelete();
             $table->string('sku')->nullable()->unique();
             $table->text('description')->nullable();
             $table->text('short_description')->nullable();

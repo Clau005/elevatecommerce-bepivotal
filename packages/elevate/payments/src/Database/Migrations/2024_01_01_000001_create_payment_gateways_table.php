@@ -16,6 +16,7 @@ return new class extends Migration
             $table->boolean('test_mode')->default(true);
             $table->integer('sort_order')->default(0);
             $table->text('credentials'); // encrypted JSON
+            $table->text('test_credentials')->nullable();
             $table->json('settings')->nullable();
             $table->timestamps();
         });

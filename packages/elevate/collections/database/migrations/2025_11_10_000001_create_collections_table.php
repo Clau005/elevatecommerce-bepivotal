@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->foreignId('template_id')->nullable()->constrained('templates')->nullOnDelete();
             $table->text('description')->nullable();
             $table->foreignId('parent_id')->nullable()->constrained('collections')->onDelete('cascade');
             $table->string('image')->nullable();
@@ -19,6 +20,8 @@ return new class extends Migration
             $table->integer('sort_order')->default(0);
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
+            $table->enum('type', ['manual', 'smart'])->default('manual');
+            $table->json('smart_rules')->nullable();
             $table->timestamps();
 
             // Indexes

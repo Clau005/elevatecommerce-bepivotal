@@ -156,13 +156,6 @@ class Order extends Model
         return $this->hasMany(DiscountUsage::class);
     }
 
-    /**
-     * Get the payments for this order.
-     */
-    public function payments(): HasMany
-    {
-        return $this->hasMany(Payment::class);
-    }
 
     /**
      * Get the payment gateway used for this order.
