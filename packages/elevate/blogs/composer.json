@@ -1,0 +1,21 @@
+{
+    "name": "elevate/blogs",
+    "description": "Blog management package for Elevate",
+    "type": "library",
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.0|^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Elevate\\Blogs\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Elevate\\Blogs\\Providers\\BlogsServiceProvider"
+            ]
+        }
+    }
+}

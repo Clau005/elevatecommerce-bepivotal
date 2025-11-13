@@ -1,0 +1,77 @@
+<?php
+
+namespace Elevate\Payments\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Elevate\Payments\Services\PaymentService;
+
+class CheckoutController extends Controller
+{
+    public function __construct(
+        protected PaymentService $paymentService
+    ) {}
+
+    /**
+     * Show checkout page
+     */
+    public function index(Request $request)
+    {
+        $gateways = $this->paymentService->getEnabledGateways();
+        
+        // Get cart/order data from session or request
+        $cart = session('cart', []);
+        $total = collect($cart)->sum('total');
+
+        return view('payments::checkout.index', compact('gateways', 'cart', 'total'));
+    }
+
+    /**
+     * Process payment
+     */
+    public function process(Request $request)
+    {
+        $validated = $request->validate([
+            'gateway_id' => 'required|exists:payment_gateways,id',
+            'amount' => 'required|numeric|min:0.01',
+            'currency' => 'string|size:3',
+            'payment_method' => 'required|string',
+        ]);
+
+        try {
+            $result = $this->paymentService->charge(
+                $validated['gateway_id'],
+                $validated['amount'],
+                [
+                    'currency' => $validated['currency'] ?? 'GBP',
+                    'token' => $request->payment_token,
+                    'card' => $request->card,
+                    'returnUrl' => route('checkout.complete'),
+                    'cancelUrl' => route('checkout.index'),
+                ]
+            );
+
+            if ($result['success']) {
+                return redirect()->route('checkout.complete')
+                    ->with('success', 'Payment processed successfully');
+            }
+
+            if ($result['redirect']) {
+                return redirect($result['redirect']);
+            }
+
+            return back()->with('error', $result['message'] ?? 'Payment failed');
+
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Payment completion page
+     */
+    public function complete(Request $request)
+    {
+        return view('payments::checkout.complete');
+    }
+}
