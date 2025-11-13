@@ -11,7 +11,15 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "elevate/payments": "@dev",
+        "elevate/shipping": "@dev",
+        "elevate/editor": "@dev",
+        "elevate/commerce-core": "@dev",
+        "elevate/product": "@dev",
+        "elevate/collections": "@dev",
+        "elevate/blogs": "@dev",
+        "elevate/watches": "@dev"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -85,6 +93,40 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/elevate/commerce-core"
+        },
+        {
+            "type": "path",
+            "url": "./packages/elevate/product"
+        },
+        {
+            "type": "path",
+            "url": "./packages/elevate/collections"
+        },
+        {
+            "type": "path",
+            "url": "./packages/elevate/blogs"
+        },
+        {
+            "type": "path",
+            "url": "./packages/elevate/watches"
+        },
+        {
+            "type": "path",
+            "url": "./packages/elevate/payments"
+        },
+        {
+            "type": "path",
+            "url": "./packages/elevate/shipping"
+        },
+        {
+            "type": "path",
+            "url": "./packages/elevate/editor"
+        }
+    ]
 }

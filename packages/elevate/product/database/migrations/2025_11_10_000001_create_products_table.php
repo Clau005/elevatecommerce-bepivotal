@@ -49,9 +49,6 @@ return new class extends Migration
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             
-            // Template
-            $table->foreignId('template_id')->nullable()->constrained('templates')->nullOnDelete();
-            
             // Sorting
             $table->integer('sort_order')->default(0);
             
