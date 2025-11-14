@@ -5,6 +5,7 @@ namespace Elevate\Editor\Services;
 use Elevate\Editor\Models\EditorSession;
 use Elevate\Editor\Models\Template;
 use Elevate\Editor\Models\Page;
+use Illuminate\Support\Facades\Artisan;
 
 class EditorService
 {
@@ -65,7 +66,7 @@ class EditorService
         } elseif ($editable instanceof Page) {
             $editable->publish();
         }
-
+        
         // Clear related caches
         $this->clearCaches($editable);
     }
@@ -94,11 +95,34 @@ class EditorService
     protected function clearCaches(Template|Page $editable): void
     {
         if ($editable instanceof Template) {
+            // Clear template-specific caches
             cache()->forget("template.{$editable->slug}");
             cache()->forget("templates.{$editable->model_type}");
+            cache()->forget("editor.template.render.{$editable->slug}");
+            
+            // Clear all templates cache for this model type
+            if ($editable->model_type) {
+                cache()->forget("templates.{$editable->model_type}");
+            }
         } elseif ($editable instanceof Page) {
+            // Clear page-specific caches
             cache()->forget("page.{$editable->slug}");
+            cache()->forget("editor.page.render.{$editable->slug}");
+            
+            // Clear route registry cache (so new pages appear in routes)
+            cache()->forget('editor.page_slugs');
         }
+        
+        // Clear theme sections cache if theme is set
+        if (isset($editable->theme_id)) {
+            $theme = $editable->theme;
+            if ($theme) {
+                cache()->forget("theme.{$theme->slug}.sections");
+            }
+        }
+        
+        // Clear view cache
+        Artisan::call('view:clear');
     }
 
     /**

@@ -12,11 +12,14 @@ class CommerceCoreServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Merge configuration
+        // Merge commerce configuration
         $this->mergeConfigFrom(
             __DIR__.'/../config/commerce.php',
             'commerce'
         );
+
+        // Merge auth configuration for staff guard
+        $this->mergeAuthConfig();
 
         // Register Admin Navigation as singleton
         $this->app->singleton('admin.navigation', function ($app) {
@@ -84,6 +87,13 @@ class CommerceCoreServiceProvider extends ServiceProvider
 
         // Register core admin navigation items
         $this->registerNavigation();
+
+        // Register commands
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \Elevate\CommerceCore\Console\Commands\InstallCommand::class,
+            ]);
+        }
     }
 
     /**
@@ -130,6 +140,38 @@ class CommerceCoreServiceProvider extends ServiceProvider
             'pattern' => 'admin/settings',
             'order' => 910,
             'group' => 'settings',
+        ]);
+    }
+
+    /**
+     * Merge authentication configuration for staff guard.
+     */
+    protected function mergeAuthConfig(): void
+    {
+        $authConfig = require __DIR__.'/../config/auth.php';
+
+        // Merge guards
+        config([
+            'auth.guards' => array_merge(
+                config('auth.guards', []),
+                $authConfig['guards']
+            ),
+        ]);
+
+        // Merge providers
+        config([
+            'auth.providers' => array_merge(
+                config('auth.providers', []),
+                $authConfig['providers']
+            ),
+        ]);
+
+        // Merge password reset configs
+        config([
+            'auth.passwords' => array_merge(
+                config('auth.passwords', []),
+                $authConfig['passwords']
+            ),
         ]);
     }
 }

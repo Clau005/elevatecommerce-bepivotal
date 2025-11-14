@@ -1,0 +1,58 @@
+{
+  "name": "Text Section",
+  "description": "A simple text section with customizable content and styling",
+  "category": "content",
+  "fields": [
+    {
+      "name": "title",
+      "label": "Title",
+      "type": "text",
+      "required": false,
+      "placeholder": "Enter section title"
+    },
+    {
+      "name": "content",
+      "label": "Content",
+      "type": "textarea",
+      "required": true,
+      "placeholder": "Enter your content here"
+    },
+    {
+      "name": "text_align",
+      "label": "Text Alignment",
+      "type": "select",
+      "required": false,
+      "default": "left",
+      "options": [
+        {"value": "left", "label": "Left"},
+        {"value": "center", "label": "Center"},
+        {"value": "right", "label": "Right"}
+      ]
+    },
+    {
+      "name": "background_color",
+      "label": "Background Color",
+      "type": "color",
+      "required": false,
+      "default": "#ffffff"
+    },
+    {
+      "name": "text_color",
+      "label": "Text Color",
+      "type": "color",
+      "required": false,
+      "default": "#1f2937"
+    },
+    {
+      "name": "padding",
+      "label": "Padding",
+      "type": "range",
+      "required": false,
+      "default": 60,
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px"
+    }
+  ]
+}

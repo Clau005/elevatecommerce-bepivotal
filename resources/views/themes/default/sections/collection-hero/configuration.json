@@ -1,0 +1,62 @@
+{
+  "name": "Collection Hero",
+  "description": "Hero section for collection pages with title, description, and product count",
+  "category": "collections",
+  "fields": [
+    {
+      "name": "title",
+      "label": "Title",
+      "type": "text",
+      "required": true,
+      "default": "{{ model.name }}",
+      "placeholder": "Collection title"
+    },
+    {
+      "name": "subtitle",
+      "label": "Subtitle/Description",
+      "type": "textarea",
+      "required": false,
+      "default": "{{ model.description }}",
+      "placeholder": "Collection description"
+    },
+    {
+      "name": "show_product_count",
+      "label": "Show Product Count",
+      "type": "toggle",
+      "required": false,
+      "default": true
+    },
+    {
+      "name": "background_image",
+      "label": "Background Image",
+      "type": "image",
+      "required": false,
+      "placeholder": "Select background image"
+    },
+    {
+      "name": "background_color",
+      "label": "Background Color",
+      "type": "color",
+      "required": false,
+      "default": "#1f2937"
+    },
+    {
+      "name": "text_color",
+      "label": "Text Color",
+      "type": "color",
+      "required": false,
+      "default": "#ffffff"
+    },
+    {
+      "name": "height",
+      "label": "Section Height",
+      "type": "range",
+      "required": false,
+      "default": 400,
+      "min": 200,
+      "max": 600,
+      "step": 50,
+      "unit": "px"
+    }
+  ]
+}

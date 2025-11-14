@@ -140,41 +140,5 @@
       </main>
 
     </div>
-
- {{-- Trix Attachment Upload Handler --}}
- <script>
-  document.addEventListener('trix-attachment-add', function(event) {
-      const attachment = event.attachment;
-      const file = attachment.file;
-
-      if (file) {
-          const formData = new FormData();
-          formData.append('attachment', file);
-          formData.append('_token', '{{ csrf_token() }}');
-
-          fetch('{{ route("admin.attachments.upload") }}', {
-              method: 'POST',
-              body: formData
-          })
-          .then(response => response.json())
-          .then(data => {
-              if (data.url) {
-                  attachment.setAttributes({
-                      url: data.url,
-                      href: data.href
-                  });
-              } else {
-                  attachment.remove();
-                  alert('Upload failed: ' + (data.error || 'Unknown error'));
-              }
-          })
-          .catch(error => {
-              attachment.remove();
-              alert('Upload failed: ' + error.message);
-          });
-      }
-  });
-</script>
-
 </body>
 </html>
