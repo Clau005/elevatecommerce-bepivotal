@@ -148,6 +148,8 @@ class CollectionController extends Controller
         $templates = \Elevate\Editor\Models\Template::where('model_type', 'Elevate\Collections\Models\Collection')
             ->get();
 
+        
+
 
         return view('collections::admin.collections.create', compact('parentCollections', 'templates'));
     }
@@ -160,7 +162,7 @@ class CollectionController extends Controller
             'description' => 'nullable|string',
             'parent_id' => 'nullable|exists:collections,id',
             'image' => 'nullable|string',
-            'template_id' => 'nullable|exists:templates,id',
+            'template_id' => 'required|exists:templates,id',
             'sort_order' => 'nullable|integer',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',

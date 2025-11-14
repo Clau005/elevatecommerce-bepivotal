@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9d85cb4abab11564d171eebb1b704ad",
+    "content-hash": "81eb8e67908db16b5eedb07dc4f8d296",
     "packages": [
         {
             "name": "brick/math",
@@ -798,39 +798,6 @@
                 }
             },
             "description": "Multi-carrier shipping integration for Elevate",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "elevate/watches",
-            "version": "dev-packages",
-            "dist": {
-                "type": "path",
-                "url": "./packages/elevate/watches",
-                "reference": "61510fa4ddec96f18aa77ddeff80775b6b120557"
-            },
-            "require": {
-                "elevate/collections": "*",
-                "elevate/commerce-core": "*",
-                "elevate/editor": "*",
-                "illuminate/support": "^10.0|^11.0|^12.0",
-                "php": "^8.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Elevate\\Watches\\WatchesServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Elevate\\Watches\\": "src/"
-                }
-            },
-            "description": "Watches e-commerce package for Elevate",
             "transport-options": {
                 "relative": true
             }
@@ -10279,16 +10246,16 @@
         },
         {
             "name": "theseer/tokenizer",
-            "version": "1.2.3",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/theseer/tokenizer.git",
-                "reference": "737eda637ed5e28c3413cb1ebe8bb52cbf1ca7a2"
+                "reference": "d74205c497bfbca49f34d4bc4c19c17e22db4ebb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theseer/tokenizer/zipball/737eda637ed5e28c3413cb1ebe8bb52cbf1ca7a2",
-                "reference": "737eda637ed5e28c3413cb1ebe8bb52cbf1ca7a2",
+                "url": "https://api.github.com/repos/theseer/tokenizer/zipball/d74205c497bfbca49f34d4bc4c19c17e22db4ebb",
+                "reference": "d74205c497bfbca49f34d4bc4c19c17e22db4ebb",
                 "shasum": ""
             },
             "require": {
@@ -10317,7 +10284,7 @@
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
             "support": {
                 "issues": "https://github.com/theseer/tokenizer/issues",
-                "source": "https://github.com/theseer/tokenizer/tree/1.2.3"
+                "source": "https://github.com/theseer/tokenizer/tree/1.3.0"
             },
             "funding": [
                 {
@@ -10325,7 +10292,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-03T12:36:25+00:00"
+            "time": "2025-11-13T13:44:09+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -10395,8 +10362,7 @@
         "elevate/editor": 20,
         "elevate/payments": 20,
         "elevate/product": 20,
-        "elevate/shipping": 20,
-        "elevate/watches": 20
+        "elevate/shipping": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

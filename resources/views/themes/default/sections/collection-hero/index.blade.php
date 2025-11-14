@@ -4,16 +4,17 @@
                 color: {{ $text_color ?? '#ffffff' }}; 
                 min-height: {{ $height ?? 400 }}px;">
     <div class="collection-hero-content max-w-3xl">
-        @if(isset($title))
-            <h1 class="text-4xl font-bold mb-4 leading-tight">{{ $title }}</h1>
-        @endif
+
+        <h1 class="text-4xl font-bold mb-4 leading-tight">{{ $collection->name }}</h1>
+    
         
-        @if(isset($subtitle))
-            <div class="text-lg mb-6 opacity-90 leading-relaxed">{!! $subtitle !!}</div>
-        @endif
+        {!! $collection->description !!}
         
-        @if(isset($show_product_count) && $show_product_count && isset($product_count))
-            <p class="text-base opacity-80">{{ $product_count }} {{ $product_count == 1 ? 'Product' : 'Products' }}</p>
+        @if(isset($show_product_count) && $show_product_count)
+            @php
+                $count = isset($product_count) ? $product_count : (isset($collection) && $collection->products ? $collection->products->count() : 0);
+            @endphp
+            <p class="text-base opacity-80">{{ $count }} {{ $count == 1 ? 'Product' : 'Products' }}</p>
         @endif
     </div>
 </section>

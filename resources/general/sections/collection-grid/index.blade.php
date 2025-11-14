@@ -7,11 +7,15 @@
         <!-- Product Grid -->
         <div class="grid gap-8" style="grid-template-columns: repeat(auto-fill, minmax({{ $column_width ?? '250px' }}, 1fr));">
             @php
-                // Support both $products and $model->items (for collections)
-                $items = $products ?? ($model->items ?? []);
+                // Support multiple data sources
+                $items = $collection->products;
             @endphp
-            @if(count($items) > 0)
-                @foreach($items as $product)
+            @if(count($collection->collectables) > 0)
+                @foreach($collection->collectables as $collectable)
+                    @php
+                        // If item is a Collectable, get the actual product
+                        $product = $collectable->collectable;
+                    @endphp
                     <div class="product-card border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
                         @if($product->featured_image)
                             <img src="{{ $product->featured_image ?? '' }}" alt="{{ $product->name }}" class="w-full h-72 object-cover">

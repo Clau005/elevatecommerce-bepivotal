@@ -18,8 +18,7 @@
         "elevate/commerce-core": "@dev",
         "elevate/product": "@dev",
         "elevate/collections": "@dev",
-        "elevate/blogs": "@dev",
-        "elevate/watches": "@dev"
+        "elevate/blogs": "@dev"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -111,10 +110,6 @@
         {
             "type": "path",
             "url": "./packages/elevate/blogs"
-        },
-        {
-            "type": "path",
-            "url": "./packages/elevate/watches"
         },
         {
             "type": "path",
