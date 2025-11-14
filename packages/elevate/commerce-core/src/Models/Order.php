@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -141,6 +142,22 @@ class Order extends Model
     }
 
     /**
+     * Get the billing address for this order.
+     */
+    public function billingAddress(): HasOne
+    {
+        return $this->hasOne(OrderAddress::class)->where('type', 'billing');
+    }
+
+    /**
+     * Get the shipping address for this order.
+     */
+    public function shippingAddress(): HasOne
+    {
+        return $this->hasOne(OrderAddress::class)->where('type', 'shipping');
+    }
+
+    /**
      * Get the timeline entries for this order.
      */
     public function timelines(): HasMany
@@ -187,22 +204,6 @@ class Order extends Model
     public function payments(): HasMany
     {
         return $this->transactions();
-    }
-
-    /**
-     * Get the billing address.
-     */
-    public function billingAddress()
-    {
-        return $this->addresses()->where('type', 'billing')->first();
-    }
-
-    /**
-     * Get the shipping address.
-     */
-    public function shippingAddress()
-    {
-        return $this->addresses()->where('type', 'shipping')->first();
     }
 
     /**

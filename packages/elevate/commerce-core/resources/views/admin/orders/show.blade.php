@@ -401,6 +401,173 @@
                     </div>
                 </div>
 
+                {{-- Payment Information --}}
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Payment</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-3">
+                        @if($order->paymentGateway)
+                            <div>
+                                <p class="text-xs text-gray-500">Payment Method</p>
+                                <p class="text-sm text-gray-900 font-medium">{{ $order->paymentGateway->name }}</p>
+                            </div>
+                        @endif
+
+                        @if($order->transactions && $order->transactions->count() > 0)
+                            @php $latestTransaction = $order->transactions->sortByDesc('created_at')->first(); @endphp
+                            <div>
+                                <p class="text-xs text-gray-500">Transaction Status</p>
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                                    @if($latestTransaction->status === 'completed') bg-green-100 text-green-800
+                                    @elseif($latestTransaction->status === 'pending') bg-yellow-100 text-yellow-800
+                                    @elseif($latestTransaction->status === 'failed') bg-red-100 text-red-800
+                                    @else bg-gray-100 text-gray-800
+                                    @endif">
+                                    {{ ucfirst($latestTransaction->status) }}
+                                </span>
+                            </div>
+
+                            @if($latestTransaction->reference)
+                                <div>
+                                    <p class="text-xs text-gray-500">Transaction ID</p>
+                                    <p class="text-sm text-gray-900 font-mono">{{ $latestTransaction->reference }}</p>
+                                </div>
+                            @endif
+
+                            @if($latestTransaction->completed_at)
+                                <div>
+                                    <p class="text-xs text-gray-500">Payment Completed</p>
+                                    <p class="text-sm text-gray-900">{{ $latestTransaction->completed_at->format('M j, Y g:ia') }}</p>
+                                </div>
+                            @endif
+
+                            <div>
+                                <p class="text-xs text-gray-500">Amount</p>
+                                <p class="text-sm text-gray-900 font-medium">{{ $latestTransaction->formatted_amount }}</p>
+                            </div>
+                        @else
+                            <p class="text-sm text-gray-500">No payment transactions recorded</p>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Shipping Information --}}
+                @if($order->shippingCarrier)
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Shipping</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-3">
+                        <div>
+                            <p class="text-xs text-gray-500">Carrier</p>
+                            <p class="text-sm text-gray-900 font-medium">{{ $order->shippingCarrier->name }}</p>
+                        </div>
+
+                        @if($order->tracking_number)
+                            <div>
+                                <p class="text-xs text-gray-500">Tracking Number</p>
+                                <p class="text-sm text-gray-900 font-mono">{{ $order->tracking_number }}</p>
+                            </div>
+                        @endif
+
+                        @if($order->shipped_at)
+                            <div>
+                                <p class="text-xs text-gray-500">Shipped At</p>
+                                <p class="text-sm text-gray-900">{{ $order->shipped_at->format('M j, Y g:ia') }}</p>
+                            </div>
+                        @endif
+
+                        @if($order->delivered_at)
+                            <div>
+                                <p class="text-xs text-gray-500">Delivered At</p>
+                                <p class="text-sm text-gray-900">{{ $order->delivered_at->format('M j, Y g:ia') }}</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+                @endif
+
+                {{-- Billing Address --}}
+                @if($order->billingAddress)
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Billing Address</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-2">
+                        <p class="text-sm text-gray-900 font-medium">
+                            {{ $order->billingAddress->first_name }} {{ $order->billingAddress->last_name }}
+                        </p>
+                        @if($order->billingAddress->company_name)
+                            <p class="text-sm text-gray-600">{{ $order->billingAddress->company_name }}</p>
+                        @endif
+                        <p class="text-sm text-gray-600">{{ $order->billingAddress->line_one }}</p>
+                        @if($order->billingAddress->line_two)
+                            <p class="text-sm text-gray-600">{{ $order->billingAddress->line_two }}</p>
+                        @endif
+                        <p class="text-sm text-gray-600">
+                            {{ $order->billingAddress->city }}, {{ $order->billingAddress->state }} {{ $order->billingAddress->postcode }}
+                        </p>
+                        <p class="text-sm text-gray-600">{{ $order->billingAddress->country->name ?? '' }}</p>
+                        @if($order->billingAddress->contact_email)
+                            <p class="text-sm text-gray-600 mt-3">
+                                <span class="text-xs text-gray-500">Email:</span><br>
+                                {{ $order->billingAddress->contact_email }}
+                            </p>
+                        @endif
+                        @if($order->billingAddress->contact_phone)
+                            <p class="text-sm text-gray-600">
+                                <span class="text-xs text-gray-500">Phone:</span><br>
+                                {{ $order->billingAddress->contact_phone }}
+                            </p>
+                        @endif
+                    </div>
+                </div>
+                @endif
+
+                {{-- Shipping Address --}}
+                @if($order->shippingAddress)
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Shipping Address</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-2">
+                        <p class="text-sm text-gray-900 font-medium">
+                            {{ $order->shippingAddress->first_name }} {{ $order->shippingAddress->last_name }}
+                        </p>
+                        @if($order->shippingAddress->company_name)
+                            <p class="text-sm text-gray-600">{{ $order->shippingAddress->company_name }}</p>
+                        @endif
+                        <p class="text-sm text-gray-600">{{ $order->shippingAddress->line_one }}</p>
+                        @if($order->shippingAddress->line_two)
+                            <p class="text-sm text-gray-600">{{ $order->shippingAddress->line_two }}</p>
+                        @endif
+                        <p class="text-sm text-gray-600">
+                            {{ $order->shippingAddress->city }}, {{ $order->shippingAddress->state }} {{ $order->shippingAddress->postcode }}
+                        </p>
+                        <p class="text-sm text-gray-600">{{ $order->shippingAddress->country->name ?? '' }}</p>
+                        @if($order->shippingAddress->delivery_instructions)
+                            <div class="mt-3 pt-3 border-t border-gray-200">
+                                <p class="text-xs text-gray-500">Delivery Instructions:</p>
+                                <p class="text-sm text-gray-600">{{ $order->shippingAddress->delivery_instructions }}</p>
+                            </div>
+                        @endif
+                        @if($order->shippingAddress->contact_email)
+                            <p class="text-sm text-gray-600 mt-3">
+                                <span class="text-xs text-gray-500">Email:</span><br>
+                                {{ $order->shippingAddress->contact_email }}
+                            </p>
+                        @endif
+                        @if($order->shippingAddress->contact_phone)
+                            <p class="text-sm text-gray-600">
+                                <span class="text-xs text-gray-500">Phone:</span><br>
+                                {{ $order->shippingAddress->contact_phone }}
+                            </p>
+                        @endif
+                    </div>
+                </div>
+                @endif
+
                 {{-- Order Status Management --}}
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                     <div class="px-6 py-4 border-b border-gray-200">

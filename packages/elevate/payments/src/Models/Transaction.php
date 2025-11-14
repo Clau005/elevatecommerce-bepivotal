@@ -109,7 +109,7 @@ class Transaction extends Model
     public function getFormattedAmountAttribute(): string
     {
         $currencyService = app(\Elevate\CommerceCore\Services\CurrencyService::class);
-        // Amount is stored in pounds, convert to pence for formatting
-        return $currencyService->format((int)($this->amount * 100), $this->currency);
+        // Amount is stored in smallest unit (cents/pence), format directly
+        return $currencyService->format($this->amount, $this->currency);
     }
 }

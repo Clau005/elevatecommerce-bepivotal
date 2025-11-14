@@ -389,6 +389,8 @@ class CheckoutController extends Controller
             'state' => $data['billing_address']['state'] ?? null,
             'postcode' => $data['billing_address']['postal_code'],
             'country' => $data['billing_address']['country'],
+            'contact_email' => $data['billing_address']['email'] ?? $data['email'] ?? null,
+            'contact_phone' => $data['billing_address']['phone'] ?? $data['phone'] ?? null,
         ]);
         Log::info('Billing address created');
 
@@ -406,6 +408,8 @@ class CheckoutController extends Controller
                 'state' => $data['shipping_address']['state'] ?? null,
                 'postcode' => $data['shipping_address']['postal_code'],
                 'country' => $data['shipping_address']['country'],
+                'contact_email' => $data['shipping_address']['email'] ?? $data['email'] ?? null,
+                'contact_phone' => $data['shipping_address']['phone'] ?? $data['phone'] ?? null,
             ]);
             Log::info('Shipping address created');
         }
