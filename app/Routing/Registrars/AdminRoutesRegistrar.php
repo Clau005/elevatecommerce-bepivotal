@@ -32,6 +32,7 @@ class AdminRoutesRegistrar implements RouteRegistrar
             base_path('packages/elevate/blogs/routes/admin.php'),
             base_path('packages/elevate/payments/routes/admin.php'),
             base_path('packages/elevate/shipping/routes/admin.php'),
+            base_path('packages/elevate/managed-event-notifications/routes/admin.php'),
             base_path('routes/admin.php'), // Main admin routes if any
         ];
         
