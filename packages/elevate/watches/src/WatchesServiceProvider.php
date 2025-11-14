@@ -62,7 +62,7 @@ class WatchesServiceProvider extends ServiceProvider
         // Routes are now loaded via RouteServiceProvider using Route Registrars
         // This ensures proper route priority and prevents conflicts
         // Admin routes are still loaded here as they don't conflict
-        $this->loadRoutesFrom(__DIR__.'/../routes/admin.php');
+        // $this->loadRoutesFrom(__DIR__.'/../routes/admin.php');
 
         // Load views
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'watches');

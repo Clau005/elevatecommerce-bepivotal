@@ -57,9 +57,9 @@ class CommerceCoreServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         // Load routes
+        // - Web routes loaded via CommerceRoutesRegistrar
+        // - Admin routes loaded via AdminRoutesRegistrar
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/admin.php');
 
         // Load views
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'commerce');

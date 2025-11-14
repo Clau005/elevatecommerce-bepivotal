@@ -6,21 +6,25 @@ namespace App\Routing\Registrars;
 
 use App\Routing\Contracts\RouteRegistrar;
 use Illuminate\Contracts\Routing\Registrar;
-use Illuminate\Support\Facades\Route;
-use Elevate\Collections\Http\Controllers\CollectionWebController;
 
 class CollectionRoutesRegistrar implements RouteRegistrar
 {
     public function map(Registrar $registrar): void
     {
-        // Collection routes with optional filters
-        // Must be registered BEFORE single-level slug route
-        // Apply web middleware for sessions, CSRF, etc.
+        // Load collection routes from collections package
+        
+        // Apply web middleware group
         $registrar->middleware('web')->group(function () {
-            // Nested collection with optional filters: /{parent}/{child}/{filters?}
-            Route::get('/{parent}/{child}/{filters?}', [CollectionWebController::class, 'show'])
-                ->where('filters', '.*')
-                ->name('collections.subcollection');
+            $this->loadCollectionRoutes();
         });
+    }
+    
+    protected function loadCollectionRoutes(): void
+    {
+        $routeFile = base_path('packages/elevate/collections/routes/web.php');
+        
+        if (file_exists($routeFile)) {
+            require $routeFile;
+        }
     }
 }

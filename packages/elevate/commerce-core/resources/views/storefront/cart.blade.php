@@ -212,12 +212,12 @@
                             
                             <!-- Action Buttons -->
                             <div class="space-y-3">
-                                <a href="{{ route('checkout') }}" 
+                                <a href="{{ route('checkout.index') }}" 
                                    class="w-full bg-blue-800 hover:bg-blue-900 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-800 block uppercase">
                                     Proceed to Checkout
                                 </a>
                                 
-                                <a href="{{ route('storefront.shop') }}" 
+                                <a href="/" 
                                    class="w-full bg-white hover:bg-gray-50 text-gray-700 text-center py-3 px-4 rounded-lg font-medium border border-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 block">
                                     Continue Shopping
                                 </a>

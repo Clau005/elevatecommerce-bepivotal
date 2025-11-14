@@ -6,18 +6,25 @@ namespace App\Routing\Registrars;
 
 use App\Routing\Contracts\RouteRegistrar;
 use Illuminate\Contracts\Routing\Registrar;
-use Illuminate\Support\Facades\Route;
-use Elevate\Product\Http\Controllers\ProductWebController;
 
 class ProductRoutesRegistrar implements RouteRegistrar
 {
     public function map(Registrar $registrar): void
     {
-        // Product routes - /products/{slug}
-        // Apply web middleware for sessions, CSRF, etc.
+        // Load product routes from product package
+        
+        // Apply web middleware group
         $registrar->middleware('web')->group(function () {
-            Route::get('/products/{slug}', [ProductWebController::class, 'show'])
-                ->name('products.show');
+            $this->loadProductRoutes();
         });
+    }
+    
+    protected function loadProductRoutes(): void
+    {
+        $routeFile = base_path('packages/elevate/product/routes/web.php');
+        
+        if (file_exists($routeFile)) {
+            require $routeFile;
+        }
     }
 }

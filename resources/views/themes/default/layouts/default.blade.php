@@ -35,9 +35,11 @@
 </head>
 <body class="live-site">
     <div class="theme-container">
+        @include('themes.default.snippets.header')
         <div class="theme-content">
             {!! $sectionsHtml !!}
         </div>
+        @include('themes.default.snippets.footer')
     </div>
     
     <!-- Prevent editor styles from affecting live site -->

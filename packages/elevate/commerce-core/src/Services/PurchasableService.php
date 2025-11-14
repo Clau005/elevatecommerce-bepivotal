@@ -128,9 +128,9 @@ class PurchasableService
                 'total' => 0,
                 'item_count' => 0,
                 'formatted' => [
-                    'subtotal' => $this->formatCurrency(0),
-                    'tax' => $this->formatCurrency(0),
-                    'total' => $this->formatCurrency(0),
+                    'subtotal' => '£0.00',
+                    'tax' => '£0.00',
+                    'total' => '£0.00',
                 ],
             ];
         }

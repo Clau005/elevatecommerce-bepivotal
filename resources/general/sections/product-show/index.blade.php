@@ -50,7 +50,7 @@
                     <h1 class="text-4xl font-bold mb-4 leading-tight text-gray-900">{{ $product->name }}</h1>
                     
                     <div class="text-3xl font-bold text-blue-600 mb-6">
-                        ${{ number_format($product->price ?? 0, 2) }}
+                        £{{ number_format(($product->price ?? 0) / 100, 2) }}
                     </div>
                     
                     @if($product->description)
@@ -69,18 +69,42 @@
                         </span>
                     </div>
                     
-                    <!-- Quantity -->
-                    <div class="mb-6">
-                        <label class="block font-semibold text-gray-700 mb-2">Quantity:</label>
-                        <input type="number" value="1" min="1" max="99"
-                               class="w-24 px-4 py-3 border border-gray-300 rounded-md text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
+                    <!-- Add to Cart Form -->
+                    <form action="{{ route('storefront.cart.add') }}" method="POST" class="add-to-cart-form">
+                        @csrf
+                        <input type="hidden" name="purchasable_type" value="{{ get_class($product) }}">
+                        <input type="hidden" name="purchasable_id" value="{{ $product->id }}">
+                        
+                        <!-- Quantity -->
+                        <div class="mb-6">
+                            <label class="block font-semibold text-gray-700 mb-2">Quantity:</label>
+                            <input type="number" name="quantity" value="1" min="1" max="99"
+                                   class="w-24 px-4 py-3 border border-gray-300 rounded-md text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        
+                        <!-- Add to Cart Button -->
+                        <button type="submit" class="w-full px-8 py-4 rounded-lg text-lg font-semibold text-white transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                                style="background-color: {{ $button_color ?? '#3b82f6' }};">
+                            <span class="button-text">{{ $button_text ?? 'Add to Cart' }}</span>
+                            <span class="button-loading hidden">
+                                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Adding...
+                            </span>
+                        </button>
+                    </form>
                     
-                    <!-- Add to Cart Button -->
-                    <button class="w-full px-8 py-4 rounded-lg text-lg font-semibold text-white transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
-                            style="background-color: {{ $button_color ?? '#3b82f6' }};">
-                        {{ $button_text ?? 'Add to Cart' }}
-                    </button>
+                    <!-- Success Message -->
+                    <div class="cart-success-message hidden mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Added to cart successfully!</span>
+                        </div>
+                    </div>
                     
                     <!-- Product Meta -->
                     <div class="mt-8 pt-8 border-t border-gray-200 space-y-3 text-sm text-gray-600">
@@ -100,3 +124,66 @@
         </div>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.add-to-cart-form');
+    if (!form) return;
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const button = form.querySelector('button[type="submit"]');
+        const buttonText = button.querySelector('.button-text');
+        const buttonLoading = button.querySelector('.button-loading');
+        const successMessage = document.querySelector('.cart-success-message');
+        
+        // Disable button and show loading
+        button.disabled = true;
+        buttonText.classList.add('hidden');
+        buttonLoading.classList.remove('hidden');
+        successMessage.classList.add('hidden');
+        
+        try {
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin', // Important: Send cookies with request
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                // Show success message
+                successMessage.classList.remove('hidden');
+                
+                // Update cart count if element exists
+                const cartCount = document.querySelector('.cart-count');
+                if (cartCount && data.cart_count) {
+                    cartCount.textContent = data.cart_count;
+                }
+                
+                // Hide success message after 3 seconds
+                setTimeout(() => {
+                    successMessage.classList.add('hidden');
+                }, 3000);
+            } else {
+                alert(data.message || 'Failed to add item to cart');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        } finally {
+            // Re-enable button
+            button.disabled = false;
+            buttonText.classList.remove('hidden');
+            buttonLoading.classList.add('hidden');
+        }
+    });
+});
+</script>

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Routing\Registrars\AdminRoutesRegistrar;
+use App\Routing\Registrars\CommerceRoutesRegistrar;
 use App\Routing\Registrars\PageRoutesRegistrar;
 use App\Routing\Registrars\ProductRoutesRegistrar;
 use App\Routing\Registrars\CollectionRoutesRegistrar;
@@ -20,6 +21,9 @@ use App\Routing\Registrars\WatchRoutesRegistrar;
 
 // Register all admin routes from packages
 (new AdminRoutesRegistrar)->map(Route::getFacadeRoot());
+
+// Register commerce routes (cart, checkout, account)
+(new CommerceRoutesRegistrar)->map(Route::getFacadeRoot());
 
 // Register storefront routes (these should be LAST to avoid conflicts)
 (new ProductRoutesRegistrar)->map(Route::getFacadeRoot());

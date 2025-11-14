@@ -6,18 +6,25 @@ namespace App\Routing\Registrars;
 
 use App\Routing\Contracts\RouteRegistrar;
 use Illuminate\Contracts\Routing\Registrar;
-use Illuminate\Support\Facades\Route;
-use Elevate\Watches\Http\Controllers\WatchWebController;
 
 class WatchRoutesRegistrar implements RouteRegistrar
 {
     public function map(Registrar $registrar): void
     {
-        // Watch routes - /watches/{slug}
-        // Apply web middleware for sessions, CSRF, etc.
+        // Load watch routes from watches package
+        
+        // Apply web middleware group
         $registrar->middleware('web')->group(function () {
-            Route::get('/watches/{slug}', [WatchWebController::class, 'show'])
-                ->name('watches.show');
+            $this->loadWatchRoutes();
         });
+    }
+    
+    protected function loadWatchRoutes(): void
+    {
+        $routeFile = base_path('packages/elevate/watches/routes/web.php');
+        
+        if (file_exists($routeFile)) {
+            require $routeFile;
+        }
     }
 }

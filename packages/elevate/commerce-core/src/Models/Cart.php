@@ -165,15 +165,17 @@ class Cart extends Model
             }
             
             // Create new user cart
-            return static::create([
+            $cart = static::create([
                 'user_id' => $userId,
                 'session_id' => null,
-                'channel_id' => 1,
+                'channel_id' => null, // Will be set when channels are configured
                 'currency_code' => 'GBP',
                 'compare_currency_code' => 'GBP',
                 'exchange_rate' => 1.0,
                 'meta' => [],
             ]);
+            
+            return $cart;
         }
         
         // For guests, use session-based cart
@@ -186,7 +188,7 @@ class Cart extends Model
             $cart = static::create([
                 'user_id' => null,
                 'session_id' => $sessionId,
-                'channel_id' => 1,
+                'channel_id' => null, // Will be set when channels are configured
                 'currency_code' => 'GBP',
                 'compare_currency_code' => 'GBP',
                 'exchange_rate' => 1.0,
