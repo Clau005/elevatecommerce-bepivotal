@@ -50,7 +50,7 @@
                     <h1 class="text-4xl font-bold mb-4 leading-tight text-gray-900">{{ $product->name }}</h1>
                     
                     <div class="text-3xl font-bold text-blue-600 mb-6">
-                        £{{ number_format(($product->price ?? 0) / 100, 2) }}
+                        @currency($product->price ?? 0)
                     </div>
                     
                     @if($product->description)

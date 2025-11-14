@@ -3,11 +3,13 @@
 namespace Elevate\Payments\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PaymentGateway extends Model
 {
     protected $fillable = [
         'name',
+        'display_name',
         'driver',
         'is_enabled',
         'test_mode',
@@ -61,5 +63,13 @@ class PaymentGateway extends Model
     public function supportsPaymentMethod(string $method): bool
     {
         return in_array($method, $this->getAvailablePaymentMethods());
+    }
+
+    /**
+     * Get all transactions for this gateway
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'gateway', 'name');
     }
 }

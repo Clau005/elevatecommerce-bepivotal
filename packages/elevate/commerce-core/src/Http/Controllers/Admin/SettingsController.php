@@ -30,6 +30,7 @@ use Elevate\CommerceCore\Settings\Sections\PaymentsSettingsSection;
 use Elevate\CommerceCore\Settings\Sections\ShippingSettingsSection;
 use Elevate\CommerceCore\Settings\Sections\CheckoutSettingsSection;
 use Elevate\CommerceCore\Settings\Sections\GiftVouchersSettingsSection;
+use Elevate\CommerceCore\Settings\Sections\ChannelsSettingsSection;
 
 class SettingsController extends Controller
 {
@@ -59,6 +60,7 @@ class SettingsController extends Controller
             new CurrenciesSettingsSection(),
             new LanguagesSettingsSection(),
             new StatesSettingsSection(),
+            new ChannelsSettingsSection(),
             new StaffSettingsSection(),
             new CustomerGroupsSettingsSection(),
             new RolesSettingsSection(),

@@ -1,6 +1,5 @@
-@extends('themes.be-pivotal.layouts.default')
+<x-customer-layout title="Order Confirmation" description="Your order has been placed successfully">
 
-@section('content')
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
         <!-- Success Icon -->
@@ -26,7 +25,7 @@
                 </div>
                 <div class="text-left">
                     <p class="text-gray-500">Total Amount</p>
-                    <p class="font-semibold text-gray-900">£{{ number_format($order->total / 100, 2) }}</p>
+                    <p class="font-semibold text-gray-900">@currency($order->total)</p>
                 </div>
                 <div class="text-right">
                     <p class="text-gray-500">Payment Status</p>
@@ -51,7 +50,7 @@
                                 <p class="text-gray-500">Qty: {{ $line->quantity }}</p>
                             </div>
                         </div>
-                        <span class="font-medium text-gray-900">£{{ number_format(($line->unit_price * $line->quantity) / 100, 2) }}</span>
+                        <span class="font-medium text-gray-900">@currency($line->unit_price * $line->quantity)</span>
                     </div>
                 @endforeach
             </div>
@@ -95,4 +94,5 @@
         </p>
     </div>
 </div>
-@endsection
+
+</x-customer-layout>

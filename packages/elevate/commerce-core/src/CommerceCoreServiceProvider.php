@@ -35,6 +35,9 @@ class CommerceCoreServiceProvider extends ServiceProvider
         $this->app->singleton(\Elevate\CommerceCore\Settings\SettingsRegistry::class, function ($app) {
             return new \Elevate\CommerceCore\Settings\SettingsRegistry();
         });
+
+        // Register Currency Service as singleton
+        $this->app->singleton(\Elevate\CommerceCore\Services\CurrencyService::class);
     }
 
     /**
@@ -69,6 +72,9 @@ class CommerceCoreServiceProvider extends ServiceProvider
         
         // Register anonymous components from the package
         Blade::anonymousComponentPath(__DIR__.'/../resources/views/components');
+        
+        // Register Blade directives for currency formatting
+        $this->registerBladeDirectives();
 
         // Publish configuration
         $this->publishes([
@@ -141,6 +147,25 @@ class CommerceCoreServiceProvider extends ServiceProvider
             'order' => 910,
             'group' => 'settings',
         ]);
+    }
+
+    /**
+     * Register Blade directives for currency formatting
+     */
+    protected function registerBladeDirectives(): void
+    {
+        // @currency directive - formats amount with symbol
+        // Usage: @currency($order->total) or @currency($order->total, 'USD')
+        Blade::directive('currency', function ($expression) {
+            return "<?php echo app(\Elevate\CommerceCore\Services\CurrencyService::class)->format({$expression}); ?>";
+        });
+        
+        // @currencySymbol directive - just the symbol
+        // Usage: @currencySymbol or @currencySymbol('USD')
+        Blade::directive('currencySymbol', function ($expression) {
+            $expression = $expression ?: 'null';
+            return "<?php echo app(\Elevate\CommerceCore\Services\CurrencyService::class)->symbol({$expression}); ?>";
+        });
     }
 
     /**

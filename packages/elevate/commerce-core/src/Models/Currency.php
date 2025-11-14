@@ -68,9 +68,48 @@ class Currency extends Model
 
     /**
      * Format amount in this currency.
+     * Amount should be in smallest unit (pence/cents)
      */
-    public function formatAmount($amount): string
+    public function formatAmount(int $amountInSmallestUnit): string
     {
-        return $this->symbol . number_format($amount / 100, 2);
+        $decimalPlaces = $this->decimal_places ?? 2;
+        $divisor = pow(10, $decimalPlaces);
+        $amount = $amountInSmallestUnit / $divisor;
+        
+        return $this->symbol . number_format($amount, $decimalPlaces);
+    }
+    
+    /**
+     * Format amount without symbol
+     */
+    public function formatAmountWithoutSymbol(int $amountInSmallestUnit): string
+    {
+        $decimalPlaces = $this->decimal_places ?? 2;
+        $divisor = pow(10, $decimalPlaces);
+        $amount = $amountInSmallestUnit / $divisor;
+        
+        return number_format($amount, $decimalPlaces);
+    }
+    
+    /**
+     * Convert amount from smallest unit to decimal
+     */
+    public function toDecimal(int $amountInSmallestUnit): float
+    {
+        $decimalPlaces = $this->decimal_places ?? 2;
+        $divisor = pow(10, $decimalPlaces);
+        
+        return $amountInSmallestUnit / $divisor;
+    }
+    
+    /**
+     * Convert decimal amount to smallest unit
+     */
+    public function toSmallestUnit(float $decimalAmount): int
+    {
+        $decimalPlaces = $this->decimal_places ?? 2;
+        $multiplier = pow(10, $decimalPlaces);
+        
+        return (int) round($decimalAmount * $multiplier);
     }
 }

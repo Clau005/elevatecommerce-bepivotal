@@ -39,7 +39,7 @@
                                value="{{ old('code', $currency->code) }}"
                                maxlength="3"
                                required
-                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('code') border-red-300 @enderror">
+                               class="w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('code') border-red-300 @enderror">
                         <p class="mt-1 text-sm text-gray-500">3-letter ISO currency code (e.g., USD, EUR, GBP)</p>
                         @error('code')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

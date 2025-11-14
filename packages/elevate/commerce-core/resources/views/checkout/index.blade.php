@@ -1,8 +1,7 @@
-@extends('themes.be-pivotal.layouts.default')
+<x-customer-layout title="Checkout" description="Complete your purchase">
 
-@section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <h1 class="text-3xl font-bold mb-8">Checkoutdasdsa</h1>
+    <h1 class="text-3xl font-bold mb-8">Checkout</h1>
 
     @if($cart->lines->isEmpty())
         <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
@@ -179,20 +178,56 @@
                                 <p class="text-red-800 text-sm">No payment methods available. Please contact support.</p>
                             </div>
                         @else
-                            <div class="space-y-3">
+                            <div class="space-y-4">
                                 @foreach($paymentGateways as $gateway)
-                                    <label class="flex items-center p-4 border border-gray-200 rounded-lg hover:border-blue-500 cursor-pointer">
-                                        <input type="radio" name="payment_gateway_id" value="{{ $gateway->id }}" required 
-                                            class="mr-3">
-                                        <div class="flex-1">
-                                            <div class="flex items-center justify-between">
-                                                <strong class="text-gray-900">{{ $gateway->name }}</strong>
-                                                @if($gateway->test_mode)
-                                                    <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Test Mode</span>
-                                                @endif
+                                    <div class="border border-gray-200 rounded-lg">
+                                        <label class="flex items-center p-4 cursor-pointer hover:bg-gray-50">
+                                            <input type="radio" name="payment_gateway_id" value="{{ $gateway->id }}" required 
+                                                class="mr-3 payment-gateway-radio" 
+                                                data-gateway-type="{{ strtolower($gateway->name) }}"
+                                                data-gateway-id="{{ $gateway->id }}">
+                                            <div class="flex-1">
+                                                <div class="flex items-center justify-between">
+                                                    <strong class="text-gray-900">{{ $gateway->name }}</strong>
+                                                    @if($gateway->test_mode)
+                                                        <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Test Mode</span>
+                                                    @endif
+                                                </div>
                                             </div>
+                                        </label>
+                                        
+                                        <!-- Payment Gateway Fields -->
+                                        <div class="payment-fields hidden p-4 pt-0" data-gateway-id="{{ $gateway->id }}">
+                                            @if(strtolower($gateway->name) === 'stripe')
+                                                <!-- Stripe Elements Container -->
+                                                <div class="space-y-4">
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-2">Card Information</label>
+                                                        <div id="stripe-card-element-{{ $gateway->id }}" class="p-3 border border-gray-300 rounded-md bg-white"></div>
+                                                        <div id="stripe-card-errors-{{ $gateway->id }}" class="text-red-600 text-sm mt-2"></div>
+                                                    </div>
+                                                    
+                                                    <div class="grid grid-cols-2 gap-4">
+                                                        <div>
+                                                            <label class="block text-sm font-medium text-gray-700 mb-1">Cardholder Name</label>
+                                                            <input type="text" name="cardholder_name" 
+                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                                placeholder="John Doe">
+                                                        </div>
+                                                        <div>
+                                                            <label class="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+                                                            <input type="text" name="card_postal_code" 
+                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                                placeholder="12345">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <!-- Other payment gateways -->
+                                                <p class="text-sm text-gray-600">Payment details will be collected on the next page.</p>
+                                            @endif
                                         </div>
-                                    </label>
+                                    </div>
                                 @endforeach
                             </div>
                         @endif
@@ -231,7 +266,7 @@
                         <div class="border-t border-gray-200 pt-4 space-y-2">
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Subtotal</span>
-                                <span class="text-gray-900">£{{ number_format($cart->lines->sum('sub_total') / 100, 2) }}</span>
+                                <span class="text-gray-900">@currency($cart->lines->sum('sub_total'))</span>
                             </div>
                             
                             @if($requiresShipping)
@@ -243,7 +278,7 @@
                             
                             <div class="flex justify-between text-base font-semibold pt-2 border-t border-gray-200">
                                 <span>Total</span>
-                                <span>£{{ number_format($cart->lines->sum('total') / 100, 2) }}</span>
+                                <span>@currency($cart->lines->sum('total'))</span>
                             </div>
                         </div>
 
@@ -264,7 +299,102 @@
 </div>
 
 @push('scripts')
+<!-- Stripe.js -->
+<script src="https://js.stripe.com/v3/"></script>
+
 <script>
+// Initialize Stripe Elements
+let stripe = null;
+let cardElements = {};
+
+@foreach($paymentGateways as $gateway)
+    @if(strtolower($gateway->name) === 'stripe')
+        @php
+            $credentials = $gateway->getActiveCredentials();
+            $publishableKey = $credentials['publishable_key'] ?? '';
+        @endphp
+        @if($publishableKey)
+        // Initialize Stripe for gateway {{ $gateway->id }}
+        if (!stripe) {
+            stripe = Stripe('{{ $publishableKey }}');
+        }
+        
+        if (stripe) {
+            const elements{{ $gateway->id }} = stripe.elements();
+            const cardElement{{ $gateway->id }} = elements{{ $gateway->id }}.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#32325d',
+                    fontFamily: '"Figtree", sans-serif',
+                    '::placeholder': {
+                        color: '#aab7c4'
+                    }
+                },
+                invalid: {
+                    color: '#dc2626',
+                    iconColor: '#dc2626'
+                }
+            }
+        });
+        
+            cardElements[{{ $gateway->id }}] = cardElement{{ $gateway->id }};
+            
+            // Handle real-time validation errors
+            cardElement{{ $gateway->id }}.on('change', function(event) {
+                const displayError = document.getElementById('stripe-card-errors-{{ $gateway->id }}');
+                if (event.error) {
+                    displayError.textContent = event.error.message;
+                } else {
+                    displayError.textContent = '';
+                }
+            });
+        }
+        @else
+        console.error('Stripe publishable key not configured for gateway {{ $gateway->id }}. Please add it in the admin panel.');
+        @endif
+    @endif
+@endforeach
+
+// Show/hide payment fields when gateway is selected
+document.querySelectorAll('.payment-gateway-radio').forEach(radio => {
+    radio.addEventListener('change', function() {
+        // Hide all payment fields
+        document.querySelectorAll('.payment-fields').forEach(field => {
+            field.classList.add('hidden');
+        });
+        
+        // Show selected gateway's fields
+        const gatewayId = this.dataset.gatewayId;
+        const fieldsContainer = document.querySelector(`.payment-fields[data-gateway-id="${gatewayId}"]`);
+        if (fieldsContainer) {
+            fieldsContainer.classList.remove('hidden');
+            
+            // Mount Stripe Element if it's a Stripe gateway and not already mounted
+            if (this.dataset.gatewayType === 'stripe' && cardElements[gatewayId]) {
+                const cardElementContainer = document.getElementById(`stripe-card-element-${gatewayId}`);
+                if (cardElementContainer && !cardElementContainer.hasChildNodes()) {
+                    cardElements[gatewayId].mount(`#stripe-card-element-${gatewayId}`);
+                }
+            }
+        }
+    });
+    
+    // Trigger change on the first checked radio
+    if (radio.checked) {
+        radio.dispatchEvent(new Event('change'));
+    }
+});
+
+// Auto-select first gateway if none selected
+if (!document.querySelector('.payment-gateway-radio:checked')) {
+    const firstRadio = document.querySelector('.payment-gateway-radio');
+    if (firstRadio) {
+        firstRadio.checked = true;
+        firstRadio.dispatchEvent(new Event('change'));
+    }
+}
+
 // Same as billing checkbox functionality
 document.getElementById('same-as-billing')?.addEventListener('change', function(e) {
     const shippingFields = document.getElementById('shipping-address-fields');
@@ -303,4 +433,5 @@ document.querySelectorAll('[name^="billing_address"]').forEach(input => {
 });
 </script>
 @endpush
-@endsection
+
+</x-customer-layout>

@@ -174,6 +174,22 @@ class Order extends Model
     }
 
     /**
+     * Get the transactions for this order.
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(\Elevate\Payments\Models\Transaction::class);
+    }
+
+    /**
+     * Alias for transactions (for backward compatibility)
+     */
+    public function payments(): HasMany
+    {
+        return $this->transactions();
+    }
+
+    /**
      * Get the billing address.
      */
     public function billingAddress()
