@@ -171,9 +171,9 @@ trait Purchasable
     /**
      * Add this item to cart.
      */
-    public function addToCart(int $quantity, ?string $sessionId, ?int $userId, array $meta = [], ?string $cartToken = null)
+    public function addToCart(int $quantity, ?string $sessionId = null, ?int $userId = null, array $meta = [])
     {
-        $cart = \Elevate\CommerceCore\Models\Cart::getOrCreateCart($sessionId, $userId, $cartToken);
+        $cart = \Elevate\CommerceCore\Models\Cart::getOrCreateCart($sessionId, $userId);
         
         return $cart->add(
             purchasable: $this,
@@ -185,9 +185,9 @@ trait Purchasable
     /**
      * Update quantity in cart.
      */
-    public function updateCartQuantity(int $quantity, ?string $sessionId, ?int $userId, ?string $cartToken = null): bool
+    public function updateCartQuantity(int $quantity, ?string $sessionId = null, ?int $userId = null): bool
     {
-        $cart = \Elevate\CommerceCore\Models\Cart::getCart($sessionId, $userId, $cartToken);
+        $cart = \Elevate\CommerceCore\Models\Cart::getCart($sessionId, $userId);
         
         if (!$cart) {
             return false;
@@ -215,9 +215,9 @@ trait Purchasable
     /**
      * Remove this item from cart.
      */
-    public function removeFromCart(?string $sessionId, ?int $userId, ?string $cartToken = null): bool
+    public function removeFromCart(?string $sessionId = null, ?int $userId = null): bool
     {
-        $cart = \Elevate\CommerceCore\Models\Cart::getCart($sessionId, $userId, $cartToken);
+        $cart = \Elevate\CommerceCore\Models\Cart::getCart($sessionId, $userId);
         
         if (!$cart) {
             return false;

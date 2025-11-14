@@ -18,7 +18,6 @@ class Cart extends Model
         'user_id',
         'channel_id',
         'session_id',
-        'cart_token',
         'currency_code',
         'compare_currency_code',
         'exchange_rate',
@@ -152,39 +151,22 @@ class Cart extends Model
     }
 
     /**
-     * Get or create a cart for session/user/cart token.
+     * Get or create a cart for session/user.
+     * Priority: User ID (logged in) > Session ID (guest)
      */
-    public static function getOrCreateCart(?string $sessionId = null, ?int $userId = null, ?string $cartToken = null): self
+    public static function getOrCreateCart(?string $sessionId = null, ?int $userId = null): self
     {
-        // Priority: User ID > Cart Token > Session ID
+        // For authenticated users
         if ($userId) {
-            // For authenticated users, first try to find user cart
             $cart = static::where('user_id', $userId)->first();
             
             if ($cart) {
                 return $cart;
             }
             
-            // If no user cart, try to find cart by token and convert it to user cart
-            if ($cartToken) {
-                $tokenCart = static::where('cart_token', $cartToken)
-                                  ->whereNull('user_id')
-                                  ->first();
-                                  
-                if ($tokenCart) {
-                    // Convert token cart to user cart
-                    $tokenCart->update([
-                        'user_id' => $userId,
-                        'cart_token' => null, // Clear token since it's now user-based
-                    ]);
-                    return $tokenCart;
-                }
-            }
-            
             // Create new user cart
             return static::create([
                 'user_id' => $userId,
-                'cart_token' => null,
                 'session_id' => null,
                 'channel_id' => 1,
                 'currency_code' => 'GBP',
@@ -194,30 +176,7 @@ class Cart extends Model
             ]);
         }
         
-        // For guests, use cart token if available
-        if ($cartToken) {
-            $cart = static::where('cart_token', $cartToken)
-                          ->whereNull('user_id')
-                          ->first();
-                          
-            if ($cart) {
-                return $cart;
-            }
-            
-            // Create new cart with provided token
-            return static::create([
-                'user_id' => null,
-                'cart_token' => $cartToken,
-                'session_id' => $sessionId ?: session()->getId(),
-                'channel_id' => 1,
-                'currency_code' => 'GBP',
-                'compare_currency_code' => 'GBP',
-                'exchange_rate' => 1.0,
-                'meta' => [],
-            ]);
-        }
-        
-        // Fallback to session-based cart
+        // For guests, use session-based cart
         $sessionId = $sessionId ?: session()->getId();
         $cart = static::where('session_id', $sessionId)
                      ->whereNull('user_id')
@@ -226,7 +185,6 @@ class Cart extends Model
         if (!$cart) {
             $cart = static::create([
                 'user_id' => null,
-                'cart_token' => static::generateCartToken(),
                 'session_id' => $sessionId,
                 'channel_id' => 1,
                 'currency_code' => 'GBP',
@@ -241,38 +199,22 @@ class Cart extends Model
 
     /**
      * Get existing cart (don't create if not found).
+     * Priority: User ID (logged in) > Session ID (guest)
      */
-    public static function getCart(?string $sessionId = null, ?int $userId = null, ?string $cartToken = null): ?self
+    public static function getCart(?string $sessionId = null, ?int $userId = null): ?self
     {
-        // Priority: User ID > Cart Token > Session ID
+        // For authenticated users
         if ($userId) {
             return static::where('user_id', $userId)->first();
         }
         
-        if ($cartToken) {
-            return static::where('cart_token', $cartToken)
-                         ->whereNull('user_id')
-                         ->first();
-        }
-        
-        // Fallback to session cart
+        // For guests, use session cart
         $sessionId = $sessionId ?: session()->getId();
         return static::where('session_id', $sessionId)
                      ->whereNull('user_id')
                      ->first();
     }
 
-    /**
-     * Generate a unique cart token.
-     */
-    public static function generateCartToken(): string
-    {
-        do {
-            $token = 'cart_' . bin2hex(random_bytes(16));
-        } while (static::where('cart_token', $token)->exists());
-        
-        return $token;
-    }
 
     /**
      * Get cart count (number of items).

@@ -103,10 +103,16 @@ class SettingsController extends Controller
                 'redirect' => 'admin.settings.discounts.index'
             ],
             'payments' => [
-                'redirect' => 'admin.settings.payments.index'
+                'redirect' => 'admin.payment-gateways.index'
+            ],
+            'shipping' => [
+                'redirect' => 'admin.shipping-carriers.index'
             ],
             'checkout' => [
                 'redirect' => 'admin.settings.checkout.index'
+            ],
+            'checkout-rules' => [
+                'redirect' => 'admin.settings.checkout-rules.index'
             ],
             'gift-vouchers' => [
                 'redirect' => 'admin.settings.gift-vouchers.index'

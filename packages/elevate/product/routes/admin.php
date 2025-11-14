@@ -9,8 +9,16 @@ use Elevate\Product\Http\Controllers\Admin\ProductController;
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('admin')->middleware(['web', 'auth:staff'])->group(function () {
-    Route::resource('products', ProductController::class);
+Route::prefix('admin')->middleware(['web', 'auth:staff'])->name('admin.')->group(function () {
+    Route::resource('products', ProductController::class)->names([
+        'index' => 'products.index',
+        'create' => 'products.create',
+        'store' => 'products.store',
+        'show' => 'products.show',
+        'edit' => 'products.edit',
+        'update' => 'products.update',
+        'destroy' => 'products.destroy',
+    ]);
     
     // Variant management routes
     Route::prefix('products/{product}')->group(function () {

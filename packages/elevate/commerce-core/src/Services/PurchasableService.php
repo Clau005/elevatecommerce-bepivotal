@@ -15,15 +15,11 @@ class PurchasableService
 {
     protected ?string $sessionId;
     protected ?int $userId;
-    protected ?string $cartToken;
-    protected ?string $wishlistToken;
 
-    public function __construct(?string $sessionId = null, ?int $userId = null, ?string $cartToken = null, ?string $wishlistToken = null)
+    public function __construct(?string $sessionId = null, ?int $userId = null)
     {
         $this->sessionId = $sessionId ?: session()->getId();
         $this->userId = $userId ?: auth()->id();
-        $this->cartToken = $cartToken ?: request()->cookie('cart_token') ?: request()->input('cart_token');
-        $this->wishlistToken = $wishlistToken;
     }
 
     /**
@@ -39,7 +35,7 @@ class PurchasableService
      */
     public function getCart(): ?Cart
     {
-        return Cart::getCart($this->sessionId, $this->userId, $this->cartToken);
+        return Cart::getCart($this->sessionId, $this->userId);
     }
 
     /**
@@ -47,7 +43,7 @@ class PurchasableService
      */
     public function getOrCreateCart(): Cart
     {
-        return Cart::getOrCreateCart($this->sessionId, $this->userId, $this->cartToken);
+        return Cart::getOrCreateCart($this->sessionId, $this->userId);
     }
 
     /**
@@ -71,7 +67,7 @@ class PurchasableService
             throw new \Exception("Insufficient stock. Available: {$stock}, Requested: {$quantity}");
         }
 
-        return $purchasable->addToCart($quantity, $this->sessionId, $this->userId, $meta, $this->cartToken);
+        return $purchasable->addToCart($quantity, $this->sessionId, $this->userId, $meta);
     }
 
     /**
@@ -88,7 +84,7 @@ class PurchasableService
             throw new \Exception("Insufficient stock. Available: {$stock}, Requested: {$quantity}");
         }
 
-        return $purchasable->updateCartQuantity($quantity, $this->sessionId, $this->userId, $this->cartToken);
+        return $purchasable->updateCartQuantity($quantity, $this->sessionId, $this->userId);
     }
 
     /**
@@ -100,7 +96,7 @@ class PurchasableService
             throw new \InvalidArgumentException('Item must use the Purchasable trait');
         }
 
-        return $purchasable->removeFromCart($this->sessionId, $this->userId, $this->cartToken);
+        return $purchasable->removeFromCart($this->sessionId, $this->userId);
     }
 
     /**
@@ -149,7 +145,7 @@ class PurchasableService
      */
     public function getWishlist(): ?Wishlist
     {
-        return Wishlist::getWishlist($this->sessionId, $this->userId, $this->wishlistToken);
+        return Wishlist::getWishlist($this->sessionId, $this->userId);
     }
 
     /**
@@ -157,7 +153,7 @@ class PurchasableService
      */
     public function getOrCreateWishlist(): Wishlist
     {
-        return Wishlist::getOrCreateWishlist($this->sessionId, $this->userId, $this->wishlistToken);
+        return Wishlist::getOrCreateWishlist($this->sessionId, $this->userId);
     }
 
     /**
@@ -175,7 +171,7 @@ class PurchasableService
             throw new \Exception("Item '{$purchasable->getName()}' is not available for purchase");
         }
 
-        return $purchasable->addToWishlist($this->sessionId, $this->userId, $meta, $this->wishlistToken);
+        return $purchasable->addToWishlist($this->sessionId, $this->userId, $meta);
     }
 
     /**
@@ -187,7 +183,7 @@ class PurchasableService
             throw new \InvalidArgumentException('Item must use the Purchasable trait');
         }
 
-        return $purchasable->removeFromWishlist($this->sessionId, $this->userId, $this->wishlistToken);
+        return $purchasable->removeFromWishlist($this->sessionId, $this->userId);
     }
 
     /**
@@ -199,7 +195,7 @@ class PurchasableService
             return false;
         }
 
-        return $purchasable->isInWishlist($this->sessionId, $this->userId, $this->wishlistToken);
+        return $purchasable->isInWishlist($this->sessionId, $this->userId);
     }
 
     /**
@@ -217,7 +213,7 @@ class PurchasableService
             throw new \Exception("Insufficient stock. Available: {$stock}, Requested: {$quantity}");
         }
 
-        return $purchasable->moveFromWishlistToCart($quantity, $this->sessionId, $this->userId, $this->wishlistToken);
+        return $purchasable->moveFromWishlistToCart($quantity, $this->sessionId, $this->userId);
     }
 
     /**

@@ -17,6 +17,7 @@ use Elevate\CommerceCore\Http\Controllers\Admin\CheckoutSettingsController;
 use Elevate\CommerceCore\Http\Controllers\Admin\CurrencyController;
 use Elevate\CommerceCore\Http\Controllers\Admin\LanguageController;
 use Elevate\CommerceCore\Http\Controllers\Admin\StateController;
+use Elevate\CommerceCore\Http\Controllers\Admin\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +91,8 @@ Route::prefix('admin')->middleware('web')->group(function () {
         'update' => 'admin.tags.update',
         'destroy' => 'admin.tags.destroy',
     ]);
+
+    Route::get('settings', [SettingsController::class, 'index'])->name('admin.settings.index');
 
     // Settings - Staff Management
     Route::prefix('settings/staff')->name('admin.settings.staff.')->group(function () {
@@ -187,5 +190,8 @@ Route::prefix('admin')->middleware('web')->group(function () {
         Route::get('/', [CheckoutSettingsController::class, 'index'])->name('index');
         Route::post('/', [CheckoutSettingsController::class, 'update'])->name('update');
     });
+
+    // Settings - Catch-all (must be last!)
+    Route::get('settings/{section}', [SettingsController::class, 'show'])->name('admin.settings.show');
     });
 });

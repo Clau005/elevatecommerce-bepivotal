@@ -92,11 +92,11 @@ Route::middleware('auth:web')->prefix('account')->name('storefront.')->group(fun
     Route::post('/profile', [StorefrontCustomerController::class, 'profileUpdate'])->name('profile.update');
     
     // Address management
-    Route::get('/addresses', [\App\Http\Controllers\Storefront\AddressController::class, 'index'])->name('addresses');
-    Route::post('/addresses', [\App\Http\Controllers\Storefront\AddressController::class, 'store'])->name('addresses.store');
-    Route::put('/addresses/{address}', [\App\Http\Controllers\Storefront\AddressController::class, 'update'])->name('addresses.update');
-    Route::delete('/addresses/{address}', [\App\Http\Controllers\Storefront\AddressController::class, 'destroy'])->name('addresses.destroy');
-    Route::post('/addresses/{address}/set-default', [\App\Http\Controllers\Storefront\AddressController::class, 'setDefault'])->name('addresses.set-default');
+    Route::get('/addresses', [\Elevate\CommerceCore\Http\Controllers\Storefront\AddressController::class, 'index'])->name('addresses');
+    Route::post('/addresses', [\Elevate\CommerceCore\Http\Controllers\Storefront\AddressController::class, 'store'])->name('addresses.store');
+    Route::put('/addresses/{address}', [\Elevate\CommerceCore\Http\Controllers\Storefront\AddressController::class, 'update'])->name('addresses.update');
+    Route::delete('/addresses/{address}', [\Elevate\CommerceCore\Http\Controllers\Storefront\AddressController::class, 'destroy'])->name('addresses.destroy');
+    Route::post('/addresses/{address}/set-default', [\Elevate\CommerceCore\Http\Controllers\Storefront\AddressController::class, 'setDefault'])->name('addresses.set-default');
     
     // Order management
     Route::get('/orders', [StorefrontCustomerController::class, 'orders'])->name('account.orders');

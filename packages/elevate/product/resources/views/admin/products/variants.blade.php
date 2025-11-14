@@ -8,7 +8,7 @@
             <p class="text-gray-600 mt-1">{{ $product->name }}</p>
         </div>
         <div class="flex gap-3">
-            <a href="{{ route('products.edit', $product) }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+            <a href="{{ route('admin.products.edit', $product) }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
@@ -34,7 +34,7 @@
     <div id="add-variant-form" class="hidden bg-white rounded-lg border border-gray-200 p-6">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Add New Variant</h2>
         
-        <form action="{{ route('products.variants.store', $product) }}" method="POST">
+        <form action="{{ route('admin.products.variants.store', $product) }}" method="POST">
             @csrf
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -248,7 +248,7 @@
                                 <button type="button" onclick="editVariant({{ $variant->id }})" class="text-blue-600 hover:text-blue-900 mr-3">
                                     Edit
                                 </button>
-                                <form action="{{ route('products.variants.destroy', [$product, $variant]) }}" 
+                                <form action="{{ route('admin.products.variants.destroy', [$product, $variant]) }}" 
                                       method="POST" 
                                       class="inline"
                                       onsubmit="return confirm('Are you sure you want to delete this variant?');">
