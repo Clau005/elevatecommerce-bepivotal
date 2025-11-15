@@ -55,6 +55,51 @@ class Wishlist extends Model
     }
 
     /**
+     * Get or create wishlist for authenticated user
+     */
+    public static function forUser($user): self
+    {
+        return static::firstOrCreate(
+            ['user_id' => $user->id],
+            [
+                'name' => 'My Wishlist',
+                'is_public' => false,
+            ]
+        );
+    }
+
+    /**
+     * Get or create wishlist for guest session
+     */
+    public static function forSession(string $sessionId): self
+    {
+        return static::firstOrCreate(
+            ['session_id' => $sessionId],
+            [
+                'name' => 'Guest Wishlist',
+                'is_public' => false,
+            ]
+        );
+    }
+
+    /**
+     * Add item to wishlist
+     */
+    public function addItem($purchasable, ?string $note = null, int $priority = 0): WishlistItem
+    {
+        return $this->items()->firstOrCreate(
+            [
+                'purchasable_type' => get_class($purchasable),
+                'purchasable_id' => $purchasable->id,
+            ],
+            [
+                'note' => $note,
+                'priority' => $priority,
+            ]
+        );
+    }
+
+    /**
      * Check if wishlist belongs to a guest
      */
     public function isGuest(): bool

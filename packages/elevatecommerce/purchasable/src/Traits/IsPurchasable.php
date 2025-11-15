@@ -169,6 +169,16 @@ trait IsPurchasable
     }
 
     /**
+     * Alias for inStock() for better readability
+     * 
+     * @return bool
+     */
+    public function isInStock(): bool
+    {
+        return $this->inStock();
+    }
+
+    /**
      * Get available quantity (override in your model if needed)
      * 
      * @return int|null

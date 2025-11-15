@@ -68,6 +68,69 @@ class Cart extends Model
     }
 
     /**
+     * Get or create cart for authenticated user
+     */
+    public static function forUser($user): self
+    {
+        return static::firstOrCreate(
+            ['user_id' => $user->id],
+            [
+                'subtotal' => 0,
+                'tax' => 0,
+                'shipping' => 0,
+                'discount' => 0,
+                'total' => 0,
+            ]
+        );
+    }
+
+    /**
+     * Get or create cart for guest session
+     */
+    public static function forSession(string $sessionId): self
+    {
+        return static::firstOrCreate(
+            ['session_id' => $sessionId],
+            [
+                'subtotal' => 0,
+                'tax' => 0,
+                'shipping' => 0,
+                'discount' => 0,
+                'total' => 0,
+                'expires_at' => now()->addDays(7),
+            ]
+        );
+    }
+
+    /**
+     * Add item to cart
+     */
+    public function addItem($purchasable, int $quantity = 1): CartItem
+    {
+        $item = $this->items()->where([
+            'purchasable_type' => get_class($purchasable),
+            'purchasable_id' => $purchasable->id,
+        ])->first();
+
+        if ($item) {
+            $item->updateQuantity($item->quantity + $quantity);
+            return $item;
+        }
+
+        $item = $this->items()->create([
+            'purchasable_type' => get_class($purchasable),
+            'purchasable_id' => $purchasable->id,
+            'price' => $purchasable->getPurchasablePrice(),
+            'quantity' => $quantity,
+            'line_total' => $purchasable->getPurchasablePrice() * $quantity,
+        ]);
+
+        $this->recalculate();
+
+        return $item;
+    }
+
+    /**
      * Check if cart belongs to a guest
      */
     public function isGuest(): bool

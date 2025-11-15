@@ -1,0 +1,112 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use App\Models\TestingPurchasable;
+
+class TestingPurchasableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $products = [
+            [
+                'name' => 'Premium Cotton T-Shirt',
+                'sku' => 'TSHIRT-001',
+                'description' => 'High-quality, comfortable cotton t-shirt. Perfect for everyday wear. Available in multiple colors and sizes.',
+                'price' => 2000, // $20.00
+                'compare_at_price' => 2999, // $29.99
+                'is_active' => true,
+                'stock_quantity' => 100,
+                'track_inventory' => true,
+                'image_url' => 'https://via.placeholder.com/400x400/3B82F6/FFFFFF?text=T-Shirt',
+                'options' => [
+                    'sizes' => ['S', 'M', 'L', 'XL'],
+                    'colors' => ['Black', 'White', 'Blue', 'Red'],
+                ],
+            ],
+            [
+                'name' => 'Classic Denim Jeans',
+                'sku' => 'JEANS-001',
+                'description' => 'Comfortable and durable denim jeans with a classic fit. Made from premium quality denim fabric.',
+                'price' => 4500, // $45.00
+                'compare_at_price' => 5999, // $59.99
+                'is_active' => true,
+                'stock_quantity' => 75,
+                'track_inventory' => true,
+                'image_url' => 'https://via.placeholder.com/400x400/1E40AF/FFFFFF?text=Jeans',
+                'options' => [
+                    'sizes' => ['28', '30', '32', '34', '36'],
+                    'colors' => ['Dark Blue', 'Light Blue', 'Black'],
+                ],
+            ],
+            [
+                'name' => 'Leather Wallet',
+                'sku' => 'WALLET-001',
+                'description' => 'Genuine leather wallet with multiple card slots and bill compartments. Elegant and practical.',
+                'price' => 3500, // $35.00
+                'compare_at_price' => null,
+                'is_active' => true,
+                'stock_quantity' => 50,
+                'track_inventory' => true,
+                'image_url' => 'https://via.placeholder.com/400x400/92400E/FFFFFF?text=Wallet',
+                'options' => [
+                    'colors' => ['Brown', 'Black', 'Tan'],
+                ],
+            ],
+            [
+                'name' => 'Running Shoes',
+                'sku' => 'SHOES-001',
+                'description' => 'Lightweight and comfortable running shoes with excellent cushioning and support for all-day wear.',
+                'price' => 7500, // $75.00
+                'compare_at_price' => 9999, // $99.99
+                'is_active' => true,
+                'stock_quantity' => 60,
+                'track_inventory' => true,
+                'image_url' => 'https://via.placeholder.com/400x400/DC2626/FFFFFF?text=Shoes',
+                'options' => [
+                    'sizes' => ['7', '8', '9', '10', '11', '12'],
+                    'colors' => ['Black', 'White', 'Red', 'Blue'],
+                ],
+            ],
+            [
+                'name' => 'Wireless Headphones',
+                'sku' => 'HEADPHONES-001',
+                'description' => 'Premium wireless headphones with active noise cancellation and superior sound quality.',
+                'price' => 15000, // $150.00
+                'compare_at_price' => 19999, // $199.99
+                'is_active' => true,
+                'stock_quantity' => 30,
+                'track_inventory' => true,
+                'image_url' => 'https://via.placeholder.com/400x400/000000/FFFFFF?text=Headphones',
+                'options' => [
+                    'colors' => ['Black', 'Silver', 'Rose Gold'],
+                ],
+            ],
+            [
+                'name' => 'Backpack',
+                'sku' => 'BACKPACK-001',
+                'description' => 'Durable and spacious backpack with multiple compartments. Perfect for travel or daily use.',
+                'price' => 5500, // $55.00
+                'compare_at_price' => null,
+                'is_active' => true,
+                'stock_quantity' => 40,
+                'track_inventory' => true,
+                'image_url' => 'https://via.placeholder.com/400x400/059669/FFFFFF?text=Backpack',
+                'options' => [
+                    'colors' => ['Black', 'Gray', 'Navy'],
+                ],
+            ],
+        ];
+
+        foreach ($products as $product) {
+            TestingPurchasable::create($product);
+        }
+
+        $this->command->info('Created ' . count($products) . ' test purchasable products!');
+    }
+}

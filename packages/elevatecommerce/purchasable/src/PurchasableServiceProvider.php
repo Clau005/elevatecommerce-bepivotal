@@ -15,6 +15,10 @@ class PurchasableServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../config/purchasable.php', 'purchasable'
         );
+        
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/stripe.php', 'stripe'
+        );
     }
 
     /**
@@ -25,6 +29,7 @@ class PurchasableServiceProvider extends ServiceProvider
         // Publish config
         $this->publishes([
             __DIR__.'/../config/purchasable.php' => config_path('purchasable.php'),
+            __DIR__.'/../config/stripe.php' => config_path('stripe.php'),
         ], 'purchasable-config');
 
         // Load migrations

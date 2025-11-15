@@ -13,3 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function () {
+    $products = \App\Models\TestingPurchasable::where('is_active', true)
+        ->orderBy('created_at', 'desc')
+        ->get();
+    
+    return view('home', compact('products'));
+})->name('home');

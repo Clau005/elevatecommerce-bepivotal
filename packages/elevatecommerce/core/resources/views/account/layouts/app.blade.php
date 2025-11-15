@@ -44,6 +44,16 @@
                         <i class="fas fa-home w-5 mr-3"></i>
                         Dashboard
                     </a>
+                    <a href="{{ route('purchasable.cart.index') }}" 
+                       class="flex items-center px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('purchasable.cart.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-50' }}">
+                        <i class="fas fa-shopping-cart w-5 mr-3"></i>
+                        Shopping Cart
+                    </a>
+                    <a href="{{ route('purchasable.wishlist.index') }}" 
+                       class="flex items-center px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('purchasable.wishlist.*') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-50' }}">
+                        <i class="fas fa-heart w-5 mr-3"></i>
+                        Wishlist
+                    </a>
                     <a href="{{ route('account.orders') }}" 
                        class="flex items-center px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('account.orders') ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-gray-50' }}">
                         <i class="fas fa-shopping-bag w-5 mr-3"></i>

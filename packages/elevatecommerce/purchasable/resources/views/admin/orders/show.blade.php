@@ -19,8 +19,14 @@
     </div>
 
     @if(session('success'))
-    <x-core::alert type="success">
+    <x-core::alert type="success" dismissible>
         {{ session('success') }}
+    </x-core::alert>
+    @endif
+
+    @if(session('error'))
+    <x-core::alert type="error" dismissible>
+        {{ session('error') }}
     </x-core::alert>
     @endif
 

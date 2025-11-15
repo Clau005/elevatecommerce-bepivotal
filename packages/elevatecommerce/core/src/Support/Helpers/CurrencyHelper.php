@@ -45,4 +45,9 @@ class CurrencyHelper
 
         return $currency->toCents($amount);
     }
+
+    public static function getDefaultCurrencyCode(): string
+    {
+        return Currency::getDefault()->code;
+    }
 }
