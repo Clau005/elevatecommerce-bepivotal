@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('channel_id')->nullable()->constrained()->nullOnDelete();
-            $table->unsignedBigInteger('payment_gateway_id')->nullable();
             $table->unsignedBigInteger('shipping_carrier_id')->nullable();
+            $table->string('stripe_checkout_session_id')->nullable()->unique();
+            $table->string('stripe_payment_intent')->nullable()->index();
             $table->boolean('new_customer')->default(false);
             $table->string('status')->default('awaiting-payment');
             $table->string('reference')->unique();

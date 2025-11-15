@@ -18,8 +18,9 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'channel_id',
-        'payment_gateway_id',
         'shipping_carrier_id',
+        'stripe_checkout_session_id',
+        'stripe_payment_intent',
         'new_customer',
         'status',
         'reference',
@@ -175,35 +176,11 @@ class Order extends Model
 
 
     /**
-     * Get the payment gateway used for this order.
-     */
-    public function paymentGateway(): BelongsTo
-    {
-        return $this->belongsTo(\Elevate\Payments\Models\PaymentGateway::class, 'payment_gateway_id');
-    }
-
-    /**
      * Get the shipping carrier used for this order.
      */
     public function shippingCarrier(): BelongsTo
     {
         return $this->belongsTo(\Elevate\Shipping\Models\ShippingCarrier::class, 'shipping_carrier_id');
-    }
-
-    /**
-     * Get the transactions for this order.
-     */
-    public function transactions(): HasMany
-    {
-        return $this->hasMany(\Elevate\Payments\Models\Transaction::class);
-    }
-
-    /**
-     * Alias for transactions (for backward compatibility)
-     */
-    public function payments(): HasMany
-    {
-        return $this->transactions();
     }
 
     /**

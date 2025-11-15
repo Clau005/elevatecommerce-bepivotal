@@ -1,20 +1,32 @@
-<section class="collection-hero-section flex items-center justify-center text-center p-8 bg-cover bg-center" 
-         style="background-color: {{ $background_color ?? '#1f2937' }}; 
-                background-image: {{ isset($background_image) ? 'url(' . $background_image . ')' : 'none' }}; 
-                color: {{ $text_color ?? '#ffffff' }}; 
-                min-height: {{ $height ?? 400 }}px;">
-    <div class="collection-hero-content max-w-3xl">
-
-        <h1 class="text-4xl font-bold mb-4 leading-tight">{{ $collection->name }}</h1>
+{{-- Collection Header Section --}}
+<div class="collection-header relative overflow-hidden" 
+     style="min-height: {{ $minHeight ?? '400px' }}; 
+            @if(($showImage ?? true) && !empty($image))
+            background-image: url('{{ $image }}'); 
+            background-size: {{ $backgroundSize ?? 'cover' }}; 
+            background-position: {{ $backgroundPosition ?? 'center' }};
+            @endif">
     
-        
-        {!! $collection->description !!}
-        
-        @if(isset($show_product_count) && $show_product_count)
-            @php
-                $count = isset($product_count) ? $product_count : (isset($collection) && $collection->products ? $collection->products->count() : 0);
-            @endphp
-            <p class="text-base opacity-80">{{ $count }} {{ $count == 1 ? 'Product' : 'Products' }}</p>
-        @endif
+    @if(($overlay['enabled'] ?? true) && ($showImage ?? true) && !empty($image))
+        <div class="absolute inset-0" 
+             style="background-color: {{ $overlay['color'] ?? '#000000' }}; 
+                    opacity: {{ $overlay['opacity'] ?? 0.3 }};"></div>
+    @endif
+    
+    <div class="relative z-10 container mx-auto px-4 h-full flex items-center justify-{{ $textAlign ?? 'center' }}" 
+         style="min-height: {{ $minHeight ?? '400px' }};">
+        <div class="w-full {{ ($textAlign ?? 'center') === 'center' ? 'max-w-3xl mx-auto text-center' : '' }}">
+            @if($showName ?? true)
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 {{ ($showImage ?? true) && !empty($image) ? 'text-white' : 'text-gray-900' }}">
+                    {{ $name ?? $model->name ?? 'Collection' }}
+                </h1>
+            @endif
+            
+            @if(($showDescription ?? true) && !empty($description ?? $model->description ?? ''))
+                <div class="text-lg md:text-xl {{ ($showImage ?? true) && !empty($image) ? 'text-white/90' : 'text-gray-600' }} prose prose-lg max-w-none">
+                    {!! $description ?? $model->description ?? '' !!}
+                </div>
+            @endif
+        </div>
     </div>
-</section>
+</div>

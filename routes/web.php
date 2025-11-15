@@ -1,32 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Routing\Registrars\AdminRoutesRegistrar;
-use App\Routing\Registrars\CommerceRoutesRegistrar;
-use App\Routing\Registrars\PageRoutesRegistrar;
-use App\Routing\Registrars\ProductRoutesRegistrar;
-use App\Routing\Registrars\CollectionRoutesRegistrar;
-use App\Routing\Registrars\WatchRoutesRegistrar;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Application Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group.
+| Here is where you can register web routes for your application.
+| Core package routes are loaded via CustomerRouteRegistrar first,
+| then these application-specific routes are loaded.
 |
 */
 
-// Register all admin routes from packages
-(new AdminRoutesRegistrar)->map(Route::getFacadeRoot());
-
-// Register commerce routes (cart, checkout, account)
-(new CommerceRoutesRegistrar)->map(Route::getFacadeRoot());
-
-// Register storefront routes (these should be LAST to avoid conflicts)
-(new ProductRoutesRegistrar)->map(Route::getFacadeRoot());
-(new CollectionRoutesRegistrar)->map(Route::getFacadeRoot());
-(new WatchRoutesRegistrar)->map(Route::getFacadeRoot());
-(new PageRoutesRegistrar)->map(Route::getFacadeRoot()); // Pages LAST (catch-all)
+Route::get('/', function () {
+    return view('welcome');
+});

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc5cd92dd83eded39efad0b5330c3e37",
+    "content-hash": "f1b312164fbc1fa9f9604ba4923841a7",
     "packages": [
         {
             "name": "brick/math",
@@ -509,227 +509,43 @@
             "time": "2025-03-06T22:45:56+00:00"
         },
         {
-            "name": "elevate/blogs",
+            "name": "elevatecommerce/core",
             "version": "dev-packages",
             "dist": {
                 "type": "path",
-                "url": "./packages/elevate/blogs",
-                "reference": "3bfc47a091b38dcaceac7b9b12a0cd1e2f605d48"
+                "url": "./packages/elevatecommerce/core",
+                "reference": "0bf497c559af5f88a12082b149d980cc06fb7bde"
             },
             "require": {
                 "illuminate/support": "^11.0|^12.0",
                 "php": "^8.2"
             },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Elevate\\Blogs\\Providers\\BlogsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Elevate\\Blogs\\": "src/"
-                }
-            },
-            "description": "Blog management package for Elevate",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "elevate/collections",
-            "version": "dev-packages",
-            "dist": {
-                "type": "path",
-                "url": "./packages/elevate/collections",
-                "reference": "c9bb51aa67734e3ee4a2c248a82c3a97701dd402"
-            },
-            "require": {
-                "illuminate/support": "^10.0|^11.0|^12.0",
-                "php": "^8.1"
+            "require-dev": {
+                "orchestra/testbench": "^9.0",
+                "phpunit/phpunit": "^11.0"
             },
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Elevate\\Collections\\CollectionsServiceProvider"
+                        "ElevateCommerce\\Core\\CoreServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Elevate\\Collections\\": "src/"
+                    "ElevateCommerce\\Core\\": "src/"
                 }
             },
-            "description": "Collections package for organizing content with polymorphic relationships and nested subcollections",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "elevate/commerce-core",
-            "version": "dev-packages",
-            "dist": {
-                "type": "path",
-                "url": "./packages/elevate/commerce-core",
-                "reference": "e76d6e44f21870fae169a8ea7018b6521b0cbc73"
-            },
-            "require": {
-                "elevate/payments": "@dev",
-                "elevate/shipping": "@dev",
-                "illuminate/contracts": "^12.0",
-                "illuminate/database": "^12.0",
-                "illuminate/http": "^12.0",
-                "illuminate/support": "^12.0",
-                "php": "^8.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Elevate\\CommerceCore\\CommerceCoreServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
+            "autoload-dev": {
                 "psr-4": {
-                    "Elevate\\CommerceCore\\": "src/"
+                    "ElevateCommerce\\Core\\Tests\\": "tests/"
                 }
             },
             "license": [
                 "MIT"
             ],
-            "authors": [
-                {
-                    "name": "Claudiu Bardan",
-                    "email": "your@email.com"
-                }
-            ],
-            "description": "Complete e-commerce engine: cart, wishlist, orders, discounts, checkout, and payment processing for Laravel",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "elevate/editor",
-            "version": "dev-packages",
-            "dist": {
-                "type": "path",
-                "url": "./packages/elevate/editor",
-                "reference": "b591234cb4abaa79883657420fbc93a1ead35b47"
-            },
-            "require": {
-                "laravel/framework": "^11.0|^12.0",
-                "php": "^8.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Elevate\\Editor\\EditorServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Elevate\\Editor\\": "src/"
-                }
-            },
-            "description": "Visual page builder and template system for Laravel",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "elevate/payments",
-            "version": "dev-packages",
-            "dist": {
-                "type": "path",
-                "url": "./packages/elevate/payments",
-                "reference": "eb9b06c79089dfda9f3a1f0259b09fe58344ef60"
-            },
-            "require": {
-                "illuminate/support": "^11.0|^12.0",
-                "php": "^8.2",
-                "stripe/stripe-php": "^13.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Elevate\\Payments\\PaymentsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Elevate\\Payments\\": "src/"
-                }
-            },
-            "description": "Payment gateway management for Elevate",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "elevate/product",
-            "version": "dev-packages",
-            "dist": {
-                "type": "path",
-                "url": "./packages/elevate/product",
-                "reference": "ff9f90dce3cbb7a6789a1df2493aebebe0365692"
-            },
-            "require": {
-                "elevate/commerce-core": "*",
-                "illuminate/support": "^11.0|^12.0",
-                "php": "^8.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Elevate\\Product\\ProductServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Elevate\\Product\\": "src/"
-                }
-            },
-            "description": "Product management package for Elevate platform",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "elevate/shipping",
-            "version": "dev-packages",
-            "dist": {
-                "type": "path",
-                "url": "./packages/elevate/shipping",
-                "reference": "14dae5da5d341e6e946e506d32a1f95b2d0164e7"
-            },
-            "require": {
-                "illuminate/support": "^12.0",
-                "php": "^8.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Elevate\\Shipping\\ShippingServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Elevate\\Shipping\\": "src/"
-                }
-            },
-            "description": "Multi-carrier shipping integration for Elevate",
+            "description": "Core package for ElevateCommerce",
             "transport-options": {
                 "relative": true
             }
@@ -3504,65 +3320,6 @@
                 "source": "https://github.com/ramsey/uuid/tree/4.9.1"
             },
             "time": "2025-09-04T20:59:21+00:00"
-        },
-        {
-            "name": "stripe/stripe-php",
-            "version": "v13.18.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "02abb043b103766f4ed920642ae56ffdc58c7467"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/02abb043b103766f4ed920642ae56ffdc58c7467",
-                "reference": "02abb043b103766f4ed920642ae56ffdc58c7467",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "3.5.0",
-                "phpstan/phpstan": "^1.2",
-                "phpunit/phpunit": "^5.7 || ^9.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Stripe\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Stripe and contributors",
-                    "homepage": "https://github.com/stripe/stripe-php/contributors"
-                }
-            ],
-            "description": "Stripe PHP Library",
-            "homepage": "https://stripe.com/",
-            "keywords": [
-                "api",
-                "payment processing",
-                "stripe"
-            ],
-            "support": {
-                "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v13.18.0"
-            },
-            "time": "2024-04-09T21:08:04+00:00"
         },
         {
             "name": "symfony/clock",
@@ -9602,13 +9359,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "elevate/blogs": 20,
-        "elevate/collections": 20,
-        "elevate/commerce-core": 20,
-        "elevate/editor": 20,
-        "elevate/payments": 20,
-        "elevate/product": 20,
-        "elevate/shipping": 20
+        "elevatecommerce/core": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

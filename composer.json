@@ -10,16 +10,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "elevate/blogs": "@dev",
-        "elevate/collections": "@dev",
-        "elevate/commerce-core": "@dev",
-        "elevate/editor": "@dev",
-        "elevate/payments": "@dev",
-        "elevate/product": "@dev",
-        "elevate/shipping": "@dev",
+        "elevatecommerce/core": "@dev",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1",
-        "stripe/stripe-php": "^13.18"
+        "laravel/tinker": "^2.10.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -98,31 +91,7 @@
     "repositories": [
         {
             "type": "path",
-            "url": "./packages/elevate/commerce-core"
-        },
-        {
-            "type": "path",
-            "url": "./packages/elevate/product"
-        },
-        {
-            "type": "path",
-            "url": "./packages/elevate/collections"
-        },
-        {
-            "type": "path",
-            "url": "./packages/elevate/blogs"
-        },
-        {
-            "type": "path",
-            "url": "./packages/elevate/payments"
-        },
-        {
-            "type": "path",
-            "url": "./packages/elevate/shipping"
-        },
-        {
-            "type": "path",
-            "url": "./packages/elevate/editor"
+            "url": "./packages/elevatecommerce/core"
         }
     ]
 }

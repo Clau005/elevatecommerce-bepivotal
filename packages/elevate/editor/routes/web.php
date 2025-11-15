@@ -14,40 +14,16 @@ use App\Routing\Services\RouteExclusionRegistry;
 |
 */
 
-// // Homepage (special case - always '/')
-// Route::get('/', [PageController::class, 'show'])
-//     ->defaults('slug', 'homepage')
-//     ->name('home');
+// Homepage (special case - always '/')
+Route::get('/', [PageController::class, 'show'])
+    ->defaults('slug', 'homepage')
+    ->name('home');
 
-// // Preview routes for visual editor (uses draft_configuration)
-// Route::middleware(['web', 'auth:staff'])->prefix('preview')->name('preview.')->group(function () {
-//     Route::get('/themes/{theme}/pages/{page}', [\Elevate\Editor\Http\Controllers\PreviewController::class, 'page'])->name('pages');
-//     Route::get('/themes/{theme}/templates/{template}', [\Elevate\Editor\Http\Controllers\PreviewController::class, 'template'])->name('templates');
-// });
-
-// // Catch-all route for dynamic pages (must be LAST!)
-// // Handles all pages created in admin: /about, /contact, /services, etc.
-// // Also handles collection routes with nested paths
-// // Excluded prefixes are managed by RouteExclusionRegistry
-// Route::get('/{slug}', [PageController::class, 'show'])
-//     ->where('slug', RouteExclusionRegistry::getWherePattern())
-//     ->name('page.show');
-
-
-
-
-    Route::get('/', [PageController::class, 'show'])
-        ->defaults('slug', 'homepage')
-        ->name('home');
-
-    // Preview routes
-    Route::get('/preview/{theme?}', [PageController::class, 'preview'])->name('preview');
-    Route::post('/preview/{theme}/update', [PageController::class, 'updatePreview'])->name('preview.update');
-    Route::get('/preview/{theme}/check', [PageController::class, 'checkPreviewChanges'])->name('preview.check');
-    Route::get('/preview/{theme}/data', [PageController::class, 'getPreviewData'])->name('preview.data');
-    
-    // Template preview routes
-    Route::get('/preview/{theme}/template/{template}/{type}/{id}', [PageController::class, 'previewTemplate'])->name('preview.template');
+// Preview routes for visual editor (uses draft_configuration)
+Route::prefix('preview')->name('preview.')->group(function () {
+    Route::get('/themes/{theme}/pages/{page}', [\Elevate\Editor\Http\Controllers\PreviewController::class, 'page'])->name('pages');
+    Route::get('/themes/{theme}/templates/{template}', [\Elevate\Editor\Http\Controllers\PreviewController::class, 'template'])->name('templates');
+});
 
     // Catch-all for collections and pages - /{slug}/{filters?}
     // This is registered LAST (lowest priority)

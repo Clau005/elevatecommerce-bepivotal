@@ -2,8 +2,8 @@
 
 namespace Elevate\CommerceCore\Models;
 
-use App\Models\User;
-use App\Models\Order;
+use Elevate\CommerceCore\Models\User;
+use Elevate\CommerceCore\Models\Order;
 use Elevate\CommerceCore\Models\Channel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

@@ -31,6 +31,13 @@ Route::post('/logout', [StorefrontCustomerController::class, 'logout'])->name('s
 
 /*
 |--------------------------------------------------------------------------
+| Checkout Routes - WILL BE IMPLEMENTED WITH CASHIER
+|--------------------------------------------------------------------------
+| Checkout functionality will be added using Laravel Cashier
+*/
+
+/*
+|--------------------------------------------------------------------------
 | Cart Routes (Guest & Authenticated)
 |--------------------------------------------------------------------------
 */
@@ -66,16 +73,10 @@ Route::prefix('wishlist')->name('storefront.wishlist.')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Checkout Routes (Guest & Authenticated)
+| Checkout Routes - MOVED TO PAYMENTS PACKAGE
 |--------------------------------------------------------------------------
+| Checkout routes are now handled by packages/elevate/payments
 */
-
-Route::prefix('checkout')->name('checkout.')->group(function () {
-    Route::get('/', [\Elevate\CommerceCore\Http\Controllers\CheckoutController::class, 'index'])->name('index');
-    Route::post('/calculate-rates', [\Elevate\CommerceCore\Http\Controllers\CheckoutController::class, 'calculateRates'])->name('calculate-rates');
-    Route::post('/process', [\Elevate\CommerceCore\Http\Controllers\CheckoutController::class, 'process'])->name('process');
-    Route::get('/success/{order}', [\Elevate\CommerceCore\Http\Controllers\CheckoutController::class, 'success'])->name('success');
-});
 
 /*
 |--------------------------------------------------------------------------
