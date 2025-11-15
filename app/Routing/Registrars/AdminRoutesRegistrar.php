@@ -25,6 +25,7 @@ class AdminRoutesRegistrar implements RouteRegistrar
     {
         $adminRouteFiles = [
             base_path('packages/elevatecommerce/core/routes/admin.php'),
+            base_path('packages/elevatecommerce/purchasable/routes/admin.php'),
             base_path('routes/admin.php'), // Main admin routes if any
         ];
         

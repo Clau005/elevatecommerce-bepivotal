@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49339866f9d1bca9a103f60f08721f12",
+    "content-hash": "281197b15cb418e31275523839d9d446",
     "packages": [
         {
             "name": "brick/math",
@@ -546,6 +546,39 @@
                 "MIT"
             ],
             "description": "Core package for ElevateCommerce",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "elevatecommerce/purchasable",
+            "version": "dev-packages",
+            "dist": {
+                "type": "path",
+                "url": "./packages/elevatecommerce/purchasable",
+                "reference": "a757d17bde79d35bd9d3020c47cdb89351542604"
+            },
+            "require": {
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ElevateCommerce\\Purchasable\\PurchasableServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ElevateCommerce\\Purchasable\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Cart, Wishlist, Order, and Checkout functionality for ElevateCommerce",
             "transport-options": {
                 "relative": true
             }
@@ -9503,7 +9536,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "elevatecommerce/core": 20
+        "elevatecommerce/core": 20,
+        "elevatecommerce/purchasable": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

@@ -1,0 +1,24 @@
+{
+    "name": "elevatecommerce/purchasable",
+    "description": "Cart, Wishlist, Order, and Checkout functionality for ElevateCommerce",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "ElevateCommerce\\Purchasable\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.0|^12.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ElevateCommerce\\Purchasable\\PurchasableServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

@@ -31,9 +31,14 @@ class Currency extends Model
      */
     public static function getDefault(): self
     {
-        return static::where('is_default', true)
-            ->where('is_enabled', true)
-            ->first() ?? static::getGBPFallback();
+        try {
+            return static::where('is_default', true)
+                ->where('is_enabled', true)
+                ->first() ?? static::getGBPFallback();
+        } catch (\Exception $e) {
+            // Table doesn't exist yet (during migration)
+            return static::getGBPFallback();
+        }
     }
 
     /**
@@ -41,19 +46,36 @@ class Currency extends Model
      */
     public static function getGBPFallback(): self
     {
-        $gbp = static::where('code', 'GBP')->first();
+        try {
+            $gbp = static::where('code', 'GBP')->first();
+        } catch (\Exception $e) {
+            $gbp = null;
+        }
         
         if (!$gbp) {
             // Create GBP as fallback if it doesn't exist
-            $gbp = static::create([
-                'code' => 'GBP',
-                'name' => 'British Pound',
-                'symbol' => '£',
-                'decimal_places' => 2,
-                'is_default' => true,
-                'is_enabled' => true,
-                'exchange_rate' => 1.00,
-            ]);
+            try {
+                $gbp = static::create([
+                    'code' => 'GBP',
+                    'name' => 'British Pound',
+                    'symbol' => '£',
+                    'decimal_places' => 2,
+                    'is_default' => true,
+                    'is_enabled' => true,
+                    'exchange_rate' => 1.00,
+                ]);
+            } catch (\Exception $e) {
+                // Table doesn't exist, return a temporary object
+                $gbp = new static([
+                    'code' => 'GBP',
+                    'name' => 'British Pound',
+                    'symbol' => '£',
+                    'decimal_places' => 2,
+                    'is_default' => true,
+                    'is_enabled' => true,
+                    'exchange_rate' => 1.00,
+                ]);
+            }
         }
 
         return $gbp;
