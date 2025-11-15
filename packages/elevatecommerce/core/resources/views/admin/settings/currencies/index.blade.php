@@ -6,22 +6,29 @@
 <div class="space-y-6">
     <!-- Page Header -->
     <div class="flex items-center justify-between">
-        <div>
-            <div class="flex items-center space-x-3">
-                <a href="{{ route('admin.settings.index') }}" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-arrow-left"></i>
-                </a>
-                <h1 class="text-2xl font-bold text-gray-900">Currencies</h1>
-            </div>
-            <p class="mt-1 text-sm text-gray-600">Manage currencies and exchange rates</p>
+        <div class="flex items-center space-x-2">
+            <x-core::heading level="1" subtitle="Manage currencies and exchange rates">
+                Currencies
+            </x-core::heading>
         </div>
-        <a 
-            href="{{ route('admin.settings.currencies.create') }}"
-            class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
+        <div>
+        <x-core::button 
+                variant="secondary" 
+                size="sm"
+                icon="fas fa-arrow-left"
+                onclick="window.location.href='{{ route('admin.settings.index') }}'"
+            >
+                Back to Settings
+            </x-core::button>
+        <x-core::button 
+            variant="primary"
+            size="md"
+            icon="fas fa-plus"
+            onclick="window.location.href='{{ route('admin.settings.currencies.create') }}'"
         >
-            <i class="fas fa-plus mr-2"></i>
             Add Currency
-        </a>
+        </x-core::button>
+        </div>
     </div>
 
     @if(session('success'))
@@ -41,63 +48,57 @@
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Currency</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Symbol</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Decimal Places</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exchange Rate</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Currency</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Symbol</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Decimals</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rate</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @forelse($currencies as $currency)
                     <tr class="{{ $currency->is_default ? 'bg-blue-50' : '' }}">
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="px-3 py-2 whitespace-nowrap">
                             <div class="flex items-center">
                                 <div>
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-sm font-medium text-gray-900">{{ $currency->code }}</span>
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="text-xs font-medium text-gray-900">{{ $currency->code }}</span>
                                         @if($currency->is_default)
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                                            <x-core::badge variant="info" size="sm">
                                                 Default
-                                            </span>
+                                            </x-core::badge>
                                         @endif
                                     </div>
-                                    <div class="text-sm text-gray-500">{{ $currency->name }}</div>
+                                    <div class="text-xs text-gray-500">{{ $currency->name }}</div>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="text-lg">{{ $currency->symbol }}</span>
+                        <td class="px-3 py-2 whitespace-nowrap">
+                            <span class="text-sm">{{ $currency->symbol }}</span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
                             {{ $currency->decimal_places }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ number_format($currency->exchange_rate, 6) }}
+                        <td class="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                            {{ number_format($currency->exchange_rate, 4) }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            @if($currency->is_enabled)
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    Enabled
-                                </span>
-                            @else
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                    Disabled
-                                </span>
-                            @endif
+                        <td class="px-3 py-2 whitespace-nowrap">
+                            <x-core::badge :variant="$currency->is_enabled ? 'success' : 'default'">
+                                {{ $currency->is_enabled ? 'Enabled' : 'Disabled' }}
+                            </x-core::badge>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div class="flex items-center justify-end space-x-2">
+                        <td class="px-3 py-2 whitespace-nowrap text-right text-xs font-medium">
+                            <div class="flex items-center justify-end space-x-1.5">
                                 @if(!$currency->is_default)
                                     <form action="{{ route('admin.settings.currencies.set-default', $currency) }}" method="POST">
                                         @csrf
                                         <button 
                                             type="submit"
-                                            class="text-blue-600 hover:text-blue-900"
+                                            class="p-1 text-blue-600 hover:text-blue-900"
                                             title="Set as default"
                                         >
-                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star text-xs"></i>
                                         </button>
                                     </form>
                                 @endif
@@ -106,19 +107,19 @@
                                     @csrf
                                     <button 
                                         type="submit"
-                                        class="text-gray-600 hover:text-gray-900"
+                                        class="p-1 text-gray-600 hover:text-gray-900"
                                         title="{{ $currency->is_enabled ? 'Disable' : 'Enable' }}"
                                     >
-                                        <i class="fas fa-{{ $currency->is_enabled ? 'eye-slash' : 'eye' }}"></i>
+                                        <i class="fas fa-{{ $currency->is_enabled ? 'eye-slash' : 'eye' }} text-xs"></i>
                                     </button>
                                 </form>
 
                                 <a 
                                     href="{{ route('admin.settings.currencies.edit', $currency) }}"
-                                    class="text-indigo-600 hover:text-indigo-900"
+                                    class="p-1 text-indigo-600 hover:text-indigo-900"
                                     title="Edit"
                                 >
-                                    <i class="fas fa-edit"></i>
+                                    <i class="fas fa-edit text-xs"></i>
                                 </a>
 
                                 @if(!$currency->is_default)
@@ -127,10 +128,10 @@
                                         @method('DELETE')
                                         <button 
                                             type="submit"
-                                            class="text-red-600 hover:text-red-900"
+                                            class="p-1 text-red-600 hover:text-red-900"
                                             title="Delete"
                                         >
-                                            <i class="fas fa-trash"></i>
+                                            <i class="fas fa-trash text-xs"></i>
                                         </button>
                                     </form>
                                 @endif
@@ -139,9 +140,9 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-12 text-center text-gray-500">
-                            <i class="fas fa-dollar-sign text-4xl mb-4"></i>
-                            <p>No currencies found</p>
+                        <td colspan="6" class="px-3 py-8 text-center text-gray-500">
+                            <i class="fas fa-dollar-sign text-3xl mb-3"></i>
+                            <p class="text-sm">No currencies found</p>
                         </td>
                     </tr>
                 @endforelse

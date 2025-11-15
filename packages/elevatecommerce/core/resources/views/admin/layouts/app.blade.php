@@ -13,13 +13,13 @@
     <!-- Header -->
     @include('core::admin.layouts.partials.header')
 
-    <div class="flex pt-16 h-screen">
+    <div class="flex pt-16 h-screen flex-row">
         <!-- Sidebar -->
         @include('core::admin.layouts.partials.sidebar')
 
         <!-- Main Content Area -->
-        <main class="flex-1 ml-64 bg-slate-100 rounded-tr-xl overflow-y-auto">
-            <div class="p-6">
+        <main class="flex-1  bg-slate-100 rounded-tr-xl overflow-y-auto">
+            <div class="p-3">
                 @yield('content')
             </div>
         </main>

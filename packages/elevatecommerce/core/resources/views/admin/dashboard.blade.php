@@ -8,16 +8,15 @@
     $mainWidgets = \ElevateCommerce\Core\Support\Dashboard\DashboardRegistry::getByPosition('main');
 @endphp
 
-<div class="space-y-6">
+<div class="space-y-4">
     <!-- Page Header -->
-    <div>
-        <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p class="mt-1 text-sm text-gray-600">Welcome back, {{ auth('admin')->user()->first_name }}!</p>
-    </div>
+    <x-core::heading level="1" subtitle="Welcome back, {{ auth('admin')->user()->first_name }}!">
+        Dashboard
+    </x-core::heading>
 
     <!-- Stats Grid -->
     @if(!empty($statsWidgets))
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         @foreach($statsWidgets as $key => $widget)
             @if($widget['view'])
                 @include($widget['view'], $widget['data'])
@@ -30,7 +29,7 @@
 
     <!-- Main Widgets -->
     @if(!empty($mainWidgets))
-    <div class="space-y-6">
+    <div class="space-y-4">
         @foreach($mainWidgets as $key => $widget)
             @if($widget['view'])
                 @include($widget['view'], $widget['data'])

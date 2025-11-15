@@ -3,192 +3,127 @@
 @section('title', 'General Settings')
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-4">
     <!-- Page Header -->
     <div class="flex items-center justify-between">
         <div>
-            <div class="flex items-center space-x-3">
-                <a href="{{ route('admin.settings.index') }}" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-arrow-left"></i>
-                </a>
-                <h1 class="text-2xl font-bold text-gray-900">General Settings</h1>
-            </div>
-            <p class="mt-1 text-sm text-gray-600">Manage your store's basic information and preferences</p>
+            <x-core::heading level="1" subtitle="Manage your store's basic information and preferences">
+                General Settings
+            </x-core::heading>
+        </div>
+        <div>
+            <x-core::button 
+                variant="secondary" 
+                size="sm"
+                icon="fas fa-arrow-left"
+                onclick="window.location.href='{{ route('admin.settings.index') }}'"
+            >
+                Back to Settings
+            </x-core::button>
         </div>
     </div>
 
-    <form action="{{ route('admin.settings.general.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('admin.settings.general.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
         @csrf
         @method('PUT')
 
         <!-- Store Information -->
-        <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-6">Store Information</h2>
-            
-            <div class="space-y-6">
-                <!-- Store Name -->
-                <div>
-                    <label for="store_name" class="block text-sm font-medium text-gray-700 mb-2">
-                        Store Name <span class="text-red-500">*</span>
-                    </label>
-                    <input 
-                        type="text" 
-                        id="store_name" 
-                        name="store_name" 
-                        value="{{ old('store_name', config('app.name')) }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        required
-                    >
-                    @error('store_name')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+        <x-core::card title="Store Information">
+            <div class="space-y-4">
+                <x-core::input 
+                    id="store_name"
+                    name="store_name"
+                    label="Store Name"
+                    :required="true"
+                    value="{{ old('store_name', config('app.name')) }}"
+                    :error="$errors->first('store_name')"
+                />
 
-                <!-- Store Email -->
-                <div>
-                    <label for="store_email" class="block text-sm font-medium text-gray-700 mb-2">
-                        Store Email <span class="text-red-500">*</span>
-                    </label>
-                    <input 
-                        type="email" 
-                        id="store_email" 
-                        name="store_email" 
-                        value="{{ old('store_email', config('mail.from.address')) }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        required
-                    >
-                    <p class="mt-1 text-sm text-gray-500">This email will be used for customer communications</p>
-                    @error('store_email')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                <x-core::input 
+                    type="email"
+                    id="store_email"
+                    name="store_email"
+                    label="Store Email"
+                    :required="true"
+                    value="{{ old('store_email', config('mail.from.address')) }}"
+                    hint="This email will be used for customer communications"
+                    :error="$errors->first('store_email')"
+                />
 
-                <!-- Store Phone -->
-                <div>
-                    <label for="store_phone" class="block text-sm font-medium text-gray-700 mb-2">
-                        Store Phone
-                    </label>
-                    <input 
-                        type="tel" 
-                        id="store_phone" 
-                        name="store_phone" 
-                        value="{{ old('store_phone', config('store.phone')) }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                    @error('store_phone')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                <x-core::input 
+                    type="tel"
+                    id="store_phone"
+                    name="store_phone"
+                    label="Store Phone"
+                    value="{{ old('store_phone', config('store.phone')) }}"
+                    :error="$errors->first('store_phone')"
+                />
 
-                <!-- Store Description -->
-                <div>
-                    <label for="store_description" class="block text-sm font-medium text-gray-700 mb-2">
-                        Store Description
-                    </label>
-                    <textarea 
-                        id="store_description" 
-                        name="store_description" 
-                        rows="3"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >{{ old('store_description', config('store.description')) }}</textarea>
-                    <p class="mt-1 text-sm text-gray-500">A brief description of your store</p>
-                    @error('store_description')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                <x-core::textarea 
+                    id="store_description"
+                    name="store_description"
+                    label="Store Description"
+                    :rows="3"
+                    hint="A brief description of your store"
+                    :error="$errors->first('store_description')"
+                >{{ old('store_description', config('store.description')) }}</x-core::textarea>
             </div>
-        </div>
+        </x-core::card>
 
         <!-- Regional Settings -->
-        <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-6">Regional Settings</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Timezone -->
-                <div>
-                    <label for="timezone" class="block text-sm font-medium text-gray-700 mb-2">
-                        Timezone <span class="text-red-500">*</span>
-                    </label>
-                    <select 
-                        id="timezone" 
-                        name="timezone"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        required
-                    >
-                        @foreach(timezone_identifiers_list() as $tz)
-                            <option value="{{ $tz }}" {{ config('app.timezone') === $tz ? 'selected' : '' }}>
-                                {{ $tz }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('timezone')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+        <x-core::card title="Regional Settings">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <x-core::select 
+                    id="timezone"
+                    name="timezone"
+                    label="Timezone"
+                    :required="true"
+                    :error="$errors->first('timezone')"
+                >
+                    @foreach(timezone_identifiers_list() as $tz)
+                        <option value="{{ $tz }}" {{ config('app.timezone') === $tz ? 'selected' : '' }}>
+                            {{ $tz }}
+                        </option>
+                    @endforeach
+                </x-core::select>
 
-                <!-- Date Format -->
-                <div>
-                    <label for="date_format" class="block text-sm font-medium text-gray-700 mb-2">
-                        Date Format
-                    </label>
-                    <select 
-                        id="date_format" 
-                        name="date_format"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                        <option value="Y-m-d" {{ config('store.date_format') === 'Y-m-d' ? 'selected' : '' }}>YYYY-MM-DD</option>
-                        <option value="m/d/Y" {{ config('store.date_format') === 'm/d/Y' ? 'selected' : '' }}>MM/DD/YYYY</option>
-                        <option value="d/m/Y" {{ config('store.date_format') === 'd/m/Y' ? 'selected' : '' }}>DD/MM/YYYY</option>
-                        <option value="d-m-Y" {{ config('store.date_format') === 'd-m-Y' ? 'selected' : '' }}>DD-MM-YYYY</option>
-                    </select>
-                    @error('date_format')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                <x-core::select 
+                    id="date_format"
+                    name="date_format"
+                    label="Date Format"
+                    :error="$errors->first('date_format')"
+                >
+                    <option value="Y-m-d" {{ config('store.date_format') === 'Y-m-d' ? 'selected' : '' }}>YYYY-MM-DD</option>
+                    <option value="m/d/Y" {{ config('store.date_format') === 'm/d/Y' ? 'selected' : '' }}>MM/DD/YYYY</option>
+                    <option value="d/m/Y" {{ config('store.date_format') === 'd/m/Y' ? 'selected' : '' }}>DD/MM/YYYY</option>
+                    <option value="d-m-Y" {{ config('store.date_format') === 'd-m-Y' ? 'selected' : '' }}>DD-MM-YYYY</option>
+                </x-core::select>
 
-                <!-- Time Format -->
-                <div>
-                    <label for="time_format" class="block text-sm font-medium text-gray-700 mb-2">
-                        Time Format
-                    </label>
-                    <select 
-                        id="time_format" 
-                        name="time_format"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                        <option value="H:i:s" {{ config('store.time_format') === 'H:i:s' ? 'selected' : '' }}>24-hour (HH:MM:SS)</option>
-                        <option value="h:i:s A" {{ config('store.time_format') === 'h:i:s A' ? 'selected' : '' }}>12-hour (hh:mm:ss AM/PM)</option>
-                    </select>
-                    @error('time_format')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                <x-core::select 
+                    id="time_format"
+                    name="time_format"
+                    label="Time Format"
+                    :error="$errors->first('time_format')"
+                >
+                    <option value="H:i:s" {{ config('store.time_format') === 'H:i:s' ? 'selected' : '' }}>24-hour (HH:MM:SS)</option>
+                    <option value="h:i:s A" {{ config('store.time_format') === 'h:i:s A' ? 'selected' : '' }}>12-hour (hh:mm:ss AM/PM)</option>
+                </x-core::select>
 
-                <!-- Week Start Day -->
-                <div>
-                    <label for="week_start" class="block text-sm font-medium text-gray-700 mb-2">
-                        Week Starts On
-                    </label>
-                    <select 
-                        id="week_start" 
-                        name="week_start"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                        <option value="0" {{ config('store.week_start') == 0 ? 'selected' : '' }}>Sunday</option>
-                        <option value="1" {{ config('store.week_start') == 1 ? 'selected' : '' }}>Monday</option>
-                    </select>
-                    @error('week_start')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                <x-core::select 
+                    id="week_start"
+                    name="week_start"
+                    label="Week Starts On"
+                    :error="$errors->first('week_start')"
+                >
+                    <option value="0" {{ config('store.week_start') == 0 ? 'selected' : '' }}>Sunday</option>
+                    <option value="1" {{ config('store.week_start') == 1 ? 'selected' : '' }}>Monday</option>
+                </x-core::select>
             </div>
-        </div>
+        </x-core::card>
 
         <!-- Logo & Branding -->
-        <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-6">Logo & Branding</h2>
-            
-            <div class="space-y-6">
+        <x-core::card title="Logo & Branding">
+            <div class="space-y-4">
                 <!-- Logo -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -213,7 +148,7 @@
                                 <i class="fas fa-upload mr-2"></i>
                                 Upload Logo
                             </label>
-                            <p class="mt-2 text-sm text-gray-500">PNG, JPG or SVG. Max 2MB.</p>
+                            <p class="mt-1 text-xs text-gray-500">PNG, JPG or SVG. Max 2MB.</p>
                         </div>
                     </div>
                     @error('logo')
@@ -245,7 +180,7 @@
                                 <i class="fas fa-upload mr-2"></i>
                                 Upload Favicon
                             </label>
-                            <p class="mt-2 text-sm text-gray-500">ICO or PNG. 32x32 or 64x64 pixels.</p>
+                            <p class="mt-1 text-xs text-gray-500">ICO or PNG. 32x32 or 64x64 pixels.</p>
                         </div>
                     </div>
                     @error('favicon')
@@ -253,23 +188,24 @@
                     @enderror
                 </div>
             </div>
-        </div>
+        </x-core::card>
 
         <!-- Save Button -->
-        <div class="flex items-center justify-end space-x-4">
-            <a 
-                href="{{ route('admin.settings.index') }}"
-                class="px-6 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+        <div class="flex items-center justify-end space-x-2">
+            <x-core::button 
+                variant="secondary"
+                type="button"
+                onclick="window.location.href='{{ route('admin.settings.index') }}'"
             >
                 Cancel
-            </a>
-            <button 
+            </x-core::button>
+            <x-core::button 
+                variant="primary"
                 type="submit"
-                class="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                icon="fas fa-save"
             >
-                <i class="fas fa-save mr-2"></i>
                 Save Changes
-            </button>
+            </x-core::button>
         </div>
     </form>
 </div>

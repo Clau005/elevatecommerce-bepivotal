@@ -2,6 +2,7 @@
 
 namespace ElevateCommerce\Core;
 
+use ElevateCommerce\Core\Support\Helpers\CurrencyHelper;
 use Illuminate\Support\ServiceProvider;
 
 class CoreServiceProvider extends ServiceProvider
@@ -32,6 +33,11 @@ class CoreServiceProvider extends ServiceProvider
 
         // Load views
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'core');
+
+        // Load components
+        $this->loadViewComponentsAs('core', [
+            \Illuminate\View\Component::class,
+        ]);
 
         // Publish views
         $this->publishes([
@@ -96,8 +102,8 @@ class CoreServiceProvider extends ServiceProvider
             'view' => 'core::admin.widgets.stats-card',
             'data' => [
                 'title' => 'Revenue',
-                'value' => '$0',
-                'icon' => 'fas fa-dollar-sign',
+                'value' => CurrencyHelper::format(0),
+                'icon' => 'fas fa-pound-sign',
                 'iconBg' => 'bg-green-100',
                 'iconColor' => 'text-green-600',
                 'change' => 0,
