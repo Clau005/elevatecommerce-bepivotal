@@ -30,6 +30,20 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/general', [\ElevateCommerce\Core\Http\Controllers\SettingsController::class, 'general'])->name('admin.settings.general');
         Route::put('/general', [\ElevateCommerce\Core\Http\Controllers\SettingsController::class, 'updateGeneral'])->name('admin.settings.general.update');
     });
+
+    // Notifications routes
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', [\ElevateCommerce\Core\Http\Controllers\NotificationsController::class, 'index'])->name('admin.notifications.index');
+        Route::get('/{id}', [\ElevateCommerce\Core\Http\Controllers\NotificationsController::class, 'show'])->name('admin.notifications.show');
+        Route::post('/{id}/mark-read', [\ElevateCommerce\Core\Http\Controllers\NotificationsController::class, 'markAsRead'])->name('admin.notifications.mark-read');
+        Route::post('/mark-all-read', [\ElevateCommerce\Core\Http\Controllers\NotificationsController::class, 'markAllAsRead'])->name('admin.notifications.mark-all-read');
+        Route::delete('/{id}', [\ElevateCommerce\Core\Http\Controllers\NotificationsController::class, 'delete'])->name('admin.notifications.delete');
+    });
+
+    // Profile route (placeholder)
+    Route::get('/profile', function () {
+        return redirect()->route('admin.dashboard');
+    })->name('admin.profile');
     
     Route::post('/logout', [\App\Http\Controllers\Admin\AuthController::class, 'logout'])->name('admin.logout');
 });
