@@ -2,6 +2,7 @@
 
 namespace ElevateCommerce\Purchasable\Http\Controllers;
 
+use ElevateCommerce\Core\Support\Helpers\CurrencyHelper;
 use ElevateCommerce\Purchasable\Models\Cart;
 use ElevateCommerce\Purchasable\Models\Order;
 use ElevateCommerce\Purchasable\Models\OrderItem;
@@ -89,6 +90,8 @@ class CheckoutController extends Controller
         // Generate unique order number
         $orderNumber = 'ORD-' . strtoupper(Str::random(8));
 
+        $defaultCurrency = CurrencyHelper::getDefault();
+
         // Create order
         $order = Order::create([
             'order_number' => $orderNumber,
@@ -100,7 +103,7 @@ class CheckoutController extends Controller
             'shipping' => $cart->shipping,
             'discount' => $cart->discount,
             'total' => $cart->total,
-            'currency_code' => config('app.currency', 'USD'),
+            'currency_code' => $defaultCurrency->code,
             'payment_method' => $billingData['payment_method'] ?? null,
             'payment_status' => 'pending',
             'metadata' => [
