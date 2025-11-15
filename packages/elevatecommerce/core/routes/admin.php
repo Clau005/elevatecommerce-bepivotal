@@ -29,6 +29,18 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/', [\ElevateCommerce\Core\Http\Controllers\SettingsController::class, 'index'])->name('admin.settings.index');
         Route::get('/general', [\ElevateCommerce\Core\Http\Controllers\SettingsController::class, 'general'])->name('admin.settings.general');
         Route::put('/general', [\ElevateCommerce\Core\Http\Controllers\SettingsController::class, 'updateGeneral'])->name('admin.settings.general.update');
+        
+        // Currency routes
+        Route::prefix('currencies')->group(function () {
+            Route::get('/', [\ElevateCommerce\Core\Http\Controllers\CurrencyController::class, 'index'])->name('admin.settings.currencies.index');
+            Route::get('/create', [\ElevateCommerce\Core\Http\Controllers\CurrencyController::class, 'create'])->name('admin.settings.currencies.create');
+            Route::post('/', [\ElevateCommerce\Core\Http\Controllers\CurrencyController::class, 'store'])->name('admin.settings.currencies.store');
+            Route::get('/{currency}/edit', [\ElevateCommerce\Core\Http\Controllers\CurrencyController::class, 'edit'])->name('admin.settings.currencies.edit');
+            Route::put('/{currency}', [\ElevateCommerce\Core\Http\Controllers\CurrencyController::class, 'update'])->name('admin.settings.currencies.update');
+            Route::post('/{currency}/set-default', [\ElevateCommerce\Core\Http\Controllers\CurrencyController::class, 'setDefault'])->name('admin.settings.currencies.set-default');
+            Route::post('/{currency}/toggle-enabled', [\ElevateCommerce\Core\Http\Controllers\CurrencyController::class, 'toggleEnabled'])->name('admin.settings.currencies.toggle-enabled');
+            Route::delete('/{currency}', [\ElevateCommerce\Core\Http\Controllers\CurrencyController::class, 'destroy'])->name('admin.settings.currencies.destroy');
+        });
     });
 
     // Notifications routes

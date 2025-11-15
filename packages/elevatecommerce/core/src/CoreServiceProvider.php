@@ -53,6 +53,9 @@ class CoreServiceProvider extends ServiceProvider
 
         // Register default settings pages
         $this->registerSettingsPages();
+
+        // Register Blade directives
+        $this->registerBladeDirectives();
     }
 
     /**
@@ -160,5 +163,25 @@ class CoreServiceProvider extends ServiceProvider
             'order' => 10,
             'color' => 'blue',
         ]);
+
+        \ElevateCommerce\Core\Support\Settings\SettingsRegistry::register('currencies', [
+            'title' => 'Currencies',
+            'description' => 'Manage currencies and exchange rates',
+            'icon' => 'fas fa-dollar-sign',
+            'route' => 'admin.settings.currencies.index',
+            'group' => 'localization',
+            'order' => 10,
+            'color' => 'green',
+        ]);
+    }
+
+    /**
+     * Register Blade directives
+     */
+    protected function registerBladeDirectives(): void
+    {
+        \Illuminate\Support\Facades\Blade::directive('currency', function ($expression) {
+            return "<?php echo \ElevateCommerce\Core\Support\Helpers\CurrencyHelper::format($expression); ?>";
+        });
     }
 }
