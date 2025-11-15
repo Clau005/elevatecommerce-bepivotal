@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 
 // Guest routes (login)
 Route::middleware('guest:admin')->group(function () {
-    Route::get('/login', [\App\Http\Controllers\Admin\AuthController::class, 'showLogin'])->name('admin.login');
-    Route::post('/login', [\App\Http\Controllers\Admin\AuthController::class, 'login']);
+    Route::get('/login', [\ElevateCommerce\Core\Http\Controllers\Admin\AuthController::class, 'showLogin'])->name('admin.login');
+    Route::post('/login', [\ElevateCommerce\Core\Http\Controllers\Admin\AuthController::class, 'login']);
 });
 
 // Authenticated routes
@@ -68,5 +68,5 @@ Route::middleware('auth:admin')->group(function () {
         return redirect()->route('admin.dashboard');
     })->name('admin.profile');
     
-    Route::post('/logout', [\App\Http\Controllers\Admin\AuthController::class, 'logout'])->name('admin.logout');
+    Route::post('/logout', [\ElevateCommerce\Core\Http\Controllers\Admin\AuthController::class, 'logout'])->name('admin.logout');
 });

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Account;
+namespace ElevateCommerce\Core\Http\Controllers\Account;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -14,7 +14,7 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        return view('account.auth.login');
+        return view('core::account.auth.login');
     }
 
     /**
@@ -43,7 +43,7 @@ class AuthController extends Controller
      */
     public function showRegister()
     {
-        return view('account.auth.register');
+        return view('core::account.auth.register');
     }
 
     /**

@@ -24,8 +24,9 @@ class CustomerRouteRegistrar implements RouteRegistrar
     protected function loadCustomerRoutes(): void
     {
         $customerRouteFiles = [
-            base_path('packages/elevatecommerce/core/routes/web.php'),
-            base_path('routes/web.php'), // Main web routes
+            base_path('packages/elevatecommerce/core/routes/account.php'), // Customer account routes
+            base_path('packages/elevatecommerce/core/routes/web.php'),     // Core web routes
+            base_path('routes/web.php'),                                   // Main web routes
         ];
         
         foreach ($customerRouteFiles as $file) {
