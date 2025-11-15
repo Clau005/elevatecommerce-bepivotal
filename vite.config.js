@@ -9,6 +9,8 @@ export default defineConfig({
                 'resources/css/app.css', 
                 'resources/js/app.js',
                 'packages/elevate/editor/resources/js/editor.js',
+                'packages/elevatecommerce/core/resources/css/admin.css',
+                'packages/elevatecommerce/core/resources/js/media-picker.js',
             ],
             refresh: true,
         }),

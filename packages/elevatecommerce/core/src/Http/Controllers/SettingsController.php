@@ -37,8 +37,8 @@ class SettingsController extends Controller
             'date_format' => 'nullable|string',
             'time_format' => 'nullable|string',
             'week_start' => 'nullable|integer|in:0,1',
-            'logo' => 'nullable|image|max:2048',
-            'favicon' => 'nullable|image|max:512',
+            'logo_url' => 'nullable|url',
+            'favicon_url' => 'nullable|url',
         ]);
 
         // TODO: Save settings to database or config file

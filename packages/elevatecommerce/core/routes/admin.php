@@ -52,6 +52,17 @@ Route::middleware('auth:admin')->group(function () {
         Route::delete('/{id}', [\ElevateCommerce\Core\Http\Controllers\NotificationsController::class, 'delete'])->name('admin.notifications.delete');
     });
 
+    // Media Library routes
+    Route::prefix('media')->group(function () {
+        Route::get('/', [\ElevateCommerce\Core\Http\Controllers\Admin\MediaController::class, 'index'])->name('admin.media.index');
+        Route::post('/', [\ElevateCommerce\Core\Http\Controllers\Admin\MediaController::class, 'store'])->name('admin.media.store');
+        Route::get('/api', [\ElevateCommerce\Core\Http\Controllers\Admin\MediaController::class, 'api'])->name('admin.media.api');
+        Route::get('/{media}', [\ElevateCommerce\Core\Http\Controllers\Admin\MediaController::class, 'show'])->name('admin.media.show');
+        Route::put('/{media}', [\ElevateCommerce\Core\Http\Controllers\Admin\MediaController::class, 'update'])->name('admin.media.update');
+        Route::delete('/{media}', [\ElevateCommerce\Core\Http\Controllers\Admin\MediaController::class, 'destroy'])->name('admin.media.destroy');
+        Route::post('/bulk-destroy', [\ElevateCommerce\Core\Http\Controllers\Admin\MediaController::class, 'bulkDestroy'])->name('admin.media.bulk-destroy');
+    });
+
     // Profile route (placeholder)
     Route::get('/profile', function () {
         return redirect()->route('admin.dashboard');

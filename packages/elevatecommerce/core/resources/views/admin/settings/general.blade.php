@@ -123,68 +123,42 @@
 
         <!-- Logo & Branding -->
         <x-core::card title="Logo & Branding">
-            <div class="space-y-4">
+            <div class="space-y-6">
                 <!-- Logo -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                    <label class="block text-xs font-medium text-gray-700 mb-2">
                         Store Logo
                     </label>
-                    <div class="flex items-center space-x-6">
-                        <div class="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
-                            <i class="fas fa-image text-3xl text-gray-400"></i>
-                        </div>
-                        <div>
-                            <input 
-                                type="file" 
-                                id="logo" 
-                                name="logo" 
-                                accept="image/*"
-                                class="hidden"
-                            >
-                            <label 
-                                for="logo"
-                                class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
-                            >
-                                <i class="fas fa-upload mr-2"></i>
-                                Upload Logo
-                            </label>
-                            <p class="mt-1 text-xs text-gray-500">PNG, JPG or SVG. Max 2MB.</p>
-                        </div>
-                    </div>
-                    @error('logo')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <input type="hidden" name="logo_url" value="{{ old('logo_url', config('store.logo_url')) }}">
+                    <div 
+                        data-media-picker
+                        data-input-name="logo_url"
+                        data-type="images"
+                        data-label="Upload Logo"
+                        data-initial-value="{{ old('logo_url', config('store.logo_url')) }}"
+                    ></div>
+                    <p class="mt-2 text-xs text-gray-500">PNG, JPG or SVG. Max 2MB.</p>
+                    @error('logo_url')
+                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Favicon -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                    <label class="block text-xs font-medium text-gray-700 mb-2">
                         Favicon
                     </label>
-                    <div class="flex items-center space-x-6">
-                        <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
-                            <i class="fas fa-image text-2xl text-gray-400"></i>
-                        </div>
-                        <div>
-                            <input 
-                                type="file" 
-                                id="favicon" 
-                                name="favicon" 
-                                accept="image/*"
-                                class="hidden"
-                            >
-                            <label 
-                                for="favicon"
-                                class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
-                            >
-                                <i class="fas fa-upload mr-2"></i>
-                                Upload Favicon
-                            </label>
-                            <p class="mt-1 text-xs text-gray-500">ICO or PNG. 32x32 or 64x64 pixels.</p>
-                        </div>
-                    </div>
-                    @error('favicon')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <input type="hidden" name="favicon_url" value="{{ old('favicon_url', config('store.favicon_url')) }}">
+                    <div 
+                        data-media-picker
+                        data-input-name="favicon_url"
+                        data-type="images"
+                        data-label="Upload Favicon"
+                        data-initial-value="{{ old('favicon_url', config('store.favicon_url')) }}"
+                    ></div>
+                    <p class="mt-2 text-xs text-gray-500">ICO or PNG. 32x32 or 64x64 pixels.</p>
+                    @error('favicon_url')
+                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
             </div>

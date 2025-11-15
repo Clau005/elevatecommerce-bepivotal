@@ -75,6 +75,13 @@ class CoreServiceProvider extends ServiceProvider
             'route' => 'admin.dashboard',
             'order' => 10,
         ]);
+
+        \ElevateCommerce\Core\Support\Navigation\NavigationRegistry::register('admin', [
+            'label' => 'Media',
+            'icon' => 'fas fa-images',
+            'route' => 'admin.media.index',
+            'order' => 20,
+        ]);
     }
 
     /**
