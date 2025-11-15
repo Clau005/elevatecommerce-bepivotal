@@ -21,8 +21,15 @@ Route::middleware('guest:admin')->group(function () {
 // Authenticated routes
 Route::middleware('auth:admin')->group(function () {
     Route::get('/dashboard', function () {
-        return view('admin.dashboard');
+        return view('core::admin.dashboard');
     })->name('admin.dashboard');
+    
+    // Settings routes
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [\ElevateCommerce\Core\Http\Controllers\SettingsController::class, 'index'])->name('admin.settings.index');
+        Route::get('/general', [\ElevateCommerce\Core\Http\Controllers\SettingsController::class, 'general'])->name('admin.settings.general');
+        Route::put('/general', [\ElevateCommerce\Core\Http\Controllers\SettingsController::class, 'updateGeneral'])->name('admin.settings.general.update');
+    });
     
     Route::post('/logout', [\App\Http\Controllers\Admin\AuthController::class, 'logout'])->name('admin.logout');
 });

@@ -14,7 +14,7 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        return view('admin.auth.login');
+        return view('core::admin.auth.login');
     }
 
     /**

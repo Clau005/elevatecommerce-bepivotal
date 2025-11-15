@@ -4,9 +4,9 @@ export default {
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
     "./resources/**/*.vue",
-    "./packages/elevate/**/*.blade.php",
-    "./packages/elevate/**/*.vue",
-    "./packages/elevate/**/*.js",
+    "./packages/elevatecommerce/**/*.blade.php",
+    "./packages/elevatecommerce/**/*.vue",
+    "./packages/elevatecommerce/**/*.js",
   ],
   theme: {
     extend: {},
