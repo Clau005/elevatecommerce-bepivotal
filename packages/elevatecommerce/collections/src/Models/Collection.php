@@ -127,6 +127,15 @@ class Collection extends Model
     }
 
     /**
+     * Get the full slug including parent slugs (alias for getUrlPath)
+     * Returns path with leading slash (e.g., "/electronics/cables/usb-c")
+     */
+    public function getFullSlug(): string
+    {
+        return '/' . $this->getUrlPath();
+    }
+
+    /**
      * Scope for active collections
      */
     public function scopeActive($query)

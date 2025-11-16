@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use ElevateCommerce\Purchasable\Traits\IsPurchasable;
+use ElevateCommerce\Editor\Traits\HasTemplate;
 
 class TestingPurchasable extends Model
 {
-    use SoftDeletes, IsPurchasable;
+    use SoftDeletes, IsPurchasable, HasTemplate;
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +27,8 @@ class TestingPurchasable extends Model
         'track_inventory',
         'image_url',
         'options',
+        'template_id',
+        'slug',
     ];
 
     /**

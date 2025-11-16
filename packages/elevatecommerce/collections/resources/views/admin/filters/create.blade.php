@@ -1,5 +1,8 @@
-<x-core::admin.layouts.app pageTitle="Create Filter" title="Create Filter - Admin">
+@extends('core::admin.layouts.app')
 
+@section('title', 'Create Filter')
+
+@section('content')
 <div class="max-w-4xl mx-auto space-y-6">
     {{-- Header --}}
     <div class="flex items-center justify-between">
@@ -82,14 +85,13 @@
                 <select name="source_model" id="source_model" required
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">Select model</option>
-                    <option value="Elevate\Product\Models\Product" {{ old('source_model') == 'Elevate\Product\Models\Product' ? 'selected' : '' }}>
-                        Product
-                    </option>
-                    <option value="Elevate\Product\Models\ProductVariant" {{ old('source_model') == 'Elevate\Product\Models\ProductVariant' ? 'selected' : '' }}>
-                        Product Variant
-                    </option>
+                    @foreach($collectableTypes as $modelClass => $config)
+                        <option value="{{ $modelClass }}" {{ old('source_model') == $modelClass ? 'selected' : '' }}>
+                            {{ $config['label'] ?? class_basename($modelClass) }}
+                        </option>
+                    @endforeach
                 </select>
-                <p class="mt-1 text-sm text-gray-500">The model to filter (usually Product)</p>
+                <p class="mt-1 text-sm text-gray-500">Select the model type to filter from registered collectable types</p>
                 @error('source_model')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror

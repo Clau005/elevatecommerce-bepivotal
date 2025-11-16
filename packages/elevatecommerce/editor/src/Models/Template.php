@@ -45,7 +45,7 @@ class Template extends Model
             return null;
         }
 
-        $registry = app(\Elevate\Editor\Services\TemplateRegistry::class);
+        $registry = app(\ElevateCommerce\Editor\Services\TemplateRegistry::class);
         $config = $registry->get($this->model_type);
         
         return $config['icon'] ?? null;

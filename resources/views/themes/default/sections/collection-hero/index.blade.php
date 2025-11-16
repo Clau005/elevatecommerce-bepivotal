@@ -18,13 +18,13 @@
         <div class="w-full {{ ($textAlign ?? 'center') === 'center' ? 'max-w-3xl mx-auto text-center' : '' }}">
             @if($showName ?? true)
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 {{ ($showImage ?? true) && !empty($image) ? 'text-white' : 'text-gray-900' }}">
-                    {{ $name ?? $model->name ?? 'Collection' }}
+                    {{ $collection->name ?? $model->name ?? 'Collection' }}
                 </h1>
             @endif
             
-            @if(($showDescription ?? true) && !empty($description ?? $model->description ?? ''))
+            @if(($showDescription ?? true) && !empty($collection->description ?? $model->description ?? ''))
                 <div class="text-lg md:text-xl {{ ($showImage ?? true) && !empty($image) ? 'text-white/90' : 'text-gray-600' }} prose prose-lg max-w-none">
-                    {!! $description ?? $model->description ?? '' !!}
+                    {!! $collection->description ?? $model->description ?? '' !!}
                 </div>
             @endif
         </div>

@@ -1,5 +1,8 @@
-<x-core::admin.layouts.app pageTitle="Filters" title="Filters - Admin" description="Manage collection filters">
+@extends('core::admin.layouts.app')
 
+@section('title', 'Filters')
+
+@section('content')
 <div class="space-y-6">
     {{-- Header --}}
     <div class="flex justify-between items-center">

@@ -1,5 +1,8 @@
-<x-core::admin.layouts.app pageTitle="Edit Filter" title="Edit Filter - Admin">
+@extends('core::admin.layouts.app')
 
+@section('title', 'Edit Filter')
+
+@section('content')
 <div class="max-w-4xl mx-auto space-y-6">
     {{-- Header --}}
     <div class="flex items-center justify-between">
@@ -78,8 +81,16 @@
                 <label for="source_model" class="block text-sm font-medium text-gray-700 mb-1">
                     Source Model <span class="text-red-500">*</span>
                 </label>
-                <input type="text" name="source_model" id="source_model" value="{{ old('source_model', $filter->source_model) }}" required
+                <select name="source_model" id="source_model" required
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <option value="">Select model</option>
+                    @foreach($collectableTypes as $modelClass => $config)
+                        <option value="{{ $modelClass }}" {{ old('source_model', $filter->source_model) == $modelClass ? 'selected' : '' }}>
+                            {{ $config['label'] ?? class_basename($modelClass) }}
+                        </option>
+                    @endforeach
+                </select>
+                <p class="mt-1 text-sm text-gray-500">Select the model type to filter from registered collectable types</p>
                 @error('source_model')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror

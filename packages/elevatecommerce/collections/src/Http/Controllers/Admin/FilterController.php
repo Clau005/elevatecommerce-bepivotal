@@ -5,6 +5,7 @@ namespace ElevateCommerce\Collections\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use ElevateCommerce\Collections\Models\CollectionFilter;
 use ElevateCommerce\Collections\Models\CollectionFilterValue;
+use ElevateCommerce\Collections\Services\CollectableRegistry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -25,9 +26,11 @@ class FilterController extends Controller
     /**
      * Show the form for creating a new filter
      */
-    public function create()
+    public function create(CollectableRegistry $registry)
     {
-        return view('collections::admin.filters.create');
+        $collectableTypes = $registry->all();
+        
+        return view('collections::admin.filters.create', compact('collectableTypes'));
     }
 
     /**
@@ -62,11 +65,12 @@ class FilterController extends Controller
     /**
      * Show the form for editing a filter
      */
-    public function edit(CollectionFilter $filter)
+    public function edit(CollectionFilter $filter, CollectableRegistry $registry)
     {
         $filter->load(['collections', 'values']);
+        $collectableTypes = $registry->all();
         
-        return view('collections::admin.filters.edit', compact('filter'));
+        return view('collections::admin.filters.edit', compact('filter', 'collectableTypes'));
     }
 
     /**

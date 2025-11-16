@@ -7,6 +7,7 @@
         <!-- Product Grid -->
         <div class="grid gap-8" style="grid-template-columns: repeat(auto-fill, minmax({{ $column_width ?? '250px' }}, 1fr));">
             @php
+  
                 // Support multiple data sources
                 $items = $collection->products;
             @endphp
@@ -32,13 +33,45 @@
                                 <p class="text-sm text-gray-600 mb-4 leading-relaxed">{{ Str::limit($product->description, 100) }}</p>
                             @endif
                             
-                            <div class="flex justify-between items-center">
-                                <span class="text-xl font-bold text-gray-900">${{ number_format($product->price, 2) }}</span>
-                                
-                                <a href="/products/{{ $product->slug }}" 
-                                   class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300">
-                                    View
-                                </a>
+                            <!-- Price -->
+                            <div class="mb-4">
+                                <div class="flex items-baseline space-x-2">
+                                    <span class="text-xl font-bold text-gray-900">@currency($product->price)</span>
+                                    @if($product->compare_at_price && $product->compare_at_price > $product->price)
+                                        <span class="text-sm text-gray-400 line-through">@currency($product->compare_at_price)</span>
+                                    @endif
+                                </div>
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="space-y-2">
+                                @if($product->canPurchase())
+                                    <form action="{{ route('purchasable.cart.add') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="purchasable_type" value="{{ get_class($product) }}">
+                                        <input type="hidden" name="purchasable_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
+                                            <i class="fas fa-shopping-cart mr-2"></i>
+                                            Add to Cart
+                                        </button>
+                                    </form>
+                                @else
+                                    <button disabled class="w-full bg-gray-300 text-gray-500 font-semibold py-2 px-4 rounded-lg cursor-not-allowed">
+                                        <i class="fas fa-ban mr-2"></i>
+                                        Unavailable
+                                    </button>
+                                @endif
+
+                                <form action="{{ route('purchasable.wishlist.add') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="purchasable_type" value="{{ get_class($product) }}">
+                                    <input type="hidden" name="purchasable_id" value="{{ $product->id }}">
+                                    <button type="submit" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg transition duration-200">
+                                        <i class="far fa-heart mr-2"></i>
+                                        Add to Wishlist
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

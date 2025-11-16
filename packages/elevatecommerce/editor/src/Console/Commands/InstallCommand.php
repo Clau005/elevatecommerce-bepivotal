@@ -381,5 +381,126 @@ class InstallCommand extends Command
             
             $this->line("  ✓ Created template: {$templateData['name']}");
         }
+
+
+           // Collection Template
+        \ElevateCommerce\Editor\Models\Template::firstOrCreate(
+            ['slug' => 'collection'],
+            [
+                'name' => 'Collection Template',
+                'model_type' => 'ElevateCommerce\\Collections\\Models\\Collection',
+                'description' => 'Default template for collection pages',
+                'configuration' => [
+                    'basic_info' => [
+                        'title' => 'Collection Template',
+                        'layout' => 'default'
+                    ],
+                    'sections' => [
+                        [
+                            'id' => 'collection-hero-' . time(),
+                            'component' => 'collection-hero',
+                            'data' => [
+                                'title' => '{{ model.name }}',
+                                'subtitle' => '{{ model.description }}',
+                                'show_product_count' => true,
+                                'background_color' => '#1f2937',
+                                'text_color' => '#ffffff',
+                                'height' => 400
+                            ]
+                        ],
+                        [
+                            'id' => 'collection-grid-' . (time() + 1),
+                            'component' => 'collection-grid',
+                            'data' => [
+                                'columns' => 4,
+                                'gap' => '2rem',
+                                'show_filters' => true,
+                                'show_sort' => true
+                            ]
+                        ]
+                    ]
+                ],
+                'draft_configuration' => [
+                    'basic_info' => [
+                        'title' => 'Collection Template',
+                        'layout' => 'default'
+                    ],
+                    'sections' => [
+                        [
+                            'id' => 'collection-hero-' . time(),
+                            'component' => 'collection-hero',
+                            'data' => [
+                                'title' => '{{ model.name }}',
+                                'subtitle' => '{{ model.description }}',
+                                'show_product_count' => true,
+                                'background_color' => '#1f2937',
+                                'text_color' => '#ffffff',
+                                'height' => 400
+                            ]
+                        ],
+                        [
+                            'id' => 'collection-grid-' . (time() + 1),
+                            'component' => 'collection-grid',
+                            'data' => [
+                                'columns' => 4,
+                                'gap' => '2rem',
+                                'show_filters' => true,
+                                'show_sort' => true
+                            ]
+                        ]
+                    ]
+                ],
+                'status' => 'draft',
+                'is_default' => true,
+            ]
+        );
+
+        // Product Template
+        \ElevateCommerce\Editor\Models\Template::firstOrCreate(
+            ['slug' => 'product'],
+            [
+                'name' => 'Product Template',
+                'model_type' => 'ElevateCommerce\\Product\\Models\\Product',
+                'description' => 'Default template for product pages',
+                'configuration' => [
+                    'basic_info' => [
+                        'title' => 'Product Template',
+                        'layout' => 'default'
+                    ],
+                    'sections' => [
+                        [
+                            'id' => 'product-show-' . time(),
+                            'component' => 'product-show',
+                            'data' => [
+                                'layout' => 'default',
+                                'show_breadcrumbs' => true,
+                                'show_related_products' => true,
+                                'gallery_style' => 'thumbnails'
+                            ]
+                        ]
+                    ]
+                ],
+                'draft_configuration' =>  [
+                    'basic_info' => [
+                        'title' => 'Product Template',
+                        'layout' => 'default'
+                    ],
+                    'sections' => [
+                        [
+                            'id' => 'product-show-' . time(),
+                            'component' => 'product-show',
+                            'data' => [
+                                'layout' => 'default',
+                                'show_breadcrumbs' => true,
+                                'show_related_products' => true,
+                                'gallery_style' => 'thumbnails'
+                            ]
+                        ]
+                    ]
+                ],
+                'status' => 'draft',
+                'is_default' => true,
+            ]
+        );
     }
 }

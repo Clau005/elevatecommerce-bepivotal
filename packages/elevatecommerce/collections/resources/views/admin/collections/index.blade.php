@@ -87,7 +87,16 @@
                                 @endif
                                 <div>
                                     <div class="text-sm font-medium text-gray-900">{{ $collection->name }}</div>
-                                    <div class="text-sm text-gray-500">/{{ $collection->slug }}</div>
+                                    <div class="flex items-center gap-2">
+                                        <div class="text-sm text-gray-500">{{ $collection->getFullSlug() }}</div>
+                                        <button 
+                                            onclick="copyToClipboard(event, '{{ url($collection->getFullSlug()) }}')" 
+                                            class="text-gray-400 hover:text-gray-600 transition-colors"
+                                            title="Copy link"
+                                        >
+                                            <i class="fas fa-copy text-xs"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </td>
@@ -152,4 +161,54 @@
         @endif
     </x-core::card>
 </div>
+
+@push('scripts')
+<script>
+function copyToClipboard(event, text) {
+    // Try modern clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            showCopySuccess(event);
+        }).catch(err => {
+            console.error('Clipboard API failed:', err);
+            fallbackCopy(event, text);
+        });
+    } else {
+        // Fallback for older browsers or non-HTTPS
+        fallbackCopy(event, text);
+    }
+}
+
+function fallbackCopy(event, text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    
+    try {
+        document.execCommand('copy');
+        showCopySuccess(event);
+    } catch (err) {
+        console.error('Fallback copy failed:', err);
+        alert('Failed to copy link. Please copy manually: ' + text);
+    } finally {
+        document.body.removeChild(textarea);
+    }
+}
+
+function showCopySuccess(event) {
+    const button = event.target.closest('button');
+    const icon = button.querySelector('i');
+    const originalClass = icon.className;
+    
+    icon.className = 'fas fa-check text-xs text-green-600';
+    
+    setTimeout(() => {
+        icon.className = originalClass;
+    }, 2000);
+}
+</script>
+@endpush
 @endsection
