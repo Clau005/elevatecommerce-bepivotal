@@ -18,7 +18,7 @@ class StripeController extends Controller
      * Create Stripe checkout session from cart
      * This is called by CheckoutController after payment method selection
      */
-    public function checkout(Request $request)
+    public function stripeCheckout(Request $request)
     {
         // Get checkout data from session
         $checkoutData = session('checkout_data');

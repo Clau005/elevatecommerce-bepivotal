@@ -45,7 +45,7 @@ class CheckoutController extends Controller
     public function process(Request $request)
     {
         $validated = $request->validate([
-            'payment_method' => 'required|string|in:stripe',
+            'payment_method' => 'required|string|in:stripe,paypal',
             'billing_email' => 'required|email',
             'billing_name' => 'required|string|max:255',
         ]);
@@ -76,6 +76,9 @@ class CheckoutController extends Controller
         switch ($validated['payment_method']) {
             case 'stripe':
                 return redirect()->route('purchasable.purchase.stripe.checkout');
+            
+            case 'paypal':
+                return redirect()->route('purchasable.purchase.paypall.checkout');
             
             default:
                 return back()->with('error', 'Invalid payment method selected.');
@@ -152,16 +155,15 @@ class CheckoutController extends Controller
                 'name' => 'Credit/Debit Card',
                 'description' => 'Pay securely with your credit or debit card via Stripe',
                 'icon' => 'fas fa-credit-card',
-                'enabled' => config('stripe.stripe_sk') ? true : false,
+                'enabled' => true,
             ],
-            // Add more payment methods here in the future
-            // [
-            //     'id' => 'paypal',
-            //     'name' => 'PayPal',
-            //     'description' => 'Pay with your PayPal account',
-            //     'icon' => 'fab fa-paypal',
-            //     'enabled' => false,
-            // ],
+            [
+                'id' => 'paypal',
+                'name' => 'PayPal',
+                'description' => 'Pay securely with your PayPal account',
+                'icon' => 'fab fa-paypal',
+                'enabled' => true,
+            ],
         ];
     }
 

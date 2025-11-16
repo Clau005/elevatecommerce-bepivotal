@@ -3,6 +3,7 @@
 use ElevateCommerce\Purchasable\Http\Controllers\CartController;
 use ElevateCommerce\Purchasable\Http\Controllers\WishlistController;
 use ElevateCommerce\Purchasable\Http\Controllers\CheckoutController;
+use ElevateCommerce\Purchasable\Http\Controllers\PaymentGateways\PaypallController;
 use ElevateCommerce\Purchasable\Http\Controllers\PaymentGateways\StripeController;
 use Illuminate\Support\Facades\Route;
 
@@ -65,8 +66,13 @@ Route::name('purchasable.')->group(function () {
     Route::prefix('purchase')->name('purchase.')->group(function () {
         // Stripe
         Route::prefix('stripe')->name('stripe.')->group(function () {
-            Route::get('checkout', [StripeController::class, 'checkout'])->name('checkout');
+            Route::get('checkout', [StripeController::class, 'stripeCheckout'])->name('checkout');
             Route::get('return', [StripeController::class, 'stripeReturn'])->name('return');
+        });
+
+        Route::prefix('paypall')->name('paypall.')->group(function () {
+            Route::get('checkout', [PaypallController::class, 'paypalCheckout'])->name('checkout');
+            Route::get('return', [PaypallController::class, 'paypallReturn'])->name('return');
         });
     });
 });
