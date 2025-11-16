@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0706dd09cf59dcd669fd039f6ec7a639",
+    "content-hash": "5093096fab26626918c58b5784a5750c",
     "packages": [
         {
             "name": "brick/math",
@@ -551,16 +551,48 @@
             }
         },
         {
+            "name": "elevatecommerce/editor",
+            "version": "dev-packages",
+            "dist": {
+                "type": "path",
+                "url": "./packages/elevatecommerce/editor",
+                "reference": "215c685326d3fc00d81436a9eecacd8eb7c71632"
+            },
+            "require": {
+                "laravel/framework": "^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ElevateCommerce\\Editor\\EditorServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ElevateCommerce\\Editor\\": "src/"
+                }
+            },
+            "description": "Visual page builder and template system for Laravel",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "elevatecommerce/purchasable",
             "version": "dev-packages",
             "dist": {
                 "type": "path",
                 "url": "./packages/elevatecommerce/purchasable",
-                "reference": "a757d17bde79d35bd9d3020c47cdb89351542604"
+                "reference": "94ad9caa1bb6090b1a50a8801faee292663fc45d"
             },
             "require": {
                 "illuminate/support": "^11.0|^12.0",
-                "php": "^8.2"
+                "php": "^8.2",
+                "srmklive/paypal": "^3.0",
+                "stripe/stripe-php": "^13.0|^14.0|^15.0|^16.0|^17.0|^18.0"
             },
             "type": "library",
             "extra": {
@@ -572,7 +604,8 @@
             },
             "autoload": {
                 "psr-4": {
-                    "ElevateCommerce\\Purchasable\\": "src/"
+                    "ElevateCommerce\\Purchasable\\": "src/",
+                    "ElevateCommerce\\Purchasable\\Database\\Seeders\\": "database/seeders/"
                 }
             },
             "license": [
@@ -9662,6 +9695,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "elevatecommerce/core": 20,
+        "elevatecommerce/editor": 20,
         "elevatecommerce/purchasable": 20
     },
     "prefer-stable": true,
