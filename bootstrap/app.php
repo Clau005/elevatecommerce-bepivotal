@@ -10,9 +10,21 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         then: function () {
             // Register routes in hierarchical order using registrars
-            (new \App\Routing\Registrars\AdminRoutesRegistrar)->map(app('router'));
-            (new \App\Routing\Registrars\CustomerRouteRegistrar)->map(app('router'));
+            
+            // Editor API routes FIRST (need web middleware for session auth)
+            app('router')->middleware('web')->prefix('api')->group(function () {
+                $editorApiFile = base_path('packages/elevatecommerce/editor/routes/api.php');
+                if (file_exists($editorApiFile)) {
+                    require $editorApiFile;
+                }
+            });
+            
+            // Other API routes (use api middleware)
             (new \App\Routing\Registrars\ApiRoutesRegistrar)->map(app('router'));
+            // Admin routes
+            (new \App\Routing\Registrars\AdminRoutesRegistrar)->map(app('router'));
+            // Customer routes last (catch-all patterns)
+            (new \App\Routing\Registrars\CustomerRouteRegistrar)->map(app('router'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {

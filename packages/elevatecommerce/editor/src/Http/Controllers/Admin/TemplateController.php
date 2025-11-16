@@ -175,7 +175,7 @@ class TemplateController
     {
         $this->editorService->publish(
             $template,
-            auth('staff')->id(),
+            auth('admin')->id(),
             $request->input('change_notes')
         );
 

@@ -170,7 +170,7 @@ class PageController
     {
         $this->editorService->publish(
             $page,
-            auth('staff')->id()
+            auth('admin')->id()
         );
 
         return redirect()

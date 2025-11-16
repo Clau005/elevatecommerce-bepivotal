@@ -216,7 +216,7 @@ class PreviewController extends Controller
         }
 
         // Load relationships based on model type
-        if ($modelType === 'Elevate\Collections\Models\Collection') {
+        if ($modelType === 'ElevateCommerce\Collections\Models\Collection') {
             // Load collectables with their related models
             $model->load(['collectables.collectable', 'children', 'filters.values']);
             

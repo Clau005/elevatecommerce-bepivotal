@@ -33,7 +33,7 @@ class EditorApiController
         
         $session = $this->editorService->createSession(
             $template,
-            auth('staff')->id(),
+            auth('admin')->id(),
             $validated['configuration']
         );
 

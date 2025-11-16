@@ -47,8 +47,8 @@ class WatchesServiceProvider extends ServiceProvider
         $renderService->registerModelType(Watch::class, 'watch');
 
         // Register Watch as a collectable type
-        if ($this->app->bound(\Elevate\Collections\Services\CollectableRegistry::class)) {
-            $collectableRegistry = app(\Elevate\Collections\Services\CollectableRegistry::class);
+        if ($this->app->bound(\ElevateCommerce\Collections\Services\CollectableRegistry::class)) {
+            $collectableRegistry = app(\ElevateCommerce\Collections\Services\CollectableRegistry::class);
             $collectableRegistry->register(Watch::class, [
                 'label' => 'Watches',
                 'singular' => 'Watch',

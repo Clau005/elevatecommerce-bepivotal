@@ -25,7 +25,7 @@ class ApiRoutesRegistrar implements RouteRegistrar
     {
         $apiRouteFiles = [
             base_path('packages/elevatecommerce/core/routes/api.php'),          // Core API routes
-            base_path('packages/elevatecommerce/editor/routes/api.php'),        // Editor API routes
+            // Editor API routes loaded separately in bootstrap/app.php with web middleware
             base_path('packages/elevatecommerce/purchasable/routes/api.php'),   // Purchasable API routes
             base_path('routes/api.php'),                                        // Main API routes
         ];

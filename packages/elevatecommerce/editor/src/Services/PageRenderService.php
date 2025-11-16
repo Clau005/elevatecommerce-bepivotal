@@ -17,7 +17,7 @@ class PageRenderService
      * Can be extended via config or service provider
      */
     protected array $modelVariableMap = [
-        \Elevate\Collections\Models\Collection::class => 'collection',
+        \ElevateCommerce\Collections\Models\Collection::class => 'collection',
         \Elevate\Product\Models\Product::class => 'product',
     ];
 
@@ -364,7 +364,7 @@ class PageRenderService
             }
 
             // Find the template
-            $template = \Elevate\Editor\Models\Template::where('slug', $templateSlug)
+            $template = \ElevateCommerce\Editor\Models\Template::where('slug', $templateSlug)
                 ->first();
 
             if (!$template) {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5093096fab26626918c58b5784a5750c",
+    "content-hash": "688d982f8d29dabe241bd518eb52fc04",
     "packages": [
         {
             "name": "brick/math",
@@ -507,6 +507,36 @@
                 }
             ],
             "time": "2025-03-06T22:45:56+00:00"
+        },
+        {
+            "name": "elevatecommerce/collections",
+            "version": "dev-packages",
+            "dist": {
+                "type": "path",
+                "url": "./packages/elevatecommerce/collections",
+                "reference": "e008a87f97851b836e67b140db93355707cab85f"
+            },
+            "require": {
+                "illuminate/support": "^10.0|^11.0|^12.0",
+                "php": "^8.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ElevateCommerce\\Collections\\CollectionsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ElevateCommerce\\Collections\\": "src/"
+                }
+            },
+            "description": "Collections package for organizing content with polymorphic relationships and nested subcollections",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "elevatecommerce/core",
@@ -9694,6 +9724,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "elevatecommerce/collections": 20,
         "elevatecommerce/core": 20,
         "elevatecommerce/editor": 20,
         "elevatecommerce/purchasable": 20

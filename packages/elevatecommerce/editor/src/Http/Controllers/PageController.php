@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use ElevateCommerce\Editor\Services\PageRenderService;
 use ElevateCommerce\Editor\Services\RouteRegistry;
-use Elevate\Collections\Models\Collection;
-use Elevate\Collections\Http\Controllers\CollectionWebController;
+use ElevateCommerce\Collections\Models\Collection;
+use ElevateCommerce\Collections\Http\Controllers\CollectionWebController;
 
 class PageController extends Controller
 {
@@ -25,6 +25,10 @@ class PageController extends Controller
      */
     public function show(string $slug)
     {
+        if ($slug === 'home' || $slug === '/' || $slug === 'homepage') {
+            $slug = 'home';
+        }
+            
         \Log::info('Editor PageController::show called', [
             'slug' => $slug,
             'url' => request()->url(),
@@ -63,6 +67,7 @@ class PageController extends Controller
             $collectionController = app(CollectionWebController::class);
             return $collectionController->show(request(), $slug, null, null);
         }
+
 
         \Log::info('No collection found, rendering as page', ['slug' => $slug]);
 

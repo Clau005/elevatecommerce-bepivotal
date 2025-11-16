@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Elevate\CommerceCore\Traits\Purchasable;
 use Elevate\CommerceCore\Traits\HasTags;
 use Elevate\Editor\Traits\HasTemplate;
-use Elevate\Collections\Traits\HasCollections;
+use ElevateCommerce\Collections\Traits\HasCollections;
 
 class Watch extends Model
 {
@@ -68,7 +68,7 @@ class Watch extends Model
      */
     public function collectables()
     {
-        return $this->morphMany(\Elevate\Collections\Models\Collectable::class, 'collectable');
+        return $this->morphMany(\ElevateCommerce\Collections\Models\Collectable::class, 'collectable');
     }
 
     /**

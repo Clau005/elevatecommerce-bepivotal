@@ -10,9 +10,21 @@ use Illuminate\Support\Facades\Route;
 | These routes handle AJAX requests from the visual editor for real-time
 | preview, auto-save, and other interactive features.
 |
+| Note: These routes are loaded in bootstrap/app.php with 'web' middleware and 'api' prefix
+| This allows session-based authentication (auth:admin) to work properly
+|
 */
 
-Route::prefix('api/editor')->middleware(['web', 'auth:admin'])->name('api.editor.')->group(function () {
+// Pages and Templates (at root API level)
+Route::middleware(['auth:admin'])->group(function () {
+    // Pages for a theme
+    Route::get('themes/{theme}/pages', [\ElevateCommerce\Editor\Http\Controllers\Api\EditorApiController::class, 'getThemePages'])->name('api.themes.pages');
+    
+    // All templates (global, not theme-specific)
+    Route::get('templates', [\ElevateCommerce\Editor\Http\Controllers\Api\EditorApiController::class, 'getAllTemplates'])->name('api.templates');
+});
+
+Route::prefix('editor')->middleware(['auth:admin'])->name('api.editor.')->group(function () {
     
     // Draft management (auto-save)
     Route::post('save-draft', [\ElevateCommerce\Editor\Http\Controllers\Api\EditorApiController::class, 'saveDraft'])->name('save-draft');
@@ -28,11 +40,4 @@ Route::prefix('api/editor')->middleware(['web', 'auth:admin'])->name('api.editor
     Route::get('models/{modelType}/preview-data', [\ElevateCommerce\Editor\Http\Controllers\Api\EditorApiController::class, 'getPreviewData'])->name('models.preview-data');
 });
 
-// Pages and Templates (outside editor prefix to avoid /api/editor/themes/...)
-Route::prefix('api')->middleware(['web', 'auth:admin'])->group(function () {
-    // Pages for a theme
-    Route::get('themes/{theme}/pages', [\ElevateCommerce\Editor\Http\Controllers\Api\EditorApiController::class, 'getThemePages'])->name('api.themes.pages');
-    
-    // All templates (global, not theme-specific)
-    Route::get('templates', [\ElevateCommerce\Editor\Http\Controllers\Api\EditorApiController::class, 'getAllTemplates'])->name('api.templates');
-});
+
