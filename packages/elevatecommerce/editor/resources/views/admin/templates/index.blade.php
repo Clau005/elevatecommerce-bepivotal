@@ -1,9 +1,16 @@
-<x-app pageTitle="Templates" title="Templates - Admin" description="Manage your templates">
+@extends('core::admin.layouts.app')
 
-<div class="container mx-auto px-4 py-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Templates</h1>
-        <a href="{{ route('admin.templates.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+@section('title', 'Templates')
+
+@section('content')
+<div class="space-y-4">
+    <!-- Page Header -->
+    <div class="flex items-center justify-between">
+        <x-core::heading level="1" subtitle="Manage your templates">
+            Templates
+        </x-core::heading>
+        <a href="{{ route('admin.templates.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+            <i class="fas fa-plus mr-2"></i>
             Create Template
         </a>
     </div>
@@ -150,4 +157,4 @@
     </div>
 </div>
 
-</x-app>
+@endsection

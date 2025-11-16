@@ -1,4 +1,8 @@
-<x-app pageTitle="Theme Details" title="Theme Details - Admin" description="View theme details">
+@extends('core::admin.layouts.app')
+
+@section('title', 'Theme: ' . $theme->name)
+
+@section('content')
 <div class="container mx-auto px-4 py-6 max-w-4xl">
     <div class="mb-6 flex justify-between items-center">
         <div>
@@ -156,4 +160,4 @@
     @endif
 </div>
 
-</x-app>
+@endsection

@@ -1,4 +1,8 @@
-<x-app pageTitle="Edit Theme" title="Edit Theme - Admin" description="Update theme settings">
+@extends('core::admin.layouts.app')
+
+@section('title', 'Edit Theme: ' . $theme->name)
+
+@section('content')
 <div class="container mx-auto px-4 py-6 max-w-2xl">
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-900">Edit Theme: {{ $theme->name }}</h1>
@@ -55,4 +59,4 @@
     </form>
 </div>
 
-</x-app>
+@endsection

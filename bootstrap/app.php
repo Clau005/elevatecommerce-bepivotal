@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
             // Register routes in hierarchical order using registrars
             (new \App\Routing\Registrars\AdminRoutesRegistrar)->map(app('router'));
             (new \App\Routing\Registrars\CustomerRouteRegistrar)->map(app('router'));
+            (new \App\Routing\Registrars\ApiRoutesRegistrar)->map(app('router'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {

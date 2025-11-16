@@ -1,4 +1,8 @@
-<x-app pageTitle="Create Template" title="Create Template - Admin" description="Create a new template">
+@extends('core::admin.layouts.app')
+
+@section('title', 'Create Template')
+
+@section('content')
 <div class="container mx-auto px-4 py-6 max-w-3xl">
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-900">Create Template</h1>
@@ -121,4 +125,4 @@
     </form>
 </div>
 
-</x-app>
+@endsection

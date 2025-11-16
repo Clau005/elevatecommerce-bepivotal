@@ -134,6 +134,16 @@ class InstallCommand extends Command
             $this->newLine();
         }
         
+        // Step 4: Install Editor Package
+        if ($this->confirm('Install Editor package (Themes, Pages, Templates)?', true)) {
+            $this->info('🎨 Installing Editor Package');
+            $this->line('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            
+            $this->call('editor:install');
+            
+            $this->newLine();
+        }
+        
         $this->newLine();
         $this->info('🎉 ElevateCommerce installation complete!');
         $this->newLine();
@@ -145,7 +155,8 @@ class InstallCommand extends Command
         $this->comment('Next steps:');
         $this->line('1. Configure payment credentials in your .env file');
         $this->line('2. Enable/disable payment gateways in Admin → Settings → Payment Gateways');
-        $this->line('3. Start building your store!');
+        $this->line('3. Manage themes and pages in Admin → Themes / Pages');
+        $this->line('4. Start building your store!');
         $this->newLine();
 
         return self::SUCCESS;

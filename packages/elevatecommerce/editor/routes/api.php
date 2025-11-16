@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('api/editor')->middleware(['web', 'auth:staff'])->name('api.editor.')->group(function () {
+Route::prefix('api/editor')->middleware(['web', 'auth:admin'])->name('api.editor.')->group(function () {
     
     // Draft management (auto-save)
     Route::post('save-draft', [\ElevateCommerce\Editor\Http\Controllers\Api\EditorApiController::class, 'saveDraft'])->name('save-draft');
@@ -29,7 +29,7 @@ Route::prefix('api/editor')->middleware(['web', 'auth:staff'])->name('api.editor
 });
 
 // Pages and Templates (outside editor prefix to avoid /api/editor/themes/...)
-Route::prefix('api')->middleware(['web', 'auth:staff'])->group(function () {
+Route::prefix('api')->middleware(['web', 'auth:admin'])->group(function () {
     // Pages for a theme
     Route::get('themes/{theme}/pages', [\ElevateCommerce\Editor\Http\Controllers\Api\EditorApiController::class, 'getThemePages'])->name('api.themes.pages');
     

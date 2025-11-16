@@ -32,6 +32,6 @@
         ></visual-editor>
     </div>
 
-    @vite(['packages/elevate/editor/resources/js/editor.js'])
+    @vite(['packages/elevatecommerce/editor/resources/js/editor.js'])
 </body>
 </html>

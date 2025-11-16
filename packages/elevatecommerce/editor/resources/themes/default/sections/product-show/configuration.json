@@ -1,0 +1,37 @@
+{
+  "name": "Product Show",
+  "description": "Main product display section with images, details, variants, and add to cart",
+  "category": "products",
+  "fields": [
+    {
+      "name": "button_text",
+      "label": "Button Text",
+      "type": "text",
+      "required": false,
+      "default": "Add to Cart",
+      "placeholder": "Button text"
+    },
+    {
+      "name": "button_color",
+      "label": "Button Color",
+      "type": "color",
+      "required": false,
+      "default": "#3b82f6"
+    },
+    {
+      "name": "padding",
+      "label": "Section Padding",
+      "type": "text",
+      "required": false,
+      "default": "4rem 2rem",
+      "placeholder": "e.g., 4rem 2rem"
+    },
+    {
+      "name": "background_color",
+      "label": "Background Color",
+      "type": "color",
+      "required": false,
+      "default": "#ffffff"
+    }
+  ]
+}

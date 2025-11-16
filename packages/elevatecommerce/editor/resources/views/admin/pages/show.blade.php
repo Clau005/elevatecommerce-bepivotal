@@ -1,4 +1,8 @@
-<x-app pageTitle="Page Details" title="Page Details - Admin" description="View page details">
+@extends('core::admin.layouts.app')
+
+@section('title', 'Page: ' . $page->title)
+
+@section('content')
 <div class="container mx-auto px-4 py-6 max-w-4xl">
     <div class="mb-6 flex justify-between items-center">
         <div>
@@ -122,4 +126,4 @@
     </div>
 </div>
 
-</x-app>
+@endsection

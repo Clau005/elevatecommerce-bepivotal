@@ -1,4 +1,9 @@
-<x-app pageTitle="Create Page" title="Create Page - Admin" description="Create a new page">
+@extends('core::admin.layouts.app')
+
+@section('title', 'Create Page')
+
+@section('content')
+
 <div class="container mx-auto px-4 py-6 max-w-3xl">
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-900">Create Page</h1>
@@ -71,4 +76,4 @@
     </form>
 </div>
 
-</x-app>
+@endsection

@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('template_versions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('template_id')->constrained()->onDelete('cascade');
-            $table->foreignId('created_by')->constrained('staff')->onDelete('cascade');
+            $table->foreignId('created_by')->constrained('admins')->onDelete('cascade');
             $table->integer('version_number');
             $table->json('configuration');
             $table->text('change_notes')->nullable();

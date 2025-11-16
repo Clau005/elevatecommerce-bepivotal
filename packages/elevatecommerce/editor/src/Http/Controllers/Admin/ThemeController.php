@@ -72,11 +72,11 @@ class ThemeController
     }
 
     /**
-     * Copy theme files from resources/general to resources/views/themes/{slug}
+     * Copy theme files from editor package to resources/views/themes/{slug}
      */
     protected function copyThemeFiles(string $slug): void
     {
-        $sourcePath = resource_path('general');
+        $sourcePath = base_path('packages/elevatecommerce/editor/resources/themes/default');
         $destinationPath = resource_path("views/themes/{$slug}");
 
         // Create theme directory if it doesn't exist

@@ -1,8 +1,16 @@
-<x-app pageTitle="Pages" title="Pages - Admin" description="Manage your pages">
-<div class="container mx-auto px-4 py-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Pages</h1>
-        <a href="{{ route('admin.pages.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+@extends('core::admin.layouts.app')
+
+@section('title', 'Pages')
+
+@section('content')
+<div class="space-y-4">
+    <!-- Page Header -->
+    <div class="flex items-center justify-between">
+        <x-core::heading level="1" subtitle="Manage your pages">
+            Pages
+        </x-core::heading>
+        <a href="{{ route('admin.pages.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+            <i class="fas fa-plus mr-2"></i>
             Create Page
         </a>
     </div>
@@ -121,4 +129,4 @@
     </div>
 </div>
 
-</x-app>
+@endsection

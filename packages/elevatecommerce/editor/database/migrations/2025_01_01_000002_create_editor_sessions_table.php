@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('editor_sessions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('template_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('staff')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('admins')->onDelete('cascade');
             $table->json('configuration'); // Current editing state
             $table->timestamp('last_activity_at');
             $table->timestamps();

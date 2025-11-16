@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('admin')->middleware(['web', 'auth:staff'])->name('admin.')->group(function () {
+Route::middleware(['auth:admin'])->name('admin.')->group(function () {
     
     // Themes
     Route::resource('themes', \ElevateCommerce\Editor\Http\Controllers\Admin\ThemeController::class)->names([

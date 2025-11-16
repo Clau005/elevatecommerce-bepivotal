@@ -1,4 +1,8 @@
-<x-app pageTitle="Register Theme" title="Register Theme - Admin" description="Register a new theme">
+@extends('core::admin.layouts.app')
+
+@section('title', 'Register Theme')
+
+@section('content')
 <div class="container mx-auto px-4 py-6 max-w-2xl">
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-900">Register Theme</h1>
@@ -54,4 +58,4 @@
     </form>
 </div>
 
-</x-app>
+@endsection
