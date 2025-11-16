@@ -1,5 +1,6 @@
 <?php
 
+use ElevateCommerce\Purchasable\Http\Controllers\Admin\PaymentSettingsController;
 use ElevateCommerce\Purchasable\Http\Controllers\CartController;
 use ElevateCommerce\Purchasable\Http\Controllers\WishlistController;
 use ElevateCommerce\Purchasable\Http\Controllers\CheckoutController;
@@ -75,4 +76,15 @@ Route::name('purchasable.')->group(function () {
             Route::get('return', [PaypallController::class, 'paypallReturn'])->name('return');
         });
     });
+});
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN SETTINGS ROUTES
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['web', 'auth:admin'])->prefix('admin/settings')->name('admin.settings.')->group(function () {
+    Route::get('payments', [PaymentSettingsController::class, 'index'])->name('payments');
+    Route::put('payments/{gateway}', [PaymentSettingsController::class, 'update'])->name('payments.update');
+    Route::get('payments/{gateway}/check-credentials', [PaymentSettingsController::class, 'checkCredentials'])->name('payments.check-credentials');
 });

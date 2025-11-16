@@ -19,6 +19,10 @@ class PurchasableServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../config/stripe.php', 'stripe'
         );
+        
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/paypal.php', 'paypal'
+        );
     }
 
     /**
@@ -30,6 +34,7 @@ class PurchasableServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/purchasable.php' => config_path('purchasable.php'),
             __DIR__.'/../config/stripe.php' => config_path('stripe.php'),
+            __DIR__.'/../config/paypal.php' => config_path('paypal.php'),
         ], 'purchasable-config');
 
         // Load migrations
@@ -46,7 +51,7 @@ class PurchasableServiceProvider extends ServiceProvider
         // Register commands
         if ($this->app->runningInConsole()) {
             $this->commands([
-                // Add commands here
+                \ElevateCommerce\Purchasable\Console\Commands\InstallCommand::class,
             ]);
         }
 
@@ -64,6 +69,16 @@ class PurchasableServiceProvider extends ServiceProvider
             'icon' => 'fas fa-shopping-cart',
             'route' => 'admin.orders.index',
             'order' => 15,
+        ]);
+
+        // Register settings page
+        \ElevateCommerce\Core\Support\Settings\SettingsRegistry::register('payments', [
+            'title' => 'Payment Gateways',
+            'description' => 'Configure payment methods and credentials',
+            'icon' => 'fas fa-credit-card',
+            'route' => 'admin.settings.payments',
+            'group' => 'general',
+            'order' => 10,
         ]);
     }
 }

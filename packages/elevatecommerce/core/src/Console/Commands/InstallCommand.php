@@ -123,11 +123,29 @@ class InstallCommand extends Command
         }
 
         $this->newLine();
-        $this->info('🎉 ElevateCommerce Core installation complete!');
+        
+        // Step 3: Install Purchasable Package
+        if ($this->confirm('Install Purchasable package (Cart, Orders, Payments)?', true)) {
+            $this->info('📦 Installing Purchasable Package');
+            $this->line('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            
+            $this->call('purchasable:install');
+            
+            $this->newLine();
+        }
+        
+        $this->newLine();
+        $this->info('🎉 ElevateCommerce installation complete!');
         $this->newLine();
         $this->line('Access URLs:');
         $this->line('  Admin Panel: ' . url('/admin/login'));
         $this->line('  Customer Account: ' . url('/account/login'));
+        $this->line('  Settings: ' . url('/admin/settings'));
+        $this->newLine();
+        $this->comment('Next steps:');
+        $this->line('1. Configure payment credentials in your .env file');
+        $this->line('2. Enable/disable payment gateways in Admin → Settings → Payment Gateways');
+        $this->line('3. Start building your store!');
         $this->newLine();
 
         return self::SUCCESS;

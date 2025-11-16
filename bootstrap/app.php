@@ -19,6 +19,22 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'webhooks/payments/*',
         ]);
+
+        // Configure authentication redirects per guard
+        $middleware->redirectGuestsTo(function ($request) {
+            // Check if this is an admin route
+            if ($request->is('admin') || $request->is('admin/*')) {
+                return route('admin.login');
+            }
+            
+            // Check if this is a customer account route
+            if ($request->is('account') || $request->is('account/*')) {
+                return route('customer.login');
+            }
+            
+            // Default to customer login
+            return route('customer.login');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

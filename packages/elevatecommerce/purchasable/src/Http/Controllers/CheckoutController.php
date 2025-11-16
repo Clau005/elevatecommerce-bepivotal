@@ -7,6 +7,7 @@ use ElevateCommerce\Purchasable\Models\Cart;
 use ElevateCommerce\Purchasable\Models\Order;
 use ElevateCommerce\Purchasable\Models\OrderItem;
 use ElevateCommerce\Purchasable\Models\OrderTimeline;
+use ElevateCommerce\Purchasable\Models\PaymentGateway;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
@@ -145,26 +146,11 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Get available payment methods
+     * Get available payment methods from database
      */
     protected function getAvailablePaymentMethods(): array
     {
-        return [
-            [
-                'id' => 'stripe',
-                'name' => 'Credit/Debit Card',
-                'description' => 'Pay securely with your credit or debit card via Stripe',
-                'icon' => 'fas fa-credit-card',
-                'enabled' => true,
-            ],
-            [
-                'id' => 'paypal',
-                'name' => 'PayPal',
-                'description' => 'Pay securely with your PayPal account',
-                'icon' => 'fab fa-paypal',
-                'enabled' => true,
-            ],
-        ];
+        return PaymentGateway::getAvailableForCheckout();
     }
 
     /**
