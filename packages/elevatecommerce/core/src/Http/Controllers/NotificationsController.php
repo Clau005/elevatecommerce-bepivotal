@@ -26,8 +26,10 @@ class NotificationsController extends Controller
         $notification->markAsRead();
 
         // Redirect based on notification data
-        if (isset($notification->data['url'])) {
-            return redirect($notification->data['url']);
+        if (isset($notification->data['data']['action_url'])) {
+            return redirect($notification->data['data']['action_url']);
+        } elseif (isset($notification->data['data']['url'])) {
+            return redirect($notification->data['data']['url']);
         }
 
         return redirect()->route('admin.notifications.index');

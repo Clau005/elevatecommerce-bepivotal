@@ -2,14 +2,15 @@
 
 namespace ElevateCommerce\Purchasable\Http\Controllers\PaymentGateways;
 
+use ElevateCommerce\Core\Support\Helpers\CurrencyHelper;
+use ElevateCommerce\Purchasable\Events\OrderUpdated;
 use ElevateCommerce\Purchasable\Models\Cart;
 use ElevateCommerce\Purchasable\Models\Order;
-use ElevateCommerce\Purchasable\Models\OrderItem;
 use ElevateCommerce\Purchasable\Models\OrderAddress;
+use ElevateCommerce\Purchasable\Models\OrderItem;
 use ElevateCommerce\Purchasable\Models\OrderTimeline;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use ElevateCommerce\Core\Support\Helpers\CurrencyHelper;
 use Illuminate\Support\Str;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
@@ -185,6 +186,9 @@ class PaypallController extends Controller
                             'payment_transaction_id' => $captureId,
                             'paid_at' => now(),
                         ]);
+
+                        // Dispatch OrderUpdated event
+                        event(new OrderUpdated($order, 'pending', 'processing'));
 
                         // Add timeline entry for payment
                         OrderTimeline::create([

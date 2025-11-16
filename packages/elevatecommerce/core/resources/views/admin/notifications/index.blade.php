@@ -32,20 +32,45 @@
 
                         <!-- Content -->
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center space-x-1.5 mb-0.5">
-                                <h3 class="text-xs font-semibold text-gray-900">
-                                    {{ $notification->data['title'] ?? 'Notification' }}
-                                </h3>
-                                @if(!$notification->read_at)
-                                    <span class="inline-block w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
-                                @endif
-                            </div>
-                            <p class="text-xs text-gray-600">
-                                {{ $notification->data['message'] ?? '' }}
-                            </p>
-                            <p class="text-xs text-gray-400 mt-1">
-                                {{ $notification->created_at->diffForHumans() }}
-                            </p>
+                            @if(isset($notification->data['data']['action_url']))
+                                <a href="{{ route('admin.notifications.show', $notification->id) }}" class="block hover:opacity-80">
+                                    <div class="flex items-center space-x-1.5 mb-0.5">
+                                        <h3 class="text-xs font-semibold text-gray-900">
+                                            {{ $notification->data['data']['title'] ?? 'Notification' }}
+                                        </h3>
+                                        @if(!$notification->read_at)
+                                            <span class="inline-block w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
+                                        @endif
+                                    </div>
+                                    <p class="text-xs text-gray-600">
+                                        {{ $notification->data['message'] ?? '' }}
+                                    </p>
+                                    @if(isset($notification->data['data']['action_text']))
+                                        <p class="text-xs text-blue-600 mt-1 inline-flex items-center">
+                                            <i class="fas fa-arrow-right mr-1"></i>
+                                            {{ $notification->data['data']['action_text'] }}
+                                        </p>
+                                    @endif
+                                    <p class="text-xs text-gray-400 mt-1">
+                                        {{ $notification->created_at->diffForHumans() }}
+                                    </p>
+                                </a>
+                            @else
+                                <div class="flex items-center space-x-1.5 mb-0.5">
+                                    <h3 class="text-xs font-semibold text-gray-900">
+                                        {{ $notification->data['title'] ?? 'Notification' }}
+                                    </h3>
+                                    @if(!$notification->read_at)
+                                        <span class="inline-block w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
+                                    @endif
+                                </div>
+                                <p class="text-xs text-gray-600">
+                                    {{ $notification->data['message'] ?? '' }}
+                                </p>
+                                <p class="text-xs text-gray-400 mt-1">
+                                    {{ $notification->created_at->diffForHumans() }}
+                                </p>
+                            @endif
                         </div>
                     </div>
 

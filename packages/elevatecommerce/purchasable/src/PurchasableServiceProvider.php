@@ -2,6 +2,7 @@
 
 namespace ElevateCommerce\Purchasable;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class PurchasableServiceProvider extends ServiceProvider
@@ -57,6 +58,25 @@ class PurchasableServiceProvider extends ServiceProvider
 
         // Register navigation
         $this->registerNavigation();
+
+        // Register event listeners
+        $this->registerEventListeners();
+    }
+
+    /**
+     * Register event listeners
+     */
+    protected function registerEventListeners(): void
+    {
+        Event::listen(
+            \ElevateCommerce\Purchasable\Events\OrderCreated::class,
+            \ElevateCommerce\Purchasable\Listeners\SendOrderCreatedNotification::class
+        );
+
+        Event::listen(
+            \ElevateCommerce\Purchasable\Events\OrderUpdated::class,
+            \ElevateCommerce\Purchasable\Listeners\SendOrderUpdatedNotification::class
+        );
     }
 
     /**

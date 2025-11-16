@@ -2,6 +2,7 @@
 
 namespace ElevateCommerce\Purchasable\Http\Controllers\PaymentGateways;
 
+use ElevateCommerce\Purchasable\Events\OrderUpdated;
 use ElevateCommerce\Purchasable\Models\Cart;
 use ElevateCommerce\Purchasable\Models\Order;
 use ElevateCommerce\Purchasable\Models\OrderItem;
@@ -121,6 +122,9 @@ class StripeController extends Controller
                             'payment_transaction_id' => $session->payment_intent ?? $session->id,
                             'paid_at' => now(),
                         ]);
+
+                        // Dispatch OrderUpdated event
+                        event(new OrderUpdated($order, 'pending', 'processing'));
 
                         // Add timeline entry for payment
                         OrderTimeline::create([

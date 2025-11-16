@@ -3,6 +3,7 @@
 namespace ElevateCommerce\Purchasable\Http\Controllers;
 
 use ElevateCommerce\Core\Support\Helpers\CurrencyHelper;
+use ElevateCommerce\Purchasable\Events\OrderCreated;
 use ElevateCommerce\Purchasable\Models\Cart;
 use ElevateCommerce\Purchasable\Models\Order;
 use ElevateCommerce\Purchasable\Models\OrderItem;
@@ -61,6 +62,9 @@ class CheckoutController extends Controller
 
         // Create order with 'pending' status
         $order = $this->createOrderFromCart($cart, $validated);
+
+        // Dispatch OrderCreated event
+        event(new OrderCreated($order));
 
         // Store checkout data in session
         session([
