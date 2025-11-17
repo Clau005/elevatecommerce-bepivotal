@@ -130,6 +130,7 @@ class TemplateController
             'description' => 'nullable|string',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
+            'status' => 'nullable|string|in:draft,published',
             'is_active' => 'boolean',
         ]);
 

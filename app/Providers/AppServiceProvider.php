@@ -39,8 +39,9 @@ class AppServiceProvider extends ServiceProvider
             $templateRegistry->register(TestingPurchasable::class, [
                 'label' => 'Product',
                 'plural_label' => 'Products',
+                'variable_name' => 'product', // Variable name in Blade templates
                 'icon' => 'shopping-bag',
-                'description' => 'Product detail pages',
+                'description' => 'Product detail pagess',
                 'default_route_pattern' => '/products/{slug}',
                 'preview_data_provider' => function() {
                     return TestingPurchasable::where('is_active', true)
@@ -48,12 +49,6 @@ class AppServiceProvider extends ServiceProvider
                         ->first();
                 },
             ]);
-        }
-        
-        // Register TestingPurchasable model variable name for templates
-        if ($this->app->bound(\ElevateCommerce\Editor\Services\PageRenderService::class)) {
-            $renderService = $this->app->make(\ElevateCommerce\Editor\Services\PageRenderService::class);
-            $renderService->registerModelType(TestingPurchasable::class, 'product');
         }
         
         // Register admin navigation

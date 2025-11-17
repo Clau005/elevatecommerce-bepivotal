@@ -41,7 +41,9 @@ class EditorServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(PageRenderService::class, function ($app) {
-            return new PageRenderService();
+            return new PageRenderService(
+                $app->make(TemplateRegistry::class)
+            );
         });
 
         $this->app->singleton(RouteRegistry::class, function ($app) {

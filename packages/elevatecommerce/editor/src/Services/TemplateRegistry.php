@@ -13,6 +13,7 @@ class TemplateRegistry
      * @param array $config Configuration for this model type
      *   - 'label': Display name (e.g., 'Product')
      *   - 'plural_label': Plural display name (e.g., 'Products')
+     *   - 'variable_name': Variable name in templates (e.g., 'product')
      *   - 'icon': Icon identifier (optional)
      *   - 'description': Description of this model type
      *   - 'default_route_pattern': Default route pattern (e.g., '/products/{slug}')
@@ -20,12 +21,15 @@ class TemplateRegistry
      */
     public function register(string $modelClass, array $config): void
     {
+        $basename = class_basename($modelClass);
+        
         $this->registeredModels[$modelClass] = array_merge([
-            'label' => class_basename($modelClass),
-            'plural_label' => str(class_basename($modelClass))->plural()->toString(),
+            'label' => $basename,
+            'plural_label' => str($basename)->plural()->toString(),
+            'variable_name' => str($basename)->lower()->toString(),
             'icon' => null,
             'description' => null,
-            'default_route_pattern' => '/' . str(class_basename($modelClass))->lower()->plural()->toString() . '/{slug}',
+            'default_route_pattern' => '/' . str($basename)->lower()->plural()->toString() . '/{slug}',
             'preview_data_provider' => null,
         ], $config);
     }
@@ -101,5 +105,40 @@ class TemplateRegistry
         }
 
         return call_user_func($config['preview_data_provider']);
+    }
+
+    /**
+     * Get variable name for a model class
+     */
+    public function getVariableName(string $modelClass): ?string
+    {
+        $config = $this->get($modelClass);
+        return $config['variable_name'] ?? null;
+    }
+
+    /**
+     * Get variable name for a model instance
+     */
+    public function getVariableNameForInstance($model): ?string
+    {
+        if (!$model) {
+            return null;
+        }
+
+        $modelClass = get_class($model);
+        
+        // Check direct mapping
+        if ($this->has($modelClass)) {
+            return $this->getVariableName($modelClass);
+        }
+
+        // Check parent classes
+        foreach ($this->registeredModels as $class => $config) {
+            if ($model instanceof $class) {
+                return $config['variable_name'];
+            }
+        }
+
+        return null;
     }
 }

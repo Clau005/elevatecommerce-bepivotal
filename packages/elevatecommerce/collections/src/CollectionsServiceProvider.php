@@ -118,6 +118,7 @@ class CollectionsServiceProvider extends ServiceProvider
         $registry->register(\ElevateCommerce\Collections\Models\Collection::class, [
             'label' => 'Collection',
             'plural_label' => 'Collections',
+            'variable_name' => 'collection', // Variable name in Blade templates
             'icon' => 'folder',
             'description' => 'Collection pages',
             'default_route_pattern' => '/collections/{slug}',

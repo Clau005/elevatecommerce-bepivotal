@@ -77,6 +77,27 @@
                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">{{ old('description', $template->description) }}</textarea>
         </div>
 
+        {{-- Status --}}
+        <div class="mb-6">
+            <label for="status" class="block text-sm font-medium text-gray-700 mb-1">
+                Status
+            </label>
+            <select name="status" 
+                    id="status" 
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('status') border-red-500 @enderror">
+                <option value="draft" {{ old('status', $template->status) == 'draft' ? 'selected' : '' }}>
+                    Draft
+                </option>
+                <option value="published" {{ old('status', $template->status) == 'published' ? 'selected' : '' }}>
+                    Published
+                </option>
+            </select>
+            <p class="mt-1 text-sm text-gray-500">Draft templates are not visible on the live site</p>
+            @error('status')
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+            @enderror
+        </div>
+
         {{-- Active Status --}}
         <div class="mb-6">
             <label class="flex items-center">

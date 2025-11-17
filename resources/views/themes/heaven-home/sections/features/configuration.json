@@ -1,0 +1,76 @@
+{
+  "name": "Features Section",
+  "description": "Display a grid of features with icons, titles, and descriptions",
+  "category": "content",
+  "fields": [
+    {
+      "name": "title",
+      "label": "Section Title",
+      "type": "text",
+      "required": false,
+      "default": "Our Features",
+      "placeholder": "Enter section title"
+    },
+    {
+      "name": "subtitle",
+      "label": "Section Subtitle",
+      "type": "textarea",
+      "required": false,
+      "default": "Discover what makes us special",
+      "placeholder": "Enter section subtitle"
+    },
+    {
+      "name": "background_color",
+      "label": "Background Color",
+      "type": "color",
+      "required": false,
+      "default": "#ffffff"
+    },
+    {
+      "name": "text_color",
+      "label": "Text Color",
+      "type": "color",
+      "required": false,
+      "default": "#1f2937"
+    },
+    {
+      "name": "features",
+      "label": "Features",
+      "type": "repeater",
+      "required": true,
+      "min": 1,
+      "max": 6,
+      "fields": [
+        {
+          "name": "title",
+          "label": "Feature Title",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter feature title"
+        },
+        {
+          "name": "description",
+          "label": "Feature Description",
+          "type": "textarea",
+          "required": true,
+          "placeholder": "Enter feature description"
+        },
+        {
+          "name": "icon",
+          "label": "Icon",
+          "type": "select",
+          "required": false,
+          "options": [
+            {"value": "star", "label": "Star"},
+            {"value": "heart", "label": "Heart"},
+            {"value": "check", "label": "Check"},
+            {"value": "lightning", "label": "Lightning"},
+            {"value": "shield", "label": "Shield"},
+            {"value": "globe", "label": "Globe"}
+          ],
+          "default": "star"
+        }
+      ]
+    }
+  ]
+}
