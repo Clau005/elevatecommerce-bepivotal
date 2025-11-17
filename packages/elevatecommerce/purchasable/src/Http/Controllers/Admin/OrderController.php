@@ -47,7 +47,7 @@ class OrderController extends Controller
             $query->whereDate('created_at', '<=', $request->date_to);
         }
 
-        $orders = $query->paginate(20);
+        $orders = $query->paginate(50);
 
         // Get stats for filters
         $stats = [

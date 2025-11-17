@@ -39,7 +39,7 @@ class PageController
             });
         }
 
-        $pages = $query->latest()->paginate(20);
+        $pages = $query->latest()->paginate(50);
         $themes = Theme::all();
 
         return view('editor::admin.pages.index', compact('pages', 'themes'));

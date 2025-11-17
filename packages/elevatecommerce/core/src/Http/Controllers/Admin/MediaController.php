@@ -44,7 +44,7 @@ class MediaController extends Controller
             });
         }
 
-        $media = $query->paginate(24);
+        $media = $query->paginate(50);
 
         return view('core::admin.media.index', compact('media'));
     }
@@ -177,7 +177,7 @@ class MediaController extends Controller
             });
         }
 
-        $media = $query->paginate($request->get('per_page', 24));
+        $media = $query->paginate($request->get('per_page', 50));
 
         return response()->json($media);
     }

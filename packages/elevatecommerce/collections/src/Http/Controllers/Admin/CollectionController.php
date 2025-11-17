@@ -50,7 +50,7 @@ class CollectionController extends Controller
             $sortDirection = 'asc';
         }
 
-        $perPage = $request->get('per_page', 20);
+        $perPage = $request->get('per_page', 50);
         $collections = $query->orderBy($sortBy, $sortDirection)->paginate($perPage);
         $collections->appends($request->query());
 
