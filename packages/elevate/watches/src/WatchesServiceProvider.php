@@ -47,8 +47,8 @@ class WatchesServiceProvider extends ServiceProvider
         $renderService->registerModelType(Watch::class, 'watch');
 
         // Register Watch as a collectable type
-        if ($this->app->bound(\Elevate\Collections\Services\CollectableRegistry::class)) {
-            $collectableRegistry = app(\Elevate\Collections\Services\CollectableRegistry::class);
+        if ($this->app->bound(\ElevateCommerce\Collections\Services\CollectableRegistry::class)) {
+            $collectableRegistry = app(\ElevateCommerce\Collections\Services\CollectableRegistry::class);
             $collectableRegistry->register(Watch::class, [
                 'label' => 'Watches',
                 'singular' => 'Watch',
@@ -62,7 +62,7 @@ class WatchesServiceProvider extends ServiceProvider
         // Routes are now loaded via RouteServiceProvider using Route Registrars
         // This ensures proper route priority and prevents conflicts
         // Admin routes are still loaded here as they don't conflict
-        $this->loadRoutesFrom(__DIR__.'/../routes/admin.php');
+        // $this->loadRoutesFrom(__DIR__.'/../routes/admin.php');
 
         // Load views
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'watches');

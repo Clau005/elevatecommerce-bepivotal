@@ -9,6 +9,7 @@ use Elevate\CommerceCore\Dashboard\Lenses\RecentOrdersLens;
 use Elevate\CommerceCore\Dashboard\Lenses\QuickActionsLens;
 use Elevate\CommerceCore\Models\Order;
 use Elevate\CommerceCore\Models\User as CommerceUser;
+use ElevateCommerce\Core\Support\Helpers\CurrencyHelper;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -68,7 +69,7 @@ class DashboardController extends Controller
             new StatsCardLens(
                 identifier: 'total-revenue',
                 title: 'Total Revenue',
-                value: '£' . number_format($totalRevenue, 2),
+                value: '£' . CurrencyHelper::format($totalRevenue),
                 change: $revenueChange,
                 changeType: 'increase',
                 gridWidth: 3,

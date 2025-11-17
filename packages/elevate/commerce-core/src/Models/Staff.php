@@ -5,12 +5,10 @@ namespace Elevate\CommerceCore\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 
 class Staff extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens, HasRoles;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -55,6 +53,14 @@ class Staff extends Authenticatable
      */
     public function getFullNameAttribute(): string
     {
-        return "{$this->first_name} {$this->last_name}";
+        return trim("{$this->first_name} {$this->last_name}");
+    }
+
+    /**
+     * Get the staff member's name (alias for full_name).
+     */
+    public function getNameAttribute(): string
+    {
+        return $this->getFullNameAttribute();
     }
 }

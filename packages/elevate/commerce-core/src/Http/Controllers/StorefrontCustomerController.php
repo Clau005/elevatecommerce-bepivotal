@@ -257,13 +257,16 @@ class StorefrontCustomerController extends Controller
     /**
      * Show cart page.
      */
-    public function cart()
+    public function cart(Request $request)
     {
         $purchasableService = new PurchasableService();
         
         \Log::info('Cart page - looking for cart', [
             'session_id' => session()->getId(),
             'user_id' => auth()->id(),
+            'cookies_received' => $request->cookies->all(),
+            'session_name' => config('session.cookie'),
+            'has_session_cookie' => $request->hasCookie(config('session.cookie')),
         ]);
         
         $cart = $purchasableService->getCart();
@@ -283,11 +286,20 @@ class StorefrontCustomerController extends Controller
      */
     public function cartAdd(Request $request)
     {
+        // Ensure session is started
+        if (!session()->isStarted()) {
+            session()->start();
+        }
+        
         \Log::info('CartAdd endpoint hit!', [
             'request_data' => $request->all(),
             'url' => $request->fullUrl(),
             'session_id' => session()->getId(),
             'user_id' => auth()->id(),
+            'session_started' => session()->isStarted(),
+            'cookies_received' => $request->cookies->all(),
+            'session_name' => config('session.cookie'),
+            'has_session_cookie' => $request->hasCookie(config('session.cookie')),
         ]);
 
         $request->validate([
@@ -321,12 +333,31 @@ class StorefrontCustomerController extends Controller
             // Force session save
             session()->save();
 
+            // Return JSON for AJAX requests
+            if ($request->wantsJson() || $request->ajax()) {
+                $cart = $purchasableService->getCart();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Item added to cart successfully.',
+                    'cart_count' => $cart ? $cart->lines()->count() : 0,
+                ]);
+            }
+
             return redirect()->back()->with('success', 'Item added to cart successfully.');
         } catch (\Exception $e) {
             \Log::error('Error adding to cart', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
+            
+            // Return JSON for AJAX requests
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                ], 422);
+            }
+            
             return redirect()->back()->with('error', $e->getMessage());
         }
     }

@@ -17,6 +17,8 @@ use Elevate\CommerceCore\Http\Controllers\Admin\CheckoutSettingsController;
 use Elevate\CommerceCore\Http\Controllers\Admin\CurrencyController;
 use Elevate\CommerceCore\Http\Controllers\Admin\LanguageController;
 use Elevate\CommerceCore\Http\Controllers\Admin\StateController;
+use Elevate\CommerceCore\Http\Controllers\Admin\SettingsController;
+use Elevate\CommerceCore\Http\Controllers\Admin\ChannelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +92,8 @@ Route::prefix('admin')->middleware('web')->group(function () {
         'update' => 'admin.tags.update',
         'destroy' => 'admin.tags.destroy',
     ]);
+
+    Route::get('settings', [SettingsController::class, 'index'])->name('admin.settings.index');
 
     // Settings - Staff Management
     Route::prefix('settings/staff')->name('admin.settings.staff.')->group(function () {
@@ -187,5 +191,19 @@ Route::prefix('admin')->middleware('web')->group(function () {
         Route::get('/', [CheckoutSettingsController::class, 'index'])->name('index');
         Route::post('/', [CheckoutSettingsController::class, 'update'])->name('update');
     });
+
+    // Settings - Channels
+    Route::prefix('settings/channels')->name('admin.settings.channels.')->group(function () {
+        Route::get('/', [ChannelController::class, 'index'])->name('index');
+        Route::get('/create', [ChannelController::class, 'create'])->name('create');
+        Route::post('/', [ChannelController::class, 'store'])->name('store');
+        Route::get('/{channel}/edit', [ChannelController::class, 'edit'])->name('edit');
+        Route::put('/{channel}', [ChannelController::class, 'update'])->name('update');
+        Route::delete('/{channel}', [ChannelController::class, 'destroy'])->name('destroy');
+        Route::post('/{channel}/set-default', [ChannelController::class, 'setDefault'])->name('set-default');
+    });
+
+    // Settings - Catch-all (must be last!)
+    Route::get('settings/{section}', [SettingsController::class, 'show'])->name('admin.settings.show');
     });
 });

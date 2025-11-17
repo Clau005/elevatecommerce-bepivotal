@@ -1,0 +1,71 @@
+{
+  "name": "Hero Section",
+  "description": "A prominent hero section with title, subtitle, and call-to-action button",
+  "category": "headers",
+  "fields": [
+    {
+      "name": "title",
+      "label": "Title",
+      "type": "text",
+      "required": true,
+      "default": "Welcome to Our Site",
+      "placeholder": "Enter hero title"
+    },
+    {
+      "name": "subtitle",
+      "label": "Subtitle",
+      "type": "textarea",
+      "required": false,
+      "default": "Discover amazing features and services",
+      "placeholder": "Enter hero subtitle"
+    },
+    {
+      "name": "button_text",
+      "label": "Button Text",
+      "type": "text",
+      "required": false,
+      "default": "Get Started",
+      "placeholder": "Enter button text"
+    },
+    {
+      "name": "button_url",
+      "label": "Button URL",
+      "type": "text",
+      "required": false,
+      "default": "#",
+      "placeholder": "Enter button URL"
+    },
+    {
+      "name": "background_image",
+      "label": "Background Image",
+      "type": "image",
+      "required": false,
+      "placeholder": "Select background image"
+    },
+    {
+      "name": "background_color",
+      "label": "Background Color",
+      "type": "color",
+      "required": false,
+      "default": "#1f2937"
+    },
+    {
+      "name": "text_color",
+      "label": "Text Color",
+      "type": "color",
+      "required": false,
+      "default": "#ffffff"
+    },
+    {
+      "name": "height",
+      "label": "Section Height",
+      "type": "range",
+      "required": false,
+      "default": 500,
+      "min": 300,
+      "max": 800,
+      "step": 50,
+      "unit": "px"
+    }
+  ]
+}

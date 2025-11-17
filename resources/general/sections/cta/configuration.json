@@ -1,0 +1,72 @@
+{
+  "name": "Call to Action",
+  "description": "A prominent call-to-action section with button",
+  "category": "marketing",
+  "fields": [
+    {
+      "name": "title",
+      "label": "Title",
+      "type": "text",
+      "required": true,
+      "default": "Ready to get started?",
+      "placeholder": "Enter CTA title"
+    },
+    {
+      "name": "subtitle",
+      "label": "Subtitle",
+      "type": "textarea",
+      "required": false,
+      "default": "Join thousands of satisfied customers today",
+      "placeholder": "Enter CTA subtitle"
+    },
+    {
+      "name": "button_text",
+      "label": "Button Text",
+      "type": "text",
+      "required": true,
+      "default": "Get Started Now",
+      "placeholder": "Enter button text"
+    },
+    {
+      "name": "button_url",
+      "label": "Button URL",
+      "type": "text",
+      "required": true,
+      "default": "#",
+      "placeholder": "Enter button URL"
+    },
+    {
+      "name": "button_style",
+      "label": "Button Style",
+      "type": "select",
+      "required": false,
+      "default": "primary",
+      "options": [
+        {"value": "primary", "label": "Primary"},
+        {"value": "secondary", "label": "Secondary"},
+        {"value": "outline", "label": "Outline"}
+      ]
+    },
+    {
+      "name": "background_color",
+      "label": "Background Color",
+      "type": "color",
+      "required": false,
+      "default": "#f3f4f6"
+    },
+    {
+      "name": "text_color",
+      "label": "Text Color",
+      "type": "color",
+      "required": false,
+      "default": "#1f2937"
+    },
+    {
+      "name": "button_color",
+      "label": "Button Color",
+      "type": "color",
+      "required": false,
+      "default": "#3b82f6"
+    }
+  ]
+}

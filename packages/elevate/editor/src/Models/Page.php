@@ -48,7 +48,6 @@ class Page extends Model
     {
         $this->update([
             'configuration' => $this->draft_configuration ?? $this->configuration,
-            'draft_configuration' => null,
             'status' => 'published',
             'published_at' => now(),
         ]);

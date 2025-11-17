@@ -15,15 +15,11 @@ class PurchasableService
 {
     protected ?string $sessionId;
     protected ?int $userId;
-    protected ?string $cartToken;
-    protected ?string $wishlistToken;
 
-    public function __construct(?string $sessionId = null, ?int $userId = null, ?string $cartToken = null, ?string $wishlistToken = null)
+    public function __construct(?string $sessionId = null, ?int $userId = null)
     {
         $this->sessionId = $sessionId ?: session()->getId();
         $this->userId = $userId ?: auth()->id();
-        $this->cartToken = $cartToken ?: request()->cookie('cart_token') ?: request()->input('cart_token');
-        $this->wishlistToken = $wishlistToken;
     }
 
     /**
@@ -39,7 +35,7 @@ class PurchasableService
      */
     public function getCart(): ?Cart
     {
-        return Cart::getCart($this->sessionId, $this->userId, $this->cartToken);
+        return Cart::getCart($this->sessionId, $this->userId);
     }
 
     /**
@@ -47,7 +43,7 @@ class PurchasableService
      */
     public function getOrCreateCart(): Cart
     {
-        return Cart::getOrCreateCart($this->sessionId, $this->userId, $this->cartToken);
+        return Cart::getOrCreateCart($this->sessionId, $this->userId);
     }
 
     /**
@@ -71,7 +67,7 @@ class PurchasableService
             throw new \Exception("Insufficient stock. Available: {$stock}, Requested: {$quantity}");
         }
 
-        return $purchasable->addToCart($quantity, $this->sessionId, $this->userId, $meta, $this->cartToken);
+        return $purchasable->addToCart($quantity, $this->sessionId, $this->userId, $meta);
     }
 
     /**
@@ -88,7 +84,7 @@ class PurchasableService
             throw new \Exception("Insufficient stock. Available: {$stock}, Requested: {$quantity}");
         }
 
-        return $purchasable->updateCartQuantity($quantity, $this->sessionId, $this->userId, $this->cartToken);
+        return $purchasable->updateCartQuantity($quantity, $this->sessionId, $this->userId);
     }
 
     /**
@@ -100,7 +96,7 @@ class PurchasableService
             throw new \InvalidArgumentException('Item must use the Purchasable trait');
         }
 
-        return $purchasable->removeFromCart($this->sessionId, $this->userId, $this->cartToken);
+        return $purchasable->removeFromCart($this->sessionId, $this->userId);
     }
 
     /**
@@ -132,9 +128,9 @@ class PurchasableService
                 'total' => 0,
                 'item_count' => 0,
                 'formatted' => [
-                    'subtotal' => $this->formatCurrency(0),
-                    'tax' => $this->formatCurrency(0),
-                    'total' => $this->formatCurrency(0),
+                    'subtotal' => '£0.00',
+                    'tax' => '£0.00',
+                    'total' => '£0.00',
                 ],
             ];
         }
@@ -149,7 +145,7 @@ class PurchasableService
      */
     public function getWishlist(): ?Wishlist
     {
-        return Wishlist::getWishlist($this->sessionId, $this->userId, $this->wishlistToken);
+        return Wishlist::getWishlist($this->sessionId, $this->userId);
     }
 
     /**
@@ -157,7 +153,7 @@ class PurchasableService
      */
     public function getOrCreateWishlist(): Wishlist
     {
-        return Wishlist::getOrCreateWishlist($this->sessionId, $this->userId, $this->wishlistToken);
+        return Wishlist::getOrCreateWishlist($this->sessionId, $this->userId);
     }
 
     /**
@@ -175,7 +171,7 @@ class PurchasableService
             throw new \Exception("Item '{$purchasable->getName()}' is not available for purchase");
         }
 
-        return $purchasable->addToWishlist($this->sessionId, $this->userId, $meta, $this->wishlistToken);
+        return $purchasable->addToWishlist($this->sessionId, $this->userId, $meta);
     }
 
     /**
@@ -187,7 +183,7 @@ class PurchasableService
             throw new \InvalidArgumentException('Item must use the Purchasable trait');
         }
 
-        return $purchasable->removeFromWishlist($this->sessionId, $this->userId, $this->wishlistToken);
+        return $purchasable->removeFromWishlist($this->sessionId, $this->userId);
     }
 
     /**
@@ -199,7 +195,7 @@ class PurchasableService
             return false;
         }
 
-        return $purchasable->isInWishlist($this->sessionId, $this->userId, $this->wishlistToken);
+        return $purchasable->isInWishlist($this->sessionId, $this->userId);
     }
 
     /**
@@ -217,7 +213,7 @@ class PurchasableService
             throw new \Exception("Insufficient stock. Available: {$stock}, Requested: {$quantity}");
         }
 
-        return $purchasable->moveFromWishlistToCart($quantity, $this->sessionId, $this->userId, $this->wishlistToken);
+        return $purchasable->moveFromWishlistToCart($quantity, $this->sessionId, $this->userId);
     }
 
     /**
@@ -236,55 +232,12 @@ class PurchasableService
     }
 
     /**
-     * Get wishlist totals.
+     * Get wishlist item count.
      */
-    public function getWishlistTotals(): array
+    public function getWishlistCount(): int
     {
         $wishlist = $this->getWishlist();
-        
-        if (!$wishlist) {
-            return [
-                'item_count' => 0,
-                'total_value' => 0,
-                'formatted' => [
-                    'total_value' => $this->formatCurrency(0),
-                ],
-                'items' => [],
-            ];
-        }
-
-        $lines = $wishlist->lines()->with('purchasable')->get();
-        $itemCount = $lines->count();
-        $totalValue = 0;
-        $items = [];
-
-        foreach ($lines as $line) {
-            if ($line->purchasable) {
-                $unitPrice = $line->unit_price;
-                $totalValue += $unitPrice;
-                
-                $items[] = [
-                    'id' => $line->id,
-                    'name' => $line->name,
-                    'description' => $line->description,
-                    'unit_price' => $unitPrice,
-                    'formatted_price' => $this->formatCurrency($unitPrice),
-                    'is_available' => $line->is_available,
-                    'purchasable_type' => $line->purchasable_type,
-                    'purchasable_id' => $line->purchasable_id,
-                    'meta' => $line->meta,
-                ];
-            }
-        }
-
-        return [
-            'item_count' => $itemCount,
-            'total_value' => $totalValue,
-            'formatted' => [
-                'total_value' => $this->formatCurrency($totalValue),
-            ],
-            'items' => $items,
-        ];
+        return $wishlist ? $wishlist->getItemCount() : 0;
     }
 
     /**
@@ -328,77 +281,6 @@ class PurchasableService
 
         // Delete guest wishlist
         $guestWishlist->delete();
-    }
-
-    /**
-     * Checkout - convert cart to order.
-     */
-    public function checkout(array $customerData = [], array $shippingAddress = [], ?array $billingAddress = null): Order
-    {
-        $cart = $this->getCart();
-        
-        if (!$cart || $cart->isEmpty()) {
-            throw new \Exception('Cart is empty');
-        }
-
-        // Validate all items are still available and in stock
-        foreach ($cart->lines as $line) {
-            $purchasable = $line->purchasable;
-            
-            if (!$purchasable) {
-                \Log::error('Cart line has null purchasable', [
-                    'line_id' => $line->id,
-                    'purchasable_type' => $line->purchasable_type,
-                    'purchasable_id' => $line->purchasable_id,
-                    'description' => $line->description,
-                ]);
-                throw new \Exception("Cart item '{$line->description}' is no longer available");
-            }
-            
-            if (!$purchasable->isAvailableForPurchase()) {
-                throw new \Exception("Item '{$purchasable->getName()}' is no longer available");
-            }
-            
-            if (!$purchasable->hasStock($line->quantity)) {
-                $stock = $purchasable->getStockLevel();
-                throw new \Exception("Insufficient stock for '{$purchasable->getName()}'. Available: {$stock}, In cart: {$line->quantity}");
-            }
-        }
-
-        DB::beginTransaction();
-        
-        try {
-            // Find existing pending order or create new one
-            $order = $cart->findOrCreateOrder();
-
-            // Add customer data if provided
-            if (!empty($customerData)) {
-                $meta = $order->meta ?? [];
-                $meta['customer'] = $customerData;
-                $order->update(['meta' => $meta]);
-            }
-
-            // Add addresses if provided
-            if (!empty($shippingAddress)) {
-                $order->addresses()->create(array_merge($shippingAddress, ['type' => 'shipping']));
-            }
-            
-            if (!empty($billingAddress)) {
-                $order->addresses()->create(array_merge($billingAddress, ['type' => 'billing']));
-            }
-
-            // Discounts are now applied during order creation in Cart::createOrder()
-
-            // DON'T clear cart yet - wait for payment confirmation
-            // Cart will be cleared after successful payment
-
-            DB::commit();
-
-            return $order;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
     }
 
     /**
@@ -455,104 +337,5 @@ class PurchasableService
     protected function isPurchasable($item): bool
     {
         return in_array('Elevate\CommerceCore\Traits\Purchasable', class_uses_recursive($item));
-    }
-
-    /**
-     * Format currency amount.
-     */
-    protected function formatCurrency(int $amountInCents): string
-    {
-        $currency = Currency::getDefault();
-        
-        if ($currency) {
-            return $currency->formatAmount($amountInCents);
-        }
-
-        // Fallback formatting
-        return '£' . number_format($amountInCents / 100, 2);
-    }
-
-    // ===== STATIC CONVENIENCE METHODS =====
-
-    /**
-     * Quick add to cart (uses current session/user).
-     */
-    public static function add($purchasable, int $quantity = 1, array $meta = []): CartLine
-    {
-        return (new static())->addToCart($purchasable, $quantity, $meta);
-    }
-
-    /**
-     * Quick remove from cart (uses current session/user).
-     */
-    public static function remove($purchasable): bool
-    {
-        return (new static())->removeFromCart($purchasable);
-    }
-
-    /**
-     * Quick quantity update (uses current session/user).
-     */
-    public static function updateQty($purchasable, int $quantity): bool
-    {
-        return (new static())->updateQuantity($purchasable, $quantity);
-    }
-
-    /**
-     * Quick checkout (uses current session/user).
-     */
-    public static function createOrder(array $customerData = [], array $shippingAddress = [], ?array $billingAddress = null): Order
-    {
-        return (new static())->checkout($customerData, $shippingAddress, $billingAddress);
-    }
-
-    /**
-     * Get current cart totals (uses current session/user).
-     */
-    public static function totals(): array
-    {
-        return (new static())->getCartTotals();
-    }
-
-    // ===== STATIC WISHLIST CONVENIENCE METHODS =====
-
-    /**
-     * Quick add to wishlist (uses current session/user).
-     */
-    public static function addToWish($purchasable, array $meta = []): WishlistLine
-    {
-        return (new static())->addToWishlist($purchasable, $meta);
-    }
-
-    /**
-     * Quick remove from wishlist (uses current session/user).
-     */
-    public static function removeFromWish($purchasable): bool
-    {
-        return (new static())->removeFromWishlist($purchasable);
-    }
-
-    /**
-     * Quick check if in wishlist (uses current session/user).
-     */
-    public static function inWishlist($purchasable): bool
-    {
-        return (new static())->isInWishlist($purchasable);
-    }
-
-    /**
-     * Quick move from wishlist to cart (uses current session/user).
-     */
-    public static function moveToCart($purchasable, int $quantity = 1): ?CartLine
-    {
-        return (new static())->moveFromWishlistToCart($purchasable, $quantity);
-    }
-
-    /**
-     * Get current wishlist totals (uses current session/user).
-     */
-    public static function wishlistTotals(): array
-    {
-        return (new static())->getWishlistTotals();
     }
 }

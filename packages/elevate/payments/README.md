@@ -57,8 +57,8 @@ For each gateway:
 
 1. Get your API keys from [Stripe Dashboard](https://dashboard.stripe.com/apikeys)
 2. Enter:
-   - **Publishable Key**: `pk_test_...` or `pk_live_...`
-   - **Secret Key**: `sk_test_...` or `sk_live_...`
+   - **Publishable Key**: `pk_test_XXXXX` or `pk_live_XXXXX`
+   - **Secret Key**: `sk_test_XXXXX` or `sk_live_XXXXX`
 
 ### PayPal Setup
 

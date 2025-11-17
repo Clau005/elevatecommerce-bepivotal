@@ -30,6 +30,7 @@ use Elevate\CommerceCore\Settings\Sections\PaymentsSettingsSection;
 use Elevate\CommerceCore\Settings\Sections\ShippingSettingsSection;
 use Elevate\CommerceCore\Settings\Sections\CheckoutSettingsSection;
 use Elevate\CommerceCore\Settings\Sections\GiftVouchersSettingsSection;
+use Elevate\CommerceCore\Settings\Sections\ChannelsSettingsSection;
 
 class SettingsController extends Controller
 {
@@ -59,6 +60,7 @@ class SettingsController extends Controller
             new CurrenciesSettingsSection(),
             new LanguagesSettingsSection(),
             new StatesSettingsSection(),
+            new ChannelsSettingsSection(),
             new StaffSettingsSection(),
             new CustomerGroupsSettingsSection(),
             new RolesSettingsSection(),
@@ -103,10 +105,16 @@ class SettingsController extends Controller
                 'redirect' => 'admin.settings.discounts.index'
             ],
             'payments' => [
-                'redirect' => 'admin.settings.payments.index'
+                'redirect' => 'admin.payment-gateways.index'
+            ],
+            'shipping' => [
+                'redirect' => 'admin.shipping-carriers.index'
             ],
             'checkout' => [
                 'redirect' => 'admin.settings.checkout.index'
+            ],
+            'checkout-rules' => [
+                'redirect' => 'admin.settings.checkout-rules.index'
             ],
             'gift-vouchers' => [
                 'redirect' => 'admin.settings.gift-vouchers.index'

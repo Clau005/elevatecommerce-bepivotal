@@ -73,11 +73,13 @@
 
                     {{-- Template --}}
                     <div>
-                        <label for="template_id" class="block text-sm font-medium text-gray-700 mb-1">Template</label>
-                        <select name="template_id" id="template_id"
+                        <label for="template_id" class="block text-sm font-medium text-gray-700 mb-1">
+                            Template <span class="text-red-500">*</span>
+                        </label>
+                        <select name="template_id" id="template_id" required
                             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('template_id') border-red-300 @enderror">
-                            <option value="">Default Template</option>
-                            @foreach(\Elevate\Editor\Models\Template::where('model_type', 'Elevate\Product\Models\Collection')->get() as $template)
+                            <option value="">Select a template...</option>
+                            @foreach(\Elevate\Editor\Models\Template::where('model_type', 'Elevate\Collections\Models\Collection')->get() as $template)
                                 <option value="{{ $template->id }}" {{ old('template_id', $collection->template_id) == $template->id ? 'selected' : '' }}>
                                     {{ $template->name }}
                                 </option>

@@ -20,15 +20,16 @@ Route::get('/', [PageController::class, 'show'])
     ->name('home');
 
 // Preview routes for visual editor (uses draft_configuration)
-Route::middleware(['web', 'auth:staff'])->prefix('preview')->name('preview.')->group(function () {
+Route::prefix('preview')->name('preview.')->group(function () {
     Route::get('/themes/{theme}/pages/{page}', [\Elevate\Editor\Http\Controllers\PreviewController::class, 'page'])->name('pages');
     Route::get('/themes/{theme}/templates/{template}', [\Elevate\Editor\Http\Controllers\PreviewController::class, 'template'])->name('templates');
 });
 
-// Catch-all route for dynamic pages (must be LAST!)
-// Handles all pages created in admin: /about, /contact, /services, etc.
-// Also handles collection routes with nested paths
-// Excluded prefixes are managed by RouteExclusionRegistry
-Route::get('/{slug}', [PageController::class, 'show'])
-    ->where('slug', RouteExclusionRegistry::getWherePattern())
-    ->name('page.show');
+    // Catch-all for collections and pages - /{slug}/{filters?}
+    // This is registered LAST (lowest priority)
+    // Supports optional filter segments for single-level collections
+    // Excluded prefixes are managed by RouteExclusionRegistry
+    Route::get('/{slug}/{filters?}', [PageController::class, 'show'])
+        ->where('slug', RouteExclusionRegistry::getWherePattern())
+        ->where('filters', '.*')
+        ->name('page.show');

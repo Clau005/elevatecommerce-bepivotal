@@ -1,0 +1,163 @@
+{
+    "name": "Collection Header",
+    "fields": [
+        {
+            "name": "name",
+            "type": "text",
+            "label": "Collection Name",
+            "default": "{{ model.name }}",
+            "required": true,
+            "placeholder": "Collection name"
+        },
+        {
+            "name": "description",
+            "type": "textarea",
+            "label": "Description",
+            "default": "{{ model.description }}",
+            "required": false,
+            "placeholder": "Collection description"
+        },
+        {
+            "name": "image",
+            "type": "image",
+            "label": "Header Image",
+            "default": "{{ model.image }}",
+            "required": false,
+            "placeholder": "Select header image"
+        },
+        {
+            "name": "showImage",
+            "type": "checkbox",
+            "label": "Show Image",
+            "default": true,
+            "required": false
+        },
+        {
+            "name": "showName",
+            "type": "checkbox",
+            "label": "Show Name",
+            "default": true,
+            "required": false
+        },
+        {
+            "name": "showDescription",
+            "type": "checkbox",
+            "label": "Show Description",
+            "default": true,
+            "required": false
+        },
+        {
+            "name": "minHeight",
+            "type": "text",
+            "label": "Minimum Height",
+            "default": "400px",
+            "required": false,
+            "placeholder": "e.g., 400px"
+        },
+        {
+            "name": "backgroundSize",
+            "type": "select",
+            "label": "Background Size",
+            "default": "cover",
+            "options": [
+                {
+                    "label": "Cover",
+                    "value": "cover"
+                },
+                {
+                    "label": "Contain",
+                    "value": "contain"
+                },
+                {
+                    "label": "Auto",
+                    "value": "auto"
+                }
+            ],
+            "required": false
+        },
+        {
+            "name": "backgroundPosition",
+            "type": "select",
+            "label": "Background Position",
+            "default": "center",
+            "options": [
+                {
+                    "label": "Center",
+                    "value": "center"
+                },
+                {
+                    "label": "Top",
+                    "value": "top"
+                },
+                {
+                    "label": "Bottom",
+                    "value": "bottom"
+                },
+                {
+                    "label": "Left",
+                    "value": "left"
+                },
+                {
+                    "label": "Right",
+                    "value": "right"
+                }
+            ],
+            "required": false
+        },
+        {
+            "name": "textAlign",
+            "type": "select",
+            "label": "Text Alignment",
+            "default": "center",
+            "options": [
+                {
+                    "label": "Left",
+                    "value": "left"
+                },
+                {
+                    "label": "Center",
+                    "value": "center"
+                },
+                {
+                    "label": "Right",
+                    "value": "right"
+                }
+            ],
+            "required": false
+        },
+        {
+            "name": "overlay",
+            "type": "group",
+            "label": "Overlay Settings",
+            "fields": [
+                {
+                    "name": "enabled",
+                    "type": "checkbox",
+                    "label": "Enable Overlay",
+                    "default": true
+                },
+                {
+                    "name": "color",
+                    "type": "color",
+                    "label": "Overlay Color",
+                    "default": "#000000"
+                },
+                {
+                    "max": 1,
+                    "min": 0,
+                    "name": "opacity",
+                    "step": 0.1,
+                    "type": "range",
+                    "label": "Overlay Opacity",
+                    "default": 0.3
+                }
+            ]
+        }
+    ],
+    "category": "collections",
+    "description": "Header section for collection pages with title, description, and optional image",
+    "slug": "collection-header",
+    "id": 202,
+    "created_at": "2025-11-11T11:14:16.000000Z",
+    "updated_at": "2025-11-11T11:14:16.000000Z"
+}

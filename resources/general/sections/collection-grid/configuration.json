@@ -1,0 +1,66 @@
+{
+  "name": "Collection Grid",
+  "description": "Product grid for collection pages with customizable layout",
+  "category": "collections",
+  "fields": [
+    {
+      "name": "title",
+      "label": "Section Title",
+      "type": "text",
+      "required": false,
+      "default": "",
+      "placeholder": "Optional section title"
+    },
+    {
+      "name": "title_alignment",
+      "label": "Title Alignment",
+      "type": "select",
+      "required": false,
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "name": "column_width",
+      "label": "Column Width",
+      "type": "select",
+      "required": false,
+      "default": "250px",
+      "options": [
+        { "value": "200px", "label": "Small (200px)" },
+        { "value": "250px", "label": "Medium (250px)" },
+        { "value": "300px", "label": "Large (300px)" }
+      ]
+    },
+    {
+      "name": "grid_gap",
+      "label": "Grid Gap",
+      "type": "select",
+      "required": false,
+      "default": "2rem",
+      "options": [
+        { "value": "1rem", "label": "Small" },
+        { "value": "2rem", "label": "Medium" },
+        { "value": "3rem", "label": "Large" }
+      ]
+    },
+    {
+      "name": "padding",
+      "label": "Section Padding",
+      "type": "text",
+      "required": false,
+      "default": "4rem 2rem",
+      "placeholder": "e.g., 4rem 2rem"
+    },
+    {
+      "name": "background_color",
+      "label": "Background Color",
+      "type": "color",
+      "required": false,
+      "default": "#ffffff"
+    }
+  ]
+}

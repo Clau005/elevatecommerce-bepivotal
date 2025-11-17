@@ -9,17 +9,17 @@
                         <h1 class="text-2xl font-bold text-gray-900">Order #{{ $order->reference }}</h1>
                         <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full 
                             @switch($order->status)
-                                @case('awaiting-payment') bg-yellow-100 text-yellow-800 @break
-                                @case('payment-received') bg-blue-100 text-blue-800 @break
+                                @case('created') bg-gray-100 text-gray-800 @break
+                                @case('confirmed') bg-blue-100 text-blue-800 @break
                                 @case('processing') bg-purple-100 text-purple-800 @break
                                 @case('shipped') bg-indigo-100 text-indigo-800 @break
                                 @case('delivered') bg-green-100 text-green-800 @break
                                 @case('cancelled') bg-red-100 text-red-800 @break
-                                @case('refunded') bg-gray-100 text-gray-800 @break
+                                @case('refunded') bg-orange-100 text-orange-800 @break
                                 @default bg-gray-100 text-gray-800
                             @endswitch
                         ">
-                            {{ ucfirst(str_replace('-', ' ', $order->status)) }}
+                            {{ ucfirst($order->status) }}
                         </span>
                         @if($order->new_customer)
                             <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
@@ -36,19 +36,15 @@
                 </div>
                 <div class="flex gap-3">
                     @if($order->user)
-                        <x-bladewind::button 
-                            color="blue" 
-                            outline="true"
-                            onclick="window.location.href='{{ route('admin.customers.show', $order->user) }}'">
+                        <a href="{{ route('admin.customers.show', $order->user) }}" 
+                           class="inline-flex items-center px-4 py-2 border border-blue-600 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-50">
                             View Customer
-                        </x-bladewind::button>
+                        </a>
                     @endif
-                    <x-bladewind::button 
-                        color="gray" 
-                        outline="true"
-                        onclick="window.location.href='{{ route('admin.orders.index') }}'">
+                    <a href="{{ route('admin.orders.index') }}" 
+                       class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50">
                         Back to Orders
-                    </x-bladewind::button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -81,7 +77,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">Total</dt>
-                            <dd class="text-lg font-medium text-gray-900">£{{ number_format($stats['total'], 2) }}</dd>
+                            <dd class="text-lg font-medium text-gray-900">@currency($order->total)</dd>
                         </dl>
                     </div>
                 </div>
@@ -97,7 +93,7 @@
                     <div class="ml-5 w-0 flex-1">
                         <dl>
                             <dt class="text-sm font-medium text-gray-500 truncate">Channel</dt>
-                            <dd class="text-lg font-medium text-gray-900">{{ $order->channel->name }}</dd>
+                            <dd class="text-lg font-medium text-gray-900">{{ $order->channel->name ?? 'N/A' }}</dd>
                         </dl>
                     </div>
                 </div>
@@ -178,10 +174,10 @@
                                         {{ $line->quantity }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        £{{ number_format($line->unit_price / 100, 2) }}
+                                        @currency($line->unit_price)
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        £{{ number_format($line->total / 100, 2) }}
+                                        @currency($line->total)
                                     </td>
                                 </tr>
                                 @endforeach
@@ -244,7 +240,7 @@
                                         </span>
                                         <span class="text-gray-600">{{ $discount['description'] ?? 'Discount Applied' }}</span>
                                     </div>
-                                    <span class="font-medium text-green-600">-£{{ number_format($discount['amount'] / 100, 2) }}</span>
+                                    <span class="font-medium text-green-600">-@currency($discount['amount'])</span>
                                 </div>
                                 @endforeach
                             </div>
@@ -263,10 +259,10 @@
                                         </span>
                                         <span class="text-gray-600">{{ $voucher['description'] ?? 'Gift Voucher Applied' }}</span>
                                         @if(isset($voucher['voucher_value']))
-                                        <span class="text-xs text-gray-500 ml-1">(Value: £{{ number_format($voucher['amount'] / 100, 2) }})</span>
+                                        <span class="text-xs text-gray-500 ml-1">(Value: @currency($voucher['amount']))</span>
                                         @endif
                                     </div>
-                                    <span class="font-medium text-purple-600">-£{{ number_format($voucher['amount'] / 100, 2) }}</span>
+                                    <span class="font-medium text-purple-600">-@currency($voucher['amount'])</span>
                                 </div>
                                 @endforeach
                             </div>
@@ -281,11 +277,10 @@
                     <div class="px-6 py-4 border-b border-gray-200">
                         <div class="flex items-center justify-between">
                             <h3 class="text-lg font-medium text-gray-900">Order Timeline</h3>
-                            <x-bladewind::button 
-                                size="small"
-                                onclick="showModal('add-comment-modal')">
+                            <button onclick="document.getElementById('add-comment-modal').classList.remove('hidden')" 
+                                    class="inline-flex items-center px-3 py-1.5 border border-blue-600 text-blue-600 text-sm font-medium rounded-md hover:bg-blue-50">
                                 Add Comment
-                            </x-bladewind::button>
+                            </button>
                         </div>
                     </div>
                     
@@ -388,13 +383,10 @@
                                     <p class="text-sm text-gray-900 font-mono">{{ $order->user->account_reference }}</p>
                                 </div>
                                 <div class="pt-3 border-t border-gray-200">
-                                    <x-bladewind::button 
-                                        size="small" 
-                                        color="blue" 
-                                        outline="true"
-                                        onclick="window.location.href='{{ route('admin.customers.show', $order->user) }}'">
+                                    <a href="{{ route('admin.customers.show', $order->user) }}" 
+                                       class="inline-flex items-center px-3 py-1.5 border border-blue-600 text-blue-600 text-sm font-medium rounded-md hover:bg-blue-50">
                                         View Customer Profile
-                                    </x-bladewind::button>
+                                    </a>
                                 </div>
                             </div>
                         @else
@@ -409,6 +401,173 @@
                     </div>
                 </div>
 
+                {{-- Payment Information --}}
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Payment</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-3">
+                        @if($order->paymentGateway)
+                            <div>
+                                <p class="text-xs text-gray-500">Payment Method</p>
+                                <p class="text-sm text-gray-900 font-medium">{{ $order->paymentGateway->name }}</p>
+                            </div>
+                        @endif
+
+                        @if($order->transactions && $order->transactions->count() > 0)
+                            @php $latestTransaction = $order->transactions->sortByDesc('created_at')->first(); @endphp
+                            <div>
+                                <p class="text-xs text-gray-500">Transaction Status</p>
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                                    @if($latestTransaction->status === 'completed') bg-green-100 text-green-800
+                                    @elseif($latestTransaction->status === 'pending') bg-yellow-100 text-yellow-800
+                                    @elseif($latestTransaction->status === 'failed') bg-red-100 text-red-800
+                                    @else bg-gray-100 text-gray-800
+                                    @endif">
+                                    {{ ucfirst($latestTransaction->status) }}
+                                </span>
+                            </div>
+
+                            @if($latestTransaction->reference)
+                                <div>
+                                    <p class="text-xs text-gray-500">Transaction ID</p>
+                                    <p class="text-sm text-gray-900 font-mono">{{ $latestTransaction->reference }}</p>
+                                </div>
+                            @endif
+
+                            @if($latestTransaction->completed_at)
+                                <div>
+                                    <p class="text-xs text-gray-500">Payment Completed</p>
+                                    <p class="text-sm text-gray-900">{{ $latestTransaction->completed_at->format('M j, Y g:ia') }}</p>
+                                </div>
+                            @endif
+
+                            <div>
+                                <p class="text-xs text-gray-500">Amount</p>
+                                <p class="text-sm text-gray-900 font-medium">{{ $latestTransaction->formatted_amount }}</p>
+                            </div>
+                        @else
+                            <p class="text-sm text-gray-500">No payment transactions recorded</p>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Shipping Information --}}
+                @if($order->shippingCarrier)
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Shipping</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-3">
+                        <div>
+                            <p class="text-xs text-gray-500">Carrier</p>
+                            <p class="text-sm text-gray-900 font-medium">{{ $order->shippingCarrier->name }}</p>
+                        </div>
+
+                        @if($order->tracking_number)
+                            <div>
+                                <p class="text-xs text-gray-500">Tracking Number</p>
+                                <p class="text-sm text-gray-900 font-mono">{{ $order->tracking_number }}</p>
+                            </div>
+                        @endif
+
+                        @if($order->shipped_at)
+                            <div>
+                                <p class="text-xs text-gray-500">Shipped At</p>
+                                <p class="text-sm text-gray-900">{{ $order->shipped_at->format('M j, Y g:ia') }}</p>
+                            </div>
+                        @endif
+
+                        @if($order->delivered_at)
+                            <div>
+                                <p class="text-xs text-gray-500">Delivered At</p>
+                                <p class="text-sm text-gray-900">{{ $order->delivered_at->format('M j, Y g:ia') }}</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+                @endif
+
+                {{-- Billing Address --}}
+                @if($order->billingAddress)
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Billing Address</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-2">
+                        <p class="text-sm text-gray-900 font-medium">
+                            {{ $order->billingAddress->first_name }} {{ $order->billingAddress->last_name }}
+                        </p>
+                        @if($order->billingAddress->company_name)
+                            <p class="text-sm text-gray-600">{{ $order->billingAddress->company_name }}</p>
+                        @endif
+                        <p class="text-sm text-gray-600">{{ $order->billingAddress->line_one }}</p>
+                        @if($order->billingAddress->line_two)
+                            <p class="text-sm text-gray-600">{{ $order->billingAddress->line_two }}</p>
+                        @endif
+                        <p class="text-sm text-gray-600">
+                            {{ $order->billingAddress->city }}, {{ $order->billingAddress->state }} {{ $order->billingAddress->postcode }}
+                        </p>
+                        <p class="text-sm text-gray-600">{{ $order->billingAddress->country->name ?? '' }}</p>
+                        @if($order->billingAddress->contact_email)
+                            <p class="text-sm text-gray-600 mt-3">
+                                <span class="text-xs text-gray-500">Email:</span><br>
+                                {{ $order->billingAddress->contact_email }}
+                            </p>
+                        @endif
+                        @if($order->billingAddress->contact_phone)
+                            <p class="text-sm text-gray-600">
+                                <span class="text-xs text-gray-500">Phone:</span><br>
+                                {{ $order->billingAddress->contact_phone }}
+                            </p>
+                        @endif
+                    </div>
+                </div>
+                @endif
+
+                {{-- Shipping Address --}}
+                @if($order->shippingAddress)
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">Shipping Address</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-2">
+                        <p class="text-sm text-gray-900 font-medium">
+                            {{ $order->shippingAddress->first_name }} {{ $order->shippingAddress->last_name }}
+                        </p>
+                        @if($order->shippingAddress->company_name)
+                            <p class="text-sm text-gray-600">{{ $order->shippingAddress->company_name }}</p>
+                        @endif
+                        <p class="text-sm text-gray-600">{{ $order->shippingAddress->line_one }}</p>
+                        @if($order->shippingAddress->line_two)
+                            <p class="text-sm text-gray-600">{{ $order->shippingAddress->line_two }}</p>
+                        @endif
+                        <p class="text-sm text-gray-600">
+                            {{ $order->shippingAddress->city }}, {{ $order->shippingAddress->state }} {{ $order->shippingAddress->postcode }}
+                        </p>
+                        <p class="text-sm text-gray-600">{{ $order->shippingAddress->country->name ?? '' }}</p>
+                        @if($order->shippingAddress->delivery_instructions)
+                            <div class="mt-3 pt-3 border-t border-gray-200">
+                                <p class="text-xs text-gray-500">Delivery Instructions:</p>
+                                <p class="text-sm text-gray-600">{{ $order->shippingAddress->delivery_instructions }}</p>
+                            </div>
+                        @endif
+                        @if($order->shippingAddress->contact_email)
+                            <p class="text-sm text-gray-600 mt-3">
+                                <span class="text-xs text-gray-500">Email:</span><br>
+                                {{ $order->shippingAddress->contact_email }}
+                            </p>
+                        @endif
+                        @if($order->shippingAddress->contact_phone)
+                            <p class="text-sm text-gray-600">
+                                <span class="text-xs text-gray-500">Phone:</span><br>
+                                {{ $order->shippingAddress->contact_phone }}
+                            </p>
+                        @endif
+                    </div>
+                </div>
+                @endif
+
                 {{-- Order Status Management --}}
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                     <div class="px-6 py-4 border-b border-gray-200">
@@ -420,43 +579,36 @@
                             @method('PUT')
                             
                             <div>
-                                <x-bladewind::select 
-                                    name="status"
-                                    label="Status"
-                                    selected_value="{{ $order->status }}"
-                                    :data="[
-                                        ['label' => 'Awaiting Payment', 'value' => 'awaiting-payment'],
-                                        ['label' => 'Payment Received', 'value' => 'payment-received'],
-                                        ['label' => 'Processing', 'value' => 'processing'],
-                                        ['label' => 'Shipped', 'value' => 'shipped'],
-                                        ['label' => 'Delivered', 'value' => 'delivered'],
-                                        ['label' => 'Cancelled', 'value' => 'cancelled'],
-                                        ['label' => 'Refunded', 'value' => 'refunded']
-                                    ]" />
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Order Status</label>
+                                <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="created" {{ $order->status == 'created' ? 'selected' : '' }}>Created</option>
+                                    <option value="confirmed" {{ $order->status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                                    <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Processing</option>
+                                    <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>Shipped</option>
+                                    <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Delivered</option>
+                                    <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                    <option value="refunded" {{ $order->status == 'refunded' ? 'selected' : '' }}>Refunded</option>
+                                </select>
                             </div>
 
                             <div>
-                                <x-bladewind::input 
-                                    name="customer_reference"
-                                    label="Customer Reference"
-                                    placeholder="Optional customer reference"
-                                    value="{{ old('customer_reference', $order->customer_reference) }}" />
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Customer Reference</label>
+                                <input type="text" name="customer_reference" 
+                                       value="{{ old('customer_reference', $order->customer_reference) }}" 
+                                       placeholder="Optional customer reference"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             </div>
 
                             <div>
-                                <x-bladewind::textarea 
-                                    name="notes"
-                                    label="Order Notes"
-                                    placeholder="Internal notes about this order"
-                                    rows="3">{{ old('notes', $order->notes) }}</x-bladewind::textarea>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Order Notes</label>
+                                <textarea name="notes" rows="3" 
+                                          placeholder="Internal notes about this order"
+                                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">{{ old('notes', $order->notes) }}</textarea>
                             </div>
 
-                            <x-bladewind::button 
-                                type="primary" 
-                                can_submit="true"
-                                size="small">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
                                 Update Order
-                            </x-bladewind::button>
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -465,60 +617,67 @@
     </div>
 
     {{-- Add Comment Modal --}}
-    <x-bladewind::modal 
-        name="add-comment-modal" 
-        title="Add Comment to Order"
-        size="medium">
-        <form method="POST" action="{{ route('admin.orders.timeline.store', $order) }}" class="space-y-4">
-            @csrf
-            <div>
-                <x-bladewind::textarea 
-                    name="content"
-                    label="Comment"
-                    placeholder="Enter your comment..."
-                    rows="4"
-                    required="true" />
-            </div>
-            
-            <div>
-                <x-bladewind::checkbox 
-                    name="is_customer_visible"
-                    label="Visible to customer"
-                    value="1"
-                    checked="true" />
-            </div>
+    <div id="add-comment-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Add Comment to Order</h3>
+                <form method="POST" action="{{ route('admin.orders.timeline.store', $order) }}" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Comment</label>
+                        <textarea name="content" rows="4" required
+                                  placeholder="Enter your comment..."
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <input type="checkbox" name="is_customer_visible" value="1" checked
+                               class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label class="ml-2 text-sm text-gray-700">Visible to customer</label>
+                    </div>
 
-            <div class="flex justify-end gap-3">
-                <x-bladewind::button 
-                    color="gray" 
-                    outline="true"
-                    onclick="hideModal('add-comment-modal')">
-                    Cancel
-                </x-bladewind::button>
-                <x-bladewind::button 
-                    type="primary" 
-                    can_submit="true">
-                    Add Comment
-                </x-bladewind::button>
+                    <div class="flex justify-end gap-3">
+                        <button type="button" onclick="document.getElementById('add-comment-modal').classList.add('hidden')"
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
+                            Add Comment
+                        </button>
+                    </div>
+                </form>
             </div>
-        </form>
-    </x-bladewind::modal>
+        </div>
+    </div>
 
     {{-- Success/Error Messages --}}
     @if(session('success'))
-        <x-bladewind::notification 
-            type="success"
-            title="Success!"
-            message="{{ session('success') }}"
-            show_close_icon="true" />
+        <div class="fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg z-50" role="alert">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <div>
+                    <strong class="font-bold">Success!</strong>
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+            </div>
+        </div>
     @endif
 
     @if(session('error'))
-        <x-bladewind::notification 
-            type="error"
-            title="Error!"
-            message="{{ session('error') }}"
-            show_close_icon="true" />
+        <div class="fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-lg z-50" role="alert">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                </svg>
+                <div>
+                    <strong class="font-bold">Error!</strong>
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            </div>
+        </div>
     @endif
 
 </x-app>

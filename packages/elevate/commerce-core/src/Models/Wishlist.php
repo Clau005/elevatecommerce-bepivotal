@@ -15,7 +15,6 @@ class Wishlist extends Model
     protected $fillable = [
         'user_id',
         'session_id',
-        'wishlist_token',
         'meta',
     ];
 
@@ -37,82 +36,38 @@ class Wishlist extends Model
 
     // ===== STATIC METHODS =====
 
-    /**
-     * Generate a unique wishlist token
-     */
-    public static function generateWishlistToken(): string
-    {
-        do {
-            $token = 'wishlist_' . bin2hex(random_bytes(16));
-        } while (static::where('wishlist_token', $token)->exists());
-
-        return $token;
-    }
 
     /**
-     * Get or create wishlist for user/session/token
-     * Priority: User ID > Wishlist Token > Session ID
+     * Get or create wishlist for user/session
+     * Priority: User ID (logged in) > Session ID (guest)
      */
-    public static function getOrCreateWishlist(?string $sessionId = null, ?int $userId = null, ?string $wishlistToken = null): self
+    public static function getOrCreateWishlist(?string $sessionId = null, ?int $userId = null): self
     {
-        // Priority 1: User-based wishlist
+        // For authenticated users
         if ($userId) {
             $wishlist = static::where('user_id', $userId)->first();
             
             if ($wishlist) {
-                // If we have a wishlist token, merge token-based wishlist with user wishlist
-                if ($wishlistToken) {
-                    $tokenWishlist = static::where('wishlist_token', $wishlistToken)->whereNull('user_id')->first();
-                    if ($tokenWishlist) {
-                        // Move items from token wishlist to user wishlist
-                        foreach ($tokenWishlist->lines as $line) {
-                            if (!$wishlist->hasItem($line->purchasable)) {
-                                $wishlist->addItem($line->purchasable, $line->meta ?? []);
-                            }
-                        }
-                        $tokenWishlist->delete();
-                    }
-                }
                 return $wishlist;
             }
             
             // Create new user wishlist
-            $wishlist = static::create([
+            return static::create([
                 'user_id' => $userId,
-                'session_id' => $sessionId,
+                'session_id' => null,
             ]);
-            
-            // If we have a token wishlist, merge it
-            if ($wishlistToken) {
-                $tokenWishlist = static::where('wishlist_token', $wishlistToken)->whereNull('user_id')->first();
-                if ($tokenWishlist) {
-                    foreach ($tokenWishlist->lines as $line) {
-                        $wishlist->addItem($line->purchasable, $line->meta ?? []);
-                    }
-                    $tokenWishlist->delete();
-                }
-            }
-            
-            return $wishlist;
         }
         
-        // Priority 2: Token-based wishlist (for guests)
-        if ($wishlistToken) {
-            $wishlist = static::where('wishlist_token', $wishlistToken)->whereNull('user_id')->first();
-            if ($wishlist) {
-                return $wishlist;
-            }
-        }
-        
-        // Priority 3: Session-based wishlist (fallback)
+        // For guests, use session-based wishlist
         $sessionId = $sessionId ?: session()->getId();
-        $wishlist = static::where('session_id', $sessionId)->whereNull('user_id')->first();
+        $wishlist = static::where('session_id', $sessionId)
+                         ->whereNull('user_id')
+                         ->first();
         
         if (!$wishlist) {
             $wishlist = static::create([
                 'user_id' => null,
                 'session_id' => $sessionId,
-                'wishlist_token' => static::generateWishlistToken(),
             ]);
         }
         
@@ -121,23 +76,20 @@ class Wishlist extends Model
 
     /**
      * Get existing wishlist (don't create)
-     * Priority: User ID > Wishlist Token > Session ID
+     * Priority: User ID (logged in) > Session ID (guest)
      */
-    public static function getWishlist(?string $sessionId = null, ?int $userId = null, ?string $wishlistToken = null): ?self
+    public static function getWishlist(?string $sessionId = null, ?int $userId = null): ?self
     {
-        // Priority 1: User-based wishlist
+        // For authenticated users
         if ($userId) {
             return static::where('user_id', $userId)->first();
         }
         
-        // Priority 2: Token-based wishlist
-        if ($wishlistToken) {
-            return static::where('wishlist_token', $wishlistToken)->whereNull('user_id')->first();
-        }
-        
-        // Priority 3: Session-based wishlist (fallback)
+        // For guests, use session-based wishlist
         $sessionId = $sessionId ?: session()->getId();
-        return static::where('session_id', $sessionId)->whereNull('user_id')->first();
+        return static::where('session_id', $sessionId)
+                     ->whereNull('user_id')
+                     ->first();
     }
 
     // ===== INSTANCE METHODS =====

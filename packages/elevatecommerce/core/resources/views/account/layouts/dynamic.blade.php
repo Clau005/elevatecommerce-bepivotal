@@ -1,0 +1,1 @@
+{{-- Dynamic layout for account pages --}}

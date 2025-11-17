@@ -126,17 +126,17 @@ class ProductController extends Controller
                 'render' => function($row) {
                     $html = '<div class="flex items-center justify-end gap-2">';
                     
-                    $html .= '<a href="'.route('products.edit', $row['id']).'" class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors">
+                    $html .= '<a href="'.route('admin.products.edit', $row['id']).'" class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors">
                         Edit
                     </a>';
                     
                     if ($row['type'] === 'variable') {
-                        $html .= '<a href="'.route('products.variants', $row['id']).'" class="inline-flex items-center px-3 py-1.5 bg-purple-600 text-white text-xs font-medium rounded hover:bg-purple-700 transition-colors">
+                        $html .= '<a href="'.route('admin.products.variants', $row['id']).'" class="inline-flex items-center px-3 py-1.5 bg-purple-600 text-white text-xs font-medium rounded hover:bg-purple-700 transition-colors">
                             Variants
                         </a>';
                     }
                     
-                    $html .= '<form action="'.route('products.destroy', $row['id']).'" method="POST" class="inline" onsubmit="return confirm(\'Are you sure you want to delete this product?\')">
+                    $html .= '<form action="'.route('admin.products.destroy', $row['id']).'" method="POST" class="inline" onsubmit="return confirm(\'Are you sure you want to delete this product?\')">
                         '.csrf_field().'
                         '.method_field('DELETE').'
                         <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700 transition-colors">
@@ -216,7 +216,7 @@ class ProductController extends Controller
         }
 
         return redirect()
-            ->route('products.edit', $product)
+            ->route('admin.products.edit', $product)
             ->with('success', 'Product created successfully!');
     }
 
@@ -289,7 +289,7 @@ class ProductController extends Controller
         }
 
         return redirect()
-            ->route('products.edit', $product)
+            ->route('admin.products.edit', $product)
             ->with('success', 'Product updated successfully!');
     }
 
@@ -301,7 +301,7 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()
-            ->route('products.index')
+            ->route('admin.products.index')
             ->with('success', 'Product deleted successfully!');
     }
 
@@ -347,7 +347,7 @@ class ProductController extends Controller
         $variant = ProductVariant::create($validated);
 
         return redirect()
-            ->route('products.variants', $product)
+            ->route('admin.products.variants', $product)
             ->with('success', 'Variant created successfully!');
     }
 
@@ -382,7 +382,7 @@ class ProductController extends Controller
         $variant->update($validated);
 
         return redirect()
-            ->route('products.variants', $product)
+            ->route('admin.products.variants', $product)
             ->with('success', 'Variant updated successfully!');
     }
 
@@ -394,7 +394,7 @@ class ProductController extends Controller
         $variant->delete();
 
         return redirect()
-            ->route('products.variants', $product)
+            ->route('admin.products.variants', $product)
             ->with('success', 'Variant deleted successfully!');
     }
 }

@@ -31,6 +31,13 @@ Route::post('/logout', [StorefrontCustomerController::class, 'logout'])->name('s
 
 /*
 |--------------------------------------------------------------------------
+| Checkout Routes - WILL BE IMPLEMENTED WITH CASHIER
+|--------------------------------------------------------------------------
+| Checkout functionality will be added using Laravel Cashier
+*/
+
+/*
+|--------------------------------------------------------------------------
 | Cart Routes (Guest & Authenticated)
 |--------------------------------------------------------------------------
 */
@@ -66,16 +73,10 @@ Route::prefix('wishlist')->name('storefront.wishlist.')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Checkout Routes (Guest & Authenticated)
+| Checkout Routes - MOVED TO PAYMENTS PACKAGE
 |--------------------------------------------------------------------------
+| Checkout routes are now handled by packages/elevate/payments
 */
-
-Route::prefix('checkout')->name('checkout.')->group(function () {
-    Route::get('/', [\Elevate\CommerceCore\Http\Controllers\CheckoutController::class, 'index'])->name('index');
-    Route::post('/calculate-rates', [\Elevate\CommerceCore\Http\Controllers\CheckoutController::class, 'calculateRates'])->name('calculate-rates');
-    Route::post('/process', [\Elevate\CommerceCore\Http\Controllers\CheckoutController::class, 'process'])->name('process');
-    Route::get('/success/{order}', [\Elevate\CommerceCore\Http\Controllers\CheckoutController::class, 'success'])->name('success');
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -92,11 +93,11 @@ Route::middleware('auth:web')->prefix('account')->name('storefront.')->group(fun
     Route::post('/profile', [StorefrontCustomerController::class, 'profileUpdate'])->name('profile.update');
     
     // Address management
-    Route::get('/addresses', [\App\Http\Controllers\Storefront\AddressController::class, 'index'])->name('addresses');
-    Route::post('/addresses', [\App\Http\Controllers\Storefront\AddressController::class, 'store'])->name('addresses.store');
-    Route::put('/addresses/{address}', [\App\Http\Controllers\Storefront\AddressController::class, 'update'])->name('addresses.update');
-    Route::delete('/addresses/{address}', [\App\Http\Controllers\Storefront\AddressController::class, 'destroy'])->name('addresses.destroy');
-    Route::post('/addresses/{address}/set-default', [\App\Http\Controllers\Storefront\AddressController::class, 'setDefault'])->name('addresses.set-default');
+    Route::get('/addresses', [\Elevate\CommerceCore\Http\Controllers\Storefront\AddressController::class, 'index'])->name('addresses');
+    Route::post('/addresses', [\Elevate\CommerceCore\Http\Controllers\Storefront\AddressController::class, 'store'])->name('addresses.store');
+    Route::put('/addresses/{address}', [\Elevate\CommerceCore\Http\Controllers\Storefront\AddressController::class, 'update'])->name('addresses.update');
+    Route::delete('/addresses/{address}', [\Elevate\CommerceCore\Http\Controllers\Storefront\AddressController::class, 'destroy'])->name('addresses.destroy');
+    Route::post('/addresses/{address}/set-default', [\Elevate\CommerceCore\Http\Controllers\Storefront\AddressController::class, 'setDefault'])->name('addresses.set-default');
     
     // Order management
     Route::get('/orders', [StorefrontCustomerController::class, 'orders'])->name('account.orders');

@@ -69,26 +69,27 @@
     </div>
 
     {{-- Delete Confirmation Modal --}}
-    <x-bladewind::modal 
-        name="delete-currency-modal"
-        title="Confirm Delete"
-        size="md"
-        show_close_icon="true"
-        ok_button_action="performDelete()"
-        ok_button_label="Delete Currency"
-        cancel_button_label="Cancel"
-        close_after_action="false">
-        
-        <div class="text-center py-4">
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                </svg>
+    <div id="delete-currency-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                    <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">Delete Currency</h3>
+                <p class="text-sm text-gray-500 mb-4">Are you sure you want to delete this currency? This action cannot be undone.</p>
+                <div class="flex gap-3 justify-center mt-6">
+                    <button onclick="hideModal()" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200">
+                        Cancel
+                    </button>
+                    <button onclick="performDelete()" class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700">
+                        Delete Currency
+                    </button>
+                </div>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Delete Currency</h3>
-            <p class="text-sm text-gray-500 mb-4">Are you sure you want to delete this currency? This action cannot be undone.</p>
         </div>
-    </x-bladewind::modal>
+    </div>
 
     {{-- JavaScript for table actions --}}
     <script>
@@ -96,7 +97,12 @@
         
         function confirmDelete(id) {
             pendingDeleteCurrencyId = id;
-            showModal('delete-currency-modal');
+            document.getElementById('delete-currency-modal').classList.remove('hidden');
+        }
+        
+        function hideModal() {
+            document.getElementById('delete-currency-modal').classList.add('hidden');
+            pendingDeleteCurrencyId = null;
         }
         
         function performDelete() {
@@ -104,7 +110,7 @@
                 return false;
             }
             
-            hideModal('delete-currency-modal');
+            hideModal();
             
             const form = document.createElement('form');
             form.method = 'POST';

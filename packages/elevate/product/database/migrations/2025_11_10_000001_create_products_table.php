@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->foreignId('template_id')->nullable()->constrained('templates')->nullOnDelete();
             $table->string('sku')->nullable()->unique();
             $table->text('description')->nullable();
             $table->text('short_description')->nullable();
@@ -47,9 +48,6 @@ return new class extends Migration
             // SEO
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
-            
-            // Template
-            $table->foreignId('template_id')->nullable()->constrained('templates')->nullOnDelete();
             
             // Sorting
             $table->integer('sort_order')->default(0);

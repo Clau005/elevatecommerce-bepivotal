@@ -41,15 +41,15 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
-        'compare_at_price' => 'decimal:2',
-        'cost_per_item' => 'decimal:2',
+        'price' => 'integer', // Stored in cents!
+        'compare_at_price' => 'integer', // Stored in cents!
+        'cost_per_item' => 'integer', // Stored in cents!
         'track_inventory' => 'boolean',
         'stock' => 'integer',
-        'weight' => 'decimal:2',
+        'weight' => 'float',
         'requires_shipping' => 'boolean',
         'is_taxable' => 'boolean',
-        'tax_rate' => 'decimal:4',
+        'tax_rate' => 'float',
         'gallery_images' => 'array',
         'sort_order' => 'integer',
     ];
@@ -87,114 +87,37 @@ class Product extends Model
     }
 
     // ========================================
-    // Purchasable Trait Implementations (Required)
+    // Purchasable Trait Overrides (only when needed)
     // ========================================
 
     /**
-     * Get the purchasable name
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * Get the preview image for cart/checkout
+     * Get the preview image.
+     * Override to use 'featured_image' instead of 'image'
      */
     public function getPreview(): ?string
     {
-        return $this->featured_image;
+        return $this->featured_image ?? null;
     }
 
     /**
-     * Get the unit price in cents
+     * Get the unit price in cents.
+     * Override to handle variable products (use cheapest variant)
      */
     public function getUnitPrice(): int
     {
-        // Convert price to cents
-        if ($this->hasVariants()) {
-            $minPrice = $this->variants()->min('price') ?? 0;
-            return (int) ($minPrice * 100);
-        }
-
-        return (int) ($this->price * 100);
-    }
-
-    /**
-     * Get the description for cart/checkout
-     */
-    public function getDescription(): string
-    {
-        return $this->short_description ?? $this->description ?? '';
-    }
-
-    /**
-     * Get the identifier (SKU)
-     */
-    public function getIdentifier(): string
-    {
-        return $this->sku ?? $this->slug ?? (string) $this->id;
-    }
-
-    // ========================================
-    // Additional Purchasable Methods
-    // ========================================
-
-    /**
-     * Get the purchasable price
-     */
-    public function getPrice(): float
-    {
-        // If has variants, return the lowest variant price
         if ($this->hasVariants()) {
             return $this->variants()->min('price') ?? 0;
         }
 
-        return (float) $this->price;
+        return $this->price ?? 0; // Already in cents!
     }
 
     /**
-     * Get the compare at price
-     */
-    public function getCompareAtPrice(): ?float
-    {
-        if ($this->hasVariants()) {
-            return $this->variants()->min('compare_at_price');
-        }
-
-        return $this->compare_at_price ? (float) $this->compare_at_price : null;
-    }
-
-    /**
-     * Get the SKU
-     */
-    public function getSku(): ?string
-    {
-        return $this->sku;
-    }
-
-    /**
-     * Get the image URL
-     */
-    public function getImageUrl(): ?string
-    {
-        return $this->featured_image;
-    }
-
-    /**
-     * Check if tracks inventory
-     */
-    public function tracksInventory(): bool
-    {
-        return $this->track_inventory;
-    }
-
-    /**
-     * Get stock level
+     * Get stock level.
+     * Override to sum variant stock for variable products
      */
     public function getStockLevel(): ?int
     {
-        // If has variants, sum up variant stock
         if ($this->hasVariants()) {
             return $this->variants()->sum('stock');
         }
@@ -202,63 +125,75 @@ class Product extends Model
         return $this->stock;
     }
 
+    // ========================================
+    // Additional Helper Methods
+    // ========================================
+
     /**
-     * Get weight for shipping
+     * Get price in dollars (for display)
      */
-    public function getWeight(): ?float
+    public function getPriceInDollars(): float
     {
-        return $this->weight ? (float) $this->weight : null;
+        return $this->getUnitPrice() / 100;
     }
 
     /**
-     * Get tax rate
+     * Get compare at price in cents
      */
-    public function getTaxRate(): float
+    public function getCompareAtPrice(): ?int
     {
-        return $this->is_taxable ? (float) $this->tax_rate : 0.0;
+        if ($this->hasVariants()) {
+            return $this->variants()->min('compare_at_price');
+        }
+
+        return $this->compare_at_price;
     }
 
     /**
-     * Check if requires shipping
+     * Check if product is on sale
      */
-    public function requiresShipping(): bool
+    public function isOnSale(): bool
     {
-        return $this->requires_shipping;
+        $comparePrice = $this->getCompareAtPrice();
+        return $comparePrice && $comparePrice > $this->getUnitPrice();
     }
 
     /**
-     * Get additional meta data
+     * Get the URL to view this product
      */
-    public function getMetaData(): array
+    public function getPurchasableUrl(): ?string
     {
-        return [
-            'type' => $this->type,
-            'weight_unit' => $this->weight_unit,
-            'has_variants' => $this->hasVariants(),
-        ];
+        return route('product.show', $this->slug);
     }
 
-    /**
-     * Scope for active products
-     */
+    // ========================================
+    // Query Scopes
+    // ========================================
+
     public function scopeActive($query)
     {
         return $query->where('status', 'active');
     }
 
-    /**
-     * Scope for simple products
-     */
     public function scopeSimple($query)
     {
         return $query->where('type', 'simple');
     }
 
-    /**
-     * Scope for variable products
-     */
     public function scopeVariable($query)
     {
         return $query->where('type', 'variable');
+    }
+
+    // ========================================
+    // Accessors (for backwards compatibility)
+    // ========================================
+
+    /**
+     * Alias 'image' to 'featured_image' for Purchasable trait
+     */
+    public function getImageAttribute()
+    {
+        return $this->featured_image;
     }
 }

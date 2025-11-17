@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -17,8 +18,9 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'channel_id',
-        'payment_gateway_id',
         'shipping_carrier_id',
+        'stripe_checkout_session_id',
+        'stripe_payment_intent',
         'new_customer',
         'status',
         'reference',
@@ -141,6 +143,22 @@ class Order extends Model
     }
 
     /**
+     * Get the billing address for this order.
+     */
+    public function billingAddress(): HasOne
+    {
+        return $this->hasOne(OrderAddress::class)->where('type', 'billing');
+    }
+
+    /**
+     * Get the shipping address for this order.
+     */
+    public function shippingAddress(): HasOne
+    {
+        return $this->hasOne(OrderAddress::class)->where('type', 'shipping');
+    }
+
+    /**
      * Get the timeline entries for this order.
      */
     public function timelines(): HasMany
@@ -156,21 +174,6 @@ class Order extends Model
         return $this->hasMany(DiscountUsage::class);
     }
 
-    /**
-     * Get the payments for this order.
-     */
-    public function payments(): HasMany
-    {
-        return $this->hasMany(Payment::class);
-    }
-
-    /**
-     * Get the payment gateway used for this order.
-     */
-    public function paymentGateway(): BelongsTo
-    {
-        return $this->belongsTo(\Elevate\Payments\Models\PaymentGateway::class, 'payment_gateway_id');
-    }
 
     /**
      * Get the shipping carrier used for this order.
@@ -178,22 +181,6 @@ class Order extends Model
     public function shippingCarrier(): BelongsTo
     {
         return $this->belongsTo(\Elevate\Shipping\Models\ShippingCarrier::class, 'shipping_carrier_id');
-    }
-
-    /**
-     * Get the billing address.
-     */
-    public function billingAddress()
-    {
-        return $this->addresses()->where('type', 'billing')->first();
-    }
-
-    /**
-     * Get the shipping address.
-     */
-    public function shippingAddress()
-    {
-        return $this->addresses()->where('type', 'shipping')->first();
     }
 
     /**

@@ -7,7 +7,7 @@
             <h1 class="text-2xl font-bold text-gray-900">Create Product</h1>
             <p class="text-gray-600 mt-1">Add a new product to your catalog</p>
         </div>
-        <a href="{{ route('products.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+        <a href="{{ route('admin.products.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
@@ -16,7 +16,7 @@
     </div>
 
     {{-- Form --}}
-    <form action="{{ route('products.store') }}" method="POST" class="space-y-6">
+    <form action="{{ route('admin.products.store') }}" method="POST" class="space-y-6">
         @csrf
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -322,7 +322,7 @@
 
         {{-- Form Actions --}}
         <div class="flex justify-end gap-3 pt-6 border-t border-gray-200">
-            <a href="{{ route('products.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+            <a href="{{ route('admin.products.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                 Cancel
             </a>
             <button type="submit" class="inline-flex items-center px-4 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors">

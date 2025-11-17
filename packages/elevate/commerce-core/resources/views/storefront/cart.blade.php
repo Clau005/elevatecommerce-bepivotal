@@ -212,12 +212,26 @@
                             
                             <!-- Action Buttons -->
                             <div class="space-y-3">
-                                <a href="{{ route('checkout') }}" 
-                                   class="w-full bg-blue-800 hover:bg-blue-900 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-800 block uppercase">
-                                    Proceed to Checkout
-                                </a>
+                                @auth
+                                    {{-- Cashier Checkout Button --}}
+                                    <form action="{{ route('checkout.initiate') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" 
+                                                class="w-full bg-blue-800 hover:bg-blue-900 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-800 uppercase flex items-center justify-center">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                            </svg>
+                                            Secure Checkout
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('storefront.login') }}" 
+                                       class="w-full bg-blue-800 hover:bg-blue-900 text-white text-center py-3 px-4 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-800 block uppercase">
+                                        Login to Checkout
+                                    </a>
+                                @endauth
                                 
-                                <a href="{{ route('storefront.shop') }}" 
+                                <a href="/" 
                                    class="w-full bg-white hover:bg-gray-50 text-gray-700 text-center py-3 px-4 rounded-lg font-medium border border-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 block">
                                     Continue Shopping
                                 </a>
