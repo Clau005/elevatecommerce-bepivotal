@@ -25,6 +25,7 @@ class Collection extends Model
         'image',
         'is_active',
         'sort_order',
+        'per_page',
         'meta_title',
         'meta_description',
     ];
@@ -32,6 +33,7 @@ class Collection extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'sort_order' => 'integer',
+        'per_page' => 'integer',
         'smart_rules' => 'array',
     ];
 

@@ -126,9 +126,8 @@ class CollectionWebController extends Controller
             return $collectable->collectable;
         })->filter(); // Remove any null items
         
-        // For now, we'll paginate manually since we're working with a collection
-        // In the future, you might want to apply filters at the query level
-        $perPage = config('collections.pagination.per_page', 24);
+        // Use collection's per_page setting, fallback to config, then default to 12
+        $perPage = $collection->per_page ?? config('collections.pagination.per_page', 12);
         $currentPage = request()->get('page', 1);
         $itemsForPage = $items->forPage($currentPage, $perPage);
         

@@ -204,15 +204,23 @@ class CollectionController extends Controller
         // Load relationships
         $collection->load('children');
         
-        // Load collectables with error handling for invalid types
+        // Paginate collectables using collection's per_page setting (default to 25 for admin)
+        $perPage = $collection->per_page ?? 25;
+        
+        // Load collectables with pagination and error handling for invalid types
         try {
-            $collection->load('collectables.collectable');
+            $collectables = $collection->collectables()
+                ->with('collectable')
+                ->orderBy('sort_order')
+                ->paginate($perPage);
         } catch (\Exception $e) {
             // If there's an error loading collectables (e.g., invalid class), load without the nested relation
-            $collection->load('collectables');
+            $collectables = $collection->collectables()
+                ->orderBy('sort_order')
+                ->paginate($perPage);
         }
 
-        return view('collections::admin.collections.edit', compact('collection', 'parentCollections', 'templates', 'collectableTypes'));
+        return view('collections::admin.collections.edit', compact('collection', 'parentCollections', 'templates', 'collectableTypes', 'collectables'));
     }
 
     public function update(Request $request, Collection $collection)

@@ -42,11 +42,11 @@ return Application::configure(basePath: dirname(__DIR__))
             
             // Check if this is a customer account route
             if ($request->is('account') || $request->is('account/*')) {
-                return route('customer.login');
+                return route('account.login');
             }
             
             // Default to customer login
-            return route('customer.login');
+            return route('account.login');
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {

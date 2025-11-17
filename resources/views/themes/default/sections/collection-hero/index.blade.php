@@ -2,10 +2,11 @@
 <div class="collection-header relative overflow-hidden" 
      style="min-height: {{ $minHeight ?? '400px' }}; 
             @if(($showImage ?? true) && !empty($image))
-            background-image: url('{{ $image }}'); 
+            background-image: url('{{ $collection->image }}'); 
             background-size: {{ $backgroundSize ?? 'cover' }}; 
             background-position: {{ $backgroundPosition ?? 'center' }};
             @endif">
+
     
     @if(($overlay['enabled'] ?? true) && ($showImage ?? true) && !empty($image))
         <div class="absolute inset-0" 

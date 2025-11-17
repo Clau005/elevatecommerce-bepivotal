@@ -128,6 +128,17 @@
                         @enderror
                     </div>
 
+                    {{-- Items Per Page --}}
+                    <div>
+                        <label for="per_page" class="block text-sm font-medium text-gray-700 mb-1">Items Per Page</label>
+                        <input type="number" name="per_page" id="per_page" value="{{ old('per_page', $collection->per_page ?? 12) }}" min="1" max="100"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('per_page') border-red-300 @enderror">
+                        <p class="mt-1 text-sm text-gray-500">Number of products to show per page</p>
+                        @error('per_page')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     {{-- Status --}}
                     <div>
                         <label class="flex items-center">
@@ -264,7 +275,7 @@
                 </div>
             </div>
 
-            @if($collection->collectables->count() > 0)
+            @if($collectables->total() > 0)
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
@@ -290,7 +301,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200" id="collectables-list">
-                            @foreach($collection->collectables->sortBy('sort_order') as $collectable)
+                            @foreach($collectables as $collectable)
                                 <tr data-id="{{ $collectable->id }}" class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <input type="checkbox" class="item-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" value="{{ $collectable->id }}" onchange="updateBulkRemoveButton()">
@@ -330,6 +341,13 @@
                         </tbody>
                     </table>
                 </div>
+                
+                {{-- Pagination --}}
+                @if($collectables->hasPages())
+                    <div class="px-6 py-4 border-t border-gray-200">
+                        {{ $collectables->links() }}
+                    </div>
+                @endif
             @else
                 <div class="text-center py-12">
                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

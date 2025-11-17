@@ -14,7 +14,10 @@
         </nav>
         
         <!-- Cart Icon -->
-        <div>
+        <div class="flex flex-row items-center space-x-2">
+            <a href="/wishlist" class="text-gray-900 hover:text-blue-600 transition-colors">
+                 Wishlist
+            </a>
             <a href="/cart" class="text-gray-900 hover:text-blue-600 transition-colors">
                 🛒 Cart
             </a>
