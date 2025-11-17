@@ -13,6 +13,21 @@ use ElevateCommerce\Collections\Traits\HasDynamicCollectables;
 class Collection extends Model
 {
     use HasTemplate, HasDynamicCollectables;
+    
+    /**
+     * Boot the model
+     */
+    protected static function booted(): void
+    {
+        // Clear collection slug cache when collections are created, updated, or deleted
+        static::saved(function () {
+            \ElevateCommerce\Collections\Services\CollectionSlugRegistry::clearCache();
+        });
+        
+        static::deleted(function () {
+            \ElevateCommerce\Collections\Services\CollectionSlugRegistry::clearCache();
+        });
+    }
 
     protected $fillable = [
         'name',

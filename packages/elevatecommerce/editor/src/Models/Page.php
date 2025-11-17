@@ -9,6 +9,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Page extends Model
 {
     use SoftDeletes;
+    
+    /**
+     * Boot the model
+     */
+    protected static function booted(): void
+    {
+        // Clear page slug cache when pages are created, updated, or deleted
+        static::saved(function () {
+            \ElevateCommerce\Editor\Services\PageSlugRegistry::clearCache();
+        });
+        
+        static::deleted(function () {
+            \ElevateCommerce\Editor\Services\PageSlugRegistry::clearCache();
+        });
+    }
 
     protected $fillable = [
         'theme_id',

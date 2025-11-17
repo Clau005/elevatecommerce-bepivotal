@@ -63,11 +63,11 @@ class CollectionWebController extends Controller
             abort(404);
         }
         
-        // Build query
+        // Build query - only load template (needed for rendering)
+        // Everything else is loaded by templates as needed
         $query = Collection::where('slug', $slug)
             ->where('is_active', true)
-            ->with(['collectables.collectable', 'template', 'parent', 'children', 'filters.values']);
-
+            ->with('template');
         
         // If parent slug is provided, ensure this is a child of that parent
         if ($parentSlug) {
@@ -115,49 +115,18 @@ class CollectionWebController extends Controller
             $templateSlug = $defaultTemplate->slug;
         }
 
-        // Get all collection items (polymorphic)
-        $collectables = $collection->collectables()
-            ->with('collectable')
-            ->orderBy('sort_order')
-            ->get();
-        
-        // Extract the actual items from the collectables
-        $items = $collectables->map(function($collectable) {
-            return $collectable->collectable;
-        })->filter(); // Remove any null items
-        
-        // Use collection's per_page setting, fallback to config, then default to 12
-        $perPage = $collection->per_page ?? config('collections.pagination.per_page', 12);
-        $currentPage = request()->get('page', 1);
-        $itemsForPage = $items->forPage($currentPage, $perPage);
-        
-        // Create a paginator
-        $items = new \Illuminate\Pagination\LengthAwarePaginator(
-            $itemsForPage,
-            $items->count(),
-            $perPage,
-            $currentPage,
-            ['path' => request()->url()]
-        );
-        
-        // Get available filters (if applicable)
-        $baseUrl = $parentSlug ? "/{$parentSlug}/{$slug}" : "/{$slug}";
-        $availableFilters = []; // Filters would need to be implemented for polymorphic items
-
-        // Add data to collection for template access
-        $collection->items = $items;
+        // Add minimal data to collection for template access
+        // Templates will handle their own data fetching
         $collection->breadcrumbs = $this->buildBreadcrumbs($collection);
         $collection->applied_filters = $appliedFilters;
-        $collection->available_filters = $availableFilters;
-        $collection->base_url = $baseUrl;
-        $collection->filter_service = $this->filterService; // For generating filter URLs in template
+        $collection->base_url = $parentSlug ? "/{$parentSlug}/{$slug}" : "/{$slug}";
+        $collection->filter_service = $this->filterService;
 
         // Debug logging
         \Log::info('About to render collection template', [
             'template_slug' => $templateSlug,
             'collection_slug' => $collection->slug,
-            'items_count' => $items->count(),
-            'items_type' => get_class($items),
+            'collection_id' => $collection->id,
         ]);
 
         try {

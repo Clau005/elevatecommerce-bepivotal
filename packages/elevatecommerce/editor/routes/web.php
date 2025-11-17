@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use ElevateCommerce\Editor\Http\Controllers\PageController;
 use App\Routing\Services\RouteExclusionRegistry;
+use ElevateCommerce\Editor\Services\PageSlugRegistry;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,8 @@ Route::prefix('preview')->name('preview.')->group(function () {
     // This is registered LAST (lowest priority)
     // Supports optional filter segments for single-level collections
     // Excluded prefixes are managed by RouteExclusionRegistry
+    // Page slugs are constrained to actual pages in database (cached)
     Route::get('/{slug}/{filters?}', [PageController::class, 'show'])
-        ->where('slug', RouteExclusionRegistry::getWherePattern())
+        ->where('slug', PageSlugRegistry::getPattern())
         ->where('filters', '.*')
         ->name('page.show');

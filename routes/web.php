@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TestingPurchasableWebController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 | then these application-specific routes are loaded.
 |
 */
+
+// Product detail pages - /products/{slug}
+Route::get('/products/{slug}', [TestingPurchasableWebController::class, 'show'])
+    ->name('products.show');
 
 // Route::get('/', function () {
 //     $products = \App\Models\TestingPurchasable::where('is_active', true)

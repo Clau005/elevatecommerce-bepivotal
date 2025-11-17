@@ -7,9 +7,36 @@
         <!-- Product Grid -->
         <div class="grid gap-8 mb-8" style="grid-template-columns: repeat(auto-fill, minmax({{ $column_width ?? '250px' }}, 1fr));">
             @php
-                // Get paginated items from collection
-                // The CollectionWebController passes $collection->items which is already paginated
-                $items = $collection->items ?? collect();
+                // Template-level query: Fetch and paginate collection items
+                // This allows each template to control its own data fetching
+                $perPage = $collection->per_page ?? 12;
+                
+                // Get collectables with their related models
+                $collectables = $collection->collectables()
+                    ->with('collectable')
+                    ->orderBy('sort_order')
+                    ->get();
+
+        
+                
+                // Extract actual items from pivot table
+                $allItems = $collectables->map(function($collectable) {
+                    return $collectable->collectable;
+                })->filter(); // Remove nulls
+                
+                // Paginate items
+                $currentPage = request()->get('page', 1);
+                $itemsForPage = $allItems->forPage($currentPage, $perPage);
+                
+                $items = new \Illuminate\Pagination\LengthAwarePaginator(
+                    $itemsForPage,
+                    $allItems->count(),
+                    $perPage,
+                    $currentPage,
+                    ['path' => request()->url(), 'query' => request()->query()]
+                );
+                
+           
             @endphp
             
             @forelse($items as $item)
@@ -24,10 +51,14 @@
                             <i class="fas fa-box text-6xl"></i>
                         </div>
                     @endif
+           
+                        
                     
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold mb-2">{{ $item->name }}</h3>
-                        
+                        <a href="{{ route('products.show', $item->slug) }}">
+                            <h3 class="text-lg font-semibold mb-2">{{ $item->name }}</h3>
+                        </a>
+
                         @if($item->description)
                             <p class="text-sm text-gray-600 mb-4 leading-relaxed">{{ Str::limit($item->description, 100) }}</p>
                         @endif

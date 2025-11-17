@@ -76,15 +76,21 @@ class TemplateController
             $validated['slug'] = Str::slug($validated['name']);
         }
 
-        // Initialize with empty configuration
+        // Initialize with empty configuration matching the standard structure
         $validated['configuration'] = [
-            'layout' => 'default',
+            'seo' => [],
             'sections' => [],
+            'basic_info' => [
+                'layout' => 'default',
+            ],
         ];
 
         $validated['draft_configuration'] = [
-            'layout' => 'default',
+            'seo' => [],
             'sections' => [],
+            'basic_info' => [
+                'layout' => 'default',
+            ],
         ];
 
         $template = Template::create($validated);

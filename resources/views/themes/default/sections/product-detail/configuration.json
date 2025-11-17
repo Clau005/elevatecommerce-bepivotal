@@ -1,0 +1,22 @@
+{
+  "name": "Product Detail",
+  "category": "product",
+  "icon": "shopping-bag",
+  "description": "Display product details with image, price, description, and add to cart button",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Default Product Detail",
+      "settings": {
+        "background_color": "#ffffff"
+      }
+    }
+  ]
+}

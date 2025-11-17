@@ -32,6 +32,30 @@ class AppServiceProvider extends ServiceProvider
             ]);
         }
         
+        // Register TestingPurchasable as a templatable model
+        if ($this->app->bound(\ElevateCommerce\Editor\Services\TemplateRegistry::class)) {
+            $templateRegistry = $this->app->make(\ElevateCommerce\Editor\Services\TemplateRegistry::class);
+            
+            $templateRegistry->register(TestingPurchasable::class, [
+                'label' => 'Product',
+                'plural_label' => 'Products',
+                'icon' => 'shopping-bag',
+                'description' => 'Product detail pages',
+                'default_route_pattern' => '/products/{slug}',
+                'preview_data_provider' => function() {
+                    return TestingPurchasable::where('is_active', true)
+                        ->inRandomOrder()
+                        ->first();
+                },
+            ]);
+        }
+        
+        // Register TestingPurchasable model variable name for templates
+        if ($this->app->bound(\ElevateCommerce\Editor\Services\PageRenderService::class)) {
+            $renderService = $this->app->make(\ElevateCommerce\Editor\Services\PageRenderService::class);
+            $renderService->registerModelType(TestingPurchasable::class, 'product');
+        }
+        
         // Register admin navigation
         $this->registerNavigation();
     }
