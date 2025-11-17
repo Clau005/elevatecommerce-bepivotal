@@ -333,7 +333,7 @@ class ThemeController
             ['slug' => 'collection'],
             [
                 'name' => 'Collection Template',
-                'model_type' => 'Elevate\\Collections\\Models\\Collection',
+                'model_type' => 'ElevateCommerce\\Collections\\Models\\Collection',
                 'description' => 'Default template for collection pages',
                 'configuration' => [
                     'basic_info' => [
@@ -405,7 +405,7 @@ class ThemeController
             ['slug' => 'product'],
             [
                 'name' => 'Product Template',
-                'model_type' => 'Elevate\\Product\\Models\\Product',
+                'model_type' => 'App\\Models\\TestingPurchasable',
                 'description' => 'Default template for product pages',
                 'configuration' => [
                     'basic_info' => [
@@ -414,13 +414,10 @@ class ThemeController
                     ],
                     'sections' => [
                         [
-                            'id' => 'product-show-' . time(),
-                            'component' => 'product-show',
+                            'id' => 'product-detail-' . time(),
+                            'component' => 'product-detail',
                             'data' => [
-                                'layout' => 'default',
-                                'show_breadcrumbs' => true,
-                                'show_related_products' => true,
-                                'gallery_style' => 'thumbnails'
+                                'background_color' => '#ffffff'
                             ]
                         ]
                     ]
@@ -432,13 +429,10 @@ class ThemeController
                     ],
                     'sections' => [
                         [
-                            'id' => 'product-show-' . time(),
-                            'component' => 'product-show',
+                            'id' => 'product-detail-' . time(),
+                            'component' => 'product-detail',
                             'data' => [
-                                'layout' => 'default',
-                                'show_breadcrumbs' => true,
-                                'show_related_products' => true,
-                                'gallery_style' => 'thumbnails'
+                                'background_color' => '#ffffff'
                             ]
                         ]
                     ]

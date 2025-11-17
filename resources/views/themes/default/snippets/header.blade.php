@@ -2,13 +2,13 @@
     <div class="max-w-7xl mx-auto flex justify-between items-center">
         <!-- Logo -->
         <div class="text-2xl font-bold text-gray-900">
-            {{ $site_name ?? config('app.name', 'Store') }}
+            <a href="/">{{ $site_name ?? config('app.name', 'Store') }}</a>
         </div>
         
         <!-- Navigation -->
         <nav class="flex gap-8">
             <a href="/" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Home</a>
-            <a href="/collections" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Shop</a>
+            <a href="/catalog" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Catalog</a>
             <a href="/about" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">About</a>
             <a href="/contact" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Contact</a>
         </nav>

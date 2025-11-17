@@ -27,10 +27,10 @@
                     @if($product->compare_at_price && $product->compare_at_price > $product->price)
                         <div class="flex items-center gap-3">
                             <span class="text-3xl font-bold text-red-600">
-                                ${{ number_format($product->price / 100, 2) }}
+                                @currency($product->price)
                             </span>
                             <span class="text-xl text-gray-500 line-through">
-                                ${{ number_format($product->compare_at_price / 100, 2) }}
+                                @currency($product->compare_at_price)
                             </span>
                             <span class="bg-red-100 text-red-800 text-sm font-semibold px-2 py-1 rounded">
                                 Save {{ round((($product->compare_at_price - $product->price) / $product->compare_at_price) * 100) }}%
@@ -38,7 +38,7 @@
                         </div>
                     @else
                         <span class="text-3xl font-bold">
-                            ${{ number_format($product->price / 100, 2) }}
+                            @currency($product->price)
                         </span>
                     @endif
                 </div>

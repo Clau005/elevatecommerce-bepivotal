@@ -55,16 +55,26 @@
 
                     {{-- Actions --}}
                     <div class="space-y-2">
-                        {{-- Customize Button --}}
+                        {{-- Customize Button - Opens homepage in visual editor --}}
                         @php
-                            $homepage = $theme->pages()->where(function($query) {
-                                $query->where('slug', '/')->orWhere('slug', 'homepage');
-                            })->first();
+                            $homepage = $theme->pages()
+                                ->where(function($query) {
+                                    $query->where('slug', 'homepage')
+                                          ->orWhere('slug', '/')
+                                          ->orWhere('slug', 'home');
+                                })
+                                ->first();
                         @endphp
-                        <a href="{{ $homepage ? route('admin.visual-editor.pages', ['theme' => $theme->id, 'page' => $homepage->id]) : route('admin.pages.index') }}" 
-                           class="block w-full text-center bg-black hover:bg-gray-800 text-white px-3 py-2 rounded text-sm font-medium">
-                            Customize
-                        </a>
+                        @if($homepage)
+                            <a href="{{ route('admin.visual-editor.pages', ['theme' => $theme->id, 'page' => $homepage->id]) }}" 
+                               class="block w-full text-center bg-black hover:bg-gray-800 text-white px-3 py-2 rounded text-sm font-medium">
+                                Customize
+                            </a>
+                        @else
+                            <span class="block w-full text-center bg-gray-300 text-gray-500 px-3 py-2 rounded text-sm font-medium cursor-not-allowed" title="No homepage found">
+                                Customize
+                            </span>
+                        @endif
 
                         <div class="flex gap-2">
                             @if(!$theme->is_active)
